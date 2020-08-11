@@ -15,6 +15,7 @@ const Card = styled.div`
     background: #c9ede5;
     border-radius: 8px;
     color: #2b2c32;
+    margin-right: 9px;
     @media (max-width: 1023px) {
       margin-bottom: 9px;
     }

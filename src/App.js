@@ -5,8 +5,8 @@ import Home from "./containers/Home";
 function App() {
   return (
     <>
-      <GlobalStyle />
       <Home />
+      <GlobalStyle />
     </>
   );
 }
