@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import GlobalStyle from "./helpers/globalStyles";
 import Home from "./containers/Home";
 
