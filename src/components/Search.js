@@ -14,8 +14,8 @@ const SearchInput = styled.input`
   font-size: 14px;
   color: #2b2c32;
   line-height: 1.3;
-  padding: 0.6em 1.4em 0.5em 0.8em;
-  width: calc(322px - 44px);
+  padding: 0.6em 44px 0.5em 0.8em;
+  width: 322px;
   margin: 0;
   border: none;
   border-radius: 8px;
@@ -29,6 +29,7 @@ const SearchInput = styled.input`
 `;
 const InputBtn = styled.button`
   background: #17d1aa;
+  height: 40px;
   margin: 0;
   border: none;
   -moz-appearance: none;
@@ -36,6 +37,7 @@ const InputBtn = styled.button`
   appearance: none;
   border-radius: 0 8px 8px 0;
   padding: 0.6em 0.9em 0.5em 0.9em;
+  margin-left: -44px;
   i {
     color: white;
   }

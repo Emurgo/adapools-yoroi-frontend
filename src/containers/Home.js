@@ -70,6 +70,7 @@ function Home(): Node {
     getPools(searchValue).then((jsonResponse: ApiPoolsResponse) => {
       // eslint-disable-next-line no-console
       console.log('json Response: ', jsonResponse);
+      // setRowData(jsonResponse.pools)
     });
   };
 

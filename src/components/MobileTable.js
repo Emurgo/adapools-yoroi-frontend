@@ -23,6 +23,10 @@ const WrapperContent = styled.div`
   display: flex;
   align-items: center;
   margin: 15px 0;
+  @media (max-width: 1023px) {
+    align-items: flex-start;
+  }
+
   .label {
     color: #6b7384;
     font-size: 14px;
@@ -38,10 +42,14 @@ type Props = {|
   data: Pool,
 |};
 function MobileTable({ data }: Props) {
+  if (data && Object.entries(data).length <= 0) {
+    return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
+  }
+
   return (
     <>
       {data &&
-        (Object.entries(data): Object).map(([, value]) => (
+        (Object.entries(data): any).map(([, value]) => (
           <CardMobile key={value.id}>
             <StakingPoolCard id={value.id} avatar={value.pool_pic} fullname={value.fullname} />
             <WrapperContent style={{ display: 'flex' }}>
