@@ -50,7 +50,7 @@ const Table = styled.table`
 type Props = {|
   data: Pool,
 |};
-function DesktopTable({ data }: Props) {
+function DesktopTable({ data, randomFuncion }: Props) {
   if (data && Object.entries(data).length <= 0) {
     return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
   }
@@ -96,7 +96,7 @@ function DesktopTable({ data }: Props) {
                 </td>
                 <td>_{value.blocks_epoch}</td>
                 <td>
-                  <Button>Delegate</Button>
+                  <Button onClick={() => randomFuncion(value.id)}>Delegate</Button>
                 </td>
               </tr>
             ))}

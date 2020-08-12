@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
-import poolData from '../API/data';
 import Search from '../components/Search';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
-import { getPools } from '../API/api';
+import { getPools, listPools } from '../API/api';
 import type { ApiPoolsResponse } from '../API/api';
 import DesktopTable from '../components/DesktopTable';
 import MobileTable from '../components/MobileTable';
@@ -63,15 +62,22 @@ function Home(): Node {
   const [rowData, setRowData] = useState(null);
 
   useEffect(() => {
-    setRowData(poolData.pools);
+    const fetchData = async () => {
+      const response = await listPools();
+      setRowData(response.pools);
+    }
+      fetchData();
   }, [rowData]);
 
   const search = (searchValue) => {
     getPools(searchValue).then((jsonResponse: ApiPoolsResponse) => {
-      // eslint-disable-next-line no-console
       console.log('json Response: ', jsonResponse);
-      // setRowData(jsonResponse.pools)
+      setRowData(jsonResponse.pools)
     });
+  };
+
+  const randomFuncion = (id) => {
+    console.log(id);
   };
 
   return (
@@ -89,10 +95,10 @@ function Home(): Node {
       </Header>
 
       <DesktopOnly>
-        <DesktopTable data={rowData} />
+        <DesktopTable randomFuncion={randomFuncion} data={rowData} />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable data={rowData} />
+        <MobileTable randomFuncion={randomFuncion} data={rowData} />
       </MobileOnly>
     </Layout>
   );
