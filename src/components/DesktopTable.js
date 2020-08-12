@@ -51,7 +51,7 @@ type Props = {|
   data: Pool,
 |};
 function DesktopTable({ data }: Props) {
-  if (data && Object.entries(data).length >= 0) {
+  if (data && Object.entries(data).length <= 0) {
     return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
   }
 
