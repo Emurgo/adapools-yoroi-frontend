@@ -6,6 +6,8 @@ import StakingPoolCard from "../components/StakingPoolCard";
 import PoolSizeCard from "../components/PoolSizeCard";
 import CostsCard from "../components/CostsCard";
 import PledgeCard from "../components/PledgeCard";
+import Search from "../components/Search";
+
 import { DesktopOnly, MobileOnly } from "../components/layout/Breakpoints";
 import {
   roundInteger,
@@ -13,28 +15,9 @@ import {
   formatBigNumber,
   roundOneDecimal,
 } from "../utils/utils";
+import { getPools } from "../API/api";
+import type { ApiPoolsResponse } from "../API/api";
 
-const SearchInput = styled.input`
-  height: 40px;
-  background-color: #f0f3f5;
-  height: 40px;
-  display: block;
-  font-size: 14px;
-  color: #2b2c32;
-  line-height: 1.3;
-  padding: 0.6em 1.4em 0.5em 0.8em;
-  width: 322px;
-  margin: 0;
-  border: none;
-  border-radius: 8px;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  background-color: #f0f3f5;
-  ::placeholder {
-    color: #c4cad7;
-  }
-`;
 const WrapperSelectInput = styled.div`
   display: flex;
   flex-direction: column;
@@ -173,13 +156,19 @@ function Home() {
     setRowData(poolData.pools);
   }, [rowData]);
 
+  const search = (searchValue) => {
+    getPools(searchValue).then((jsonResponse: ApiPoolsResponse) => {
+      console.log("json Response: ", jsonResponse);
+    });
+  };
+
   return (
     <Layout>
       <h1 style={{ textAlign: "center", margin: "30px 0 50px" }}>
         Delegation Page
       </h1>
       <Header>
-        <SearchInput type="text" placeholder="Search by Id" />
+        <Search search={search} />
         <WrapperSelectInput>
           <label htmlFor="sort">Sort by:</label>
           <SelectInput name="" id="sort">
