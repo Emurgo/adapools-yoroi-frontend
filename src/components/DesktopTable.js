@@ -49,13 +49,27 @@ const Table = styled.table`
 
 type Props = {|
   data: Pool,
-  randomFuncion: Function
+  randomFuncion: Function,
+  +status: 'idle' | 'pending' | 'resolved' | 'rejected',
 |};
-function DesktopTable({ data, randomFuncion }: Props) {
-  if (data && Object.entries(data).length <= 0) {
+function DesktopTable({ data, randomFuncion, status }: Props) {
+  const isLoading = status === 'pending' || status === 'idle';
+  const isRejected = status === 'rejected';
+  const isResolved = status === 'resolved';
+  
+  if (isResolved && data && Object.entries(data).length <= 0) {
     return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
   }
 
+  if(isLoading) {
+    return <h1 style={{ fontWeight: 400 }}>Loading..</h1>;
+  }
+
+  if(isRejected) {
+    return (
+      <h1>Ups! something wrong happened. Try again!</h1>
+    )
+  }
   return (
     <TableContent>
       <Table>

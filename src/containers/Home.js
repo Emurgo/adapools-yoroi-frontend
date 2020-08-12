@@ -60,21 +60,31 @@ const Header = styled.div`
 
 function Home(): Node {
   const [rowData, setRowData] = useState(null);
+  const [status, setStatus] = useState('idle')
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await listPools();
-      setRowData(response.pools);
-    }
-      fetchData();
-  }, [rowData]);
+    setStatus('pending')
+    listPools()
+      .then((poolsData: ApiPoolsResponse) => {
+        setStatus('resolved')
+        setRowData(poolsData.pools);
+      }).catch((err) => {
+        setStatus({ status: 'rejected' });
+        console.error(err);
+      });
+  }, []);
 
-    const search = (searchValue) => {
-        getPools(searchValue)
-            .then((poolsData: ApiPoolsResponse) => {
-                setRowData(poolsData.pools);
-            });
-    };
+  const search = (searchValue) => {
+    setStatus('pending')
+    getPools(searchValue)
+      .then((poolsData: ApiPoolsResponse) => {
+        setStatus('resolved')
+        setRowData(poolsData.pools);
+      }).catch((err) => {
+        setStatus({ status: 'rejected' });
+        console.error(err);
+      });
+  };
 
   const randomFuncion = (id) => {
     console.log(id);
@@ -95,10 +105,10 @@ function Home(): Node {
       </Header>
 
       <DesktopOnly>
-        <DesktopTable randomFuncion={randomFuncion} data={rowData} />
+        <DesktopTable status={status} randomFuncion={randomFuncion} data={rowData} />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable randomFuncion={randomFuncion} data={rowData} />
+        <MobileTable status={status} randomFuncion={randomFuncion} data={rowData} />
       </MobileOnly>
     </Layout>
   );
