@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import type { Node } from "react";
 import Layout from "../components/layout/Layout";
 import styled from "styled-components";
 import poolData from "../API/data";
@@ -73,7 +74,6 @@ const TableContent = styled.div`
 const Table = styled.table`
   width: 100%;
   background: white;
-  /* border-collapse: separate; */
   border-spacing: 0 0.8rem;
   thead {
     border-bottom: 3px solid rgba(56, 57, 61, 0.2);
@@ -144,9 +144,8 @@ const WrapperContent = styled.div`
   }
 `;
 
-function Home() {
+function Home(): Node {
   const [rowData, setRowData] = useState(null);
-  // const [searchValue, setsearchValue] = useState(null);
 
   function formatCostLabel(tax_computed, tax_fix) {
     return `${roundInteger(tax_computed)}% + ${parseInt(tax_fix) / 1000000}`;

@@ -1,6 +1,9 @@
+// @flow
+
 import React from "react";
 import styled from "styled-components";
 import { PieChart } from "react-minimal-pie-chart";
+import type { Node } from "react";
 
 const Card = styled.div`
   display: flex;
@@ -33,7 +36,13 @@ const Card = styled.div`
     color: #242838;
   }
 `;
-function PoolSizeCard({ percentage, value }) {
+
+type Props = {|
+  percentage: number,
+  value: number,
+|};
+
+function PoolSizeCard({ percentage, value }: Props): Node {
   function formatArray(percent) {
     return [
       {

@@ -1,4 +1,6 @@
+// @flow
 import React from "react";
+import type { Node } from "react";
 import styled from "styled-components";
 
 const Card = styled.div`
@@ -25,7 +27,11 @@ const Card = styled.div`
     font-size: 14px;
   }
 `;
-function CostsCard({ percentage, value }) {
+type Props = {|
+  percentage: number,
+  value: number,
+|};
+function CostsCard({ percentage, value }: Props): Node {
   return (
     <Card>
       <div className="tag">{percentage}%</div>

@@ -1,7 +1,10 @@
+// @flow
 import React from "react";
+import type { Node } from "react";
 import styled from "styled-components";
 import parse from "html-react-parser";
 import { DesktopOnly } from "./layout/Breakpoints";
+
 const MainCardPool = styled.div`
   display: flex;
   padding: 15px 0;
@@ -25,19 +28,31 @@ const MainCardPool = styled.div`
   }
   .name {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
   }
   .social-media {
-    display: flex;
-    a:first-child {
-      flex: 1;
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    a {
+      margin-right: 10px;
     }
-    a:last-child {
-      order: -1;
+    a[href*="https://adapools.org"]
+    {
+      grid-column: -1/1;
+      grid-row: 1;
+      margin-bottom: 6px;
     }
   }
+  .id {
+  }
 `;
-function StakingPoolCard({ avatar, fullname, id, socialmedia }) {
+type Props = {|
+  avatar: string,
+  fullname: string,
+  id: string,
+|};
+
+function StakingPoolCard({ avatar, fullname, id }: Props): Node {
   function truncateString(string) {
     if (string.length <= 8) {
       return string;
@@ -60,7 +75,7 @@ function StakingPoolCard({ avatar, fullname, id, socialmedia }) {
         <div className="name">
           <div className="social-media">{parse(fullname)}</div>
           <DesktopOnly>
-            <span> {truncateString(id)}</span>
+            <span className="id"> {truncateString(id)}</span>
           </DesktopOnly>
         </div>
       </div>

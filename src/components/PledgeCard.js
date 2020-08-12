@@ -1,5 +1,8 @@
+// @flow
+
 import React from "react";
 import styled from "styled-components";
+import type { Node } from "react";
 
 const Card = styled.div`
   display: inline-block;
@@ -17,7 +20,12 @@ const Card = styled.div`
     display: inline;
   }
 `;
-function PledgeCard({ value }) {
+
+type Props = {|
+  value: number,
+|};
+
+function PledgeCard({ value }: Props): Node {
   return (
     <Card>
       <i className="fas fa-check"></i>
