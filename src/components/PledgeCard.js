@@ -2,9 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const Card = styled.div`
-  /* opacity: 0.3; */
   display: inline-block;
-  /* justify-content: flex-end; */
+  font-size: 14px;
   border-radius: 8px;
   background-color: #fce4bc;
   color: #2b2c32;
@@ -18,11 +17,11 @@ const Card = styled.div`
     display: inline;
   }
 `;
-function PledgeCard() {
+function PledgeCard({ value }) {
   return (
     <Card>
-      <i class="fas fa-check"></i>
-      <span>75.00k</span>
+      <i className="fas fa-check"></i>
+      <span>{value}</span>
     </Card>
   );
 }

@@ -7,6 +7,12 @@ import PoolSizeCard from "../components/PoolSizeCard";
 import CostsCard from "../components/CostsCard";
 import PledgeCard from "../components/PledgeCard";
 import { DesktopOnly, MobileOnly } from "../components/layout/Breakpoints";
+import {
+  roundInteger,
+  roundTwoDecimal,
+  formatBigNumber,
+  roundOneDecimal,
+} from "../utils/utils";
 
 const SearchInput = styled.input`
   height: 40px;
@@ -157,6 +163,11 @@ const WrapperContent = styled.div`
 
 function Home() {
   const [rowData, setRowData] = useState(null);
+  // const [searchValue, setsearchValue] = useState(null);
+
+  function formatCostLabel(tax_computed, tax_fix) {
+    return `${roundInteger(tax_computed)}% + ${parseInt(tax_fix) / 1000000}`;
+  }
 
   useEffect(() => {
     setRowData(poolData.pools);
@@ -194,26 +205,31 @@ function Home() {
             <tbody>
               {rowData &&
                 Object.entries(rowData).map(([key, value]) => (
-                  <tr>
+                  <tr key={value.id}>
                     <td>
                       <StakingPoolCard
                         id={value.id}
                         avatar={value.pool_pic}
                         fullname={value.fullname}
-                        socialmedia={value.handle}
                       />
                     </td>
                     <td>
                       <PoolSizeCard
-                        size={value.total_stake}
-                        percentage={value.total_size}
+                        percentage={roundOneDecimal(value.total_size)}
+                        value={formatBigNumber(value.total_stake)}
                       />
                     </td>
                     <td>
-                      <CostsCard percentage={value.tax_ratio} />
+                      <CostsCard
+                        percentage={roundTwoDecimal(value.tax_computed)}
+                        value={formatCostLabel(
+                          value.tax_computed,
+                          value.tax_fix
+                        )}
+                      />
                     </td>
                     <td>
-                      <PledgeCard></PledgeCard>
+                      <PledgeCard value={formatBigNumber(value.pledge)} />
                     </td>
                     <td>_{value.blocks_epoch}</td>
                     <td>
@@ -228,28 +244,30 @@ function Home() {
       <MobileOnly>
         {rowData &&
           Object.entries(rowData).map(([key, value]) => (
-            <CardMobile>
+            <CardMobile key={value.id}>
               <StakingPoolCard
                 id={value.id}
                 avatar={value.pool_pic}
                 fullname={value.fullname}
-                socialmedia={value.handle}
               />
               <WrapperContent style={{ display: "flex" }}>
                 <div className="item">
                   <div className="label">Pool Size</div>
                   <PoolSizeCard
-                    size={value.total_stake}
-                    percentage={value.total_size}
+                    percentage={roundOneDecimal(value.total_size)}
+                    value={formatBigNumber(value.total_stake)}
                   />
                 </div>
                 <div className="item">
                   <div className="label">Costs</div>
-                  <CostsCard percentage={value.tax_ratio} />
+                  <CostsCard
+                    percentage={roundTwoDecimal(value.tax_computed)}
+                    value={formatCostLabel(value.tax_computed, value.tax_fix)}
+                  />
                 </div>
                 <div className="item">
                   <div className="label">Costs</div>
-                  <PledgeCard></PledgeCard>
+                  <PledgeCard value={formatBigNumber(value.pledge)} />
                 </div>
               </WrapperContent>
               <div>

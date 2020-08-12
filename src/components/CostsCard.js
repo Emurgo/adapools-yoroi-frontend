@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { roundOneDecimal } from "../utils/utils";
 
 const Card = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  font-size: 14px;
   @media (max-width: 1023px) {
     flex-direction: column;
     align-items: flex-start;
@@ -25,11 +25,11 @@ const Card = styled.div`
     font-size: 14px;
   }
 `;
-function CostsCard({ percentage, value = 0 }) {
+function CostsCard({ percentage, value }) {
   return (
     <Card>
-      <div className="tag">{roundOneDecimal(percentage)}%</div>
-      <p className="value">({"2.56 M"})</p>
+      <div className="tag">{percentage}%</div>
+      <p className="value">({value})</p>
     </Card>
   );
 }

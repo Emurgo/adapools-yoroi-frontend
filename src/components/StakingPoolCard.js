@@ -63,16 +63,6 @@ function StakingPoolCard({ avatar, fullname, id, socialmedia }) {
             <span> {truncateString(id)}</span>
           </DesktopOnly>
         </div>
-        <ul>
-          {socialmedia && socialmedia.tw && <li>{socialmedia.tw}</li>}
-          {socialmedia && socialmedia.tg && <li>{socialmedia.tg}</li>}
-          {socialmedia && socialmedia.fb && <li>{socialmedia.fb}</li>}
-          {socialmedia && socialmedia.yt && <li>{socialmedia.yt}</li>}
-          {socialmedia && socialmedia.tc && <li>{socialmedia.tc}</li>}
-          {socialmedia && socialmedia.di && <li>{socialmedia.di}</li>}
-          {socialmedia && socialmedia.gh && <li>{socialmedia.gh}</li>}
-          {/* {socialmedia && socialmedia.icon && <li>{socialmedia.icon}</li>} */}
-        </ul>
       </div>
     </MainCardPool>
   );
