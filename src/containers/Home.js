@@ -67,7 +67,7 @@ function Home(): Node {
   }, [rowData]);
 
     const search = (searchValue) => {
-        getPools(searchValue)
+        getPools({search: searchValue})
             .then((poolsData: ApiPoolsResponse) => {
                 setRowData(poolsData.pools);
             });
