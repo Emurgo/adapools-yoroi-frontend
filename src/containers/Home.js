@@ -3,16 +3,13 @@ import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
 import poolData from '../API/data';
-import StakingPoolCard from '../components/StakingPoolCard';
-import PoolSizeCard from '../components/PoolSizeCard';
-import CostsCard from '../components/CostsCard';
-import PledgeCard from '../components/PledgeCard';
 import Search from '../components/Search';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
-import { roundInteger, roundTwoDecimal, formatBigNumber, roundOneDecimal } from '../utils/utils';
 import { getPools } from '../API/api';
 import type { ApiPoolsResponse } from '../API/api';
+import DesktopTable from '../components/DesktopTable';
+import MobileTable from '../components/MobileTable';
 
 const WrapperSelectInput = styled.div`
   display: flex;
@@ -61,90 +58,9 @@ const Header = styled.div`
     }
   }
 `;
-const TableContent = styled.div`
-  display: flex;
-  align-items: flex-end;
-`;
-
-const Table = styled.table`
-  width: 100%;
-  background: white;
-  border-spacing: 0 0.8rem;
-  thead {
-    border-bottom: 3px solid rgba(56, 57, 61, 0.2);
-    th {
-      &:first-child {
-        text-align: left;
-      }
-      &:not(:first-child) {
-        text-align: right;
-      }
-      color: #6b7384;
-      font-size: 14px;
-      letter-spacing: 0;
-      font-weight: 400;
-      padding: 20px 20px 20px 0;
-    }
-  }
-  tbody {
-    tr {
-      border-bottom: 2px solid #dee2ea;
-    }
-    td {
-      padding-right: 20px;
-      &:not(:first-child) {
-        text-align: right;
-      }
-    }
-  }
-`;
-const Button = styled.button`
-  box-sizing: border-box;
-  height: 40px;
-  width: 120px;
-  border: 2px solid #15d1aa;
-  font-size: 14px;
-  color: #15d1aa;
-  background: none;
-  border-radius: 8px;
-  text-transform: uppercase;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const CardMobile = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-radius: 8px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
-  margin-bottom: 24px;
-  padding: 11px 16px;
-`;
-const WrapperContent = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 15px 0;
-  .label {
-    color: #6b7384;
-    font-size: 14px;
-    letter-spacing: 0;
-    line-height: 22px;
-    margin-bottom: 8px;
-  }
-  .item {
-    flex: 1;
-  }
-`;
 
 function Home(): Node {
   const [rowData, setRowData] = useState(null);
-
-  function formatCostLabel(taxComputed, taxFix) {
-    return `${roundInteger(taxComputed)}% + ${Number(taxFix) / 1000000}`;
-  }
 
   useEffect(() => {
     setRowData(poolData.pools);
@@ -172,84 +88,10 @@ function Home(): Node {
       </Header>
 
       <DesktopOnly>
-        <TableContent>
-          <Table>
-            <thead>
-              <tr>
-                <th>Staking Pool</th>
-                <th>Pool Size</th>
-                <th>Costs</th>
-                <th>Pledge</th>
-                <th>Blocks</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {rowData &&
-                Object.entries(rowData).map(([, value]) => (
-                  <tr key={value.id}>
-                    <td>
-                      <StakingPoolCard
-                        id={value.id}
-                        avatar={value.pool_pic}
-                        fullname={value.fullname}
-                      />
-                    </td>
-                    <td>
-                      <PoolSizeCard
-                        percentage={roundOneDecimal(value.total_size)}
-                        value={formatBigNumber(value.total_stake)}
-                      />
-                    </td>
-                    <td>
-                      <CostsCard
-                        percentage={roundTwoDecimal(value.tax_computed)}
-                        value={formatCostLabel(value.tax_computed, value.tax_fix)}
-                      />
-                    </td>
-                    <td>
-                      <PledgeCard value={formatBigNumber(value.pledge)} />
-                    </td>
-                    <td>_{value.blocks_epoch}</td>
-                    <td>
-                      <Button>Delegate</Button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
-        </TableContent>
+        <DesktopTable data={rowData} />
       </DesktopOnly>
       <MobileOnly>
-        {rowData &&
-          Object.entries(rowData).map(([, value]) => (
-            <CardMobile key={value.id}>
-              <StakingPoolCard id={value.id} avatar={value.pool_pic} fullname={value.fullname} />
-              <WrapperContent style={{ display: 'flex' }}>
-                <div className="item">
-                  <div className="label">Pool Size</div>
-                  <PoolSizeCard
-                    percentage={roundOneDecimal(value.total_size)}
-                    value={formatBigNumber(value.total_stake)}
-                  />
-                </div>
-                <div className="item">
-                  <div className="label">Costs</div>
-                  <CostsCard
-                    percentage={roundTwoDecimal(value.tax_computed)}
-                    value={formatCostLabel(value.tax_computed, value.tax_fix)}
-                  />
-                </div>
-                <div className="item">
-                  <div className="label">Costs</div>
-                  <PledgeCard value={formatBigNumber(value.pledge)} />
-                </div>
-              </WrapperContent>
-              <div>
-                <Button style={{ width: '100%' }}>Delegate</Button>
-              </div>
-            </CardMobile>
-          ))}
+        <MobileTable data={rowData} />
       </MobileOnly>
     </Layout>
   );

@@ -12,6 +12,9 @@ export function roundInteger(num) {
   const fNum = Number(num);
   return (Math.round(fNum * 100) / 100).toFixed(0);
 }
+export function formatCostLabel(taxComputed, taxFix) {
+  return `${roundInteger(taxComputed)}% + ${Number(taxFix) / 1000000}`;
+}
 
 export function formatBigNumber(num) {
   const fNum = Number(num);
