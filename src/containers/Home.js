@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
-import poolData from '../API/data';
 import Search from '../components/Search';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
-import { getPools } from '../API/api';
+import { getPools, listPools } from '../API/api';
 import type { ApiPoolsResponse } from '../API/api';
 import DesktopTable from '../components/DesktopTable';
 import MobileTable from '../components/MobileTable';
@@ -61,17 +60,44 @@ const Header = styled.div`
 
 function Home(): Node {
   const [rowData, setRowData] = useState(null);
+  const [status, setStatus] = useState('idle')
 
   useEffect(() => {
-    setRowData(poolData.pools);
-  }, [rowData]);
+    setStatus('pending')
+    listPools()
+      .then((poolsData: ApiPoolsResponse) => {
+        setStatus('resolved')
+        setRowData(poolsData.pools);
+      }).catch((err) => {
+        setStatus({ status: 'rejected' });
+        console.error(err);
+      });
+  }, []);
 
+<<<<<<< HEAD
     const search = (searchValue) => {
         getPools({search: searchValue})
             .then((poolsData: ApiPoolsResponse) => {
                 setRowData(poolsData.pools);
             });
     };
+=======
+  const search = (searchValue) => {
+    setStatus('pending')
+    getPools(searchValue)
+      .then((poolsData: ApiPoolsResponse) => {
+        setStatus('resolved')
+        setRowData(poolsData.pools);
+      }).catch((err) => {
+        setStatus({ status: 'rejected' });
+        console.error(err);
+      });
+  };
+
+  const randomFuncion = (id) => {
+    console.log(id);
+  };
+>>>>>>> bf80a83af595a262b51a08cc89429e82f51e8d8d
 
   return (
     <Layout>
@@ -88,10 +114,10 @@ function Home(): Node {
       </Header>
 
       <DesktopOnly>
-        <DesktopTable data={rowData} />
+        <DesktopTable status={status} randomFuncion={randomFuncion} data={rowData} />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable data={rowData} />
+        <MobileTable status={status} randomFuncion={randomFuncion} data={rowData} />
       </MobileOnly>
     </Layout>
   );

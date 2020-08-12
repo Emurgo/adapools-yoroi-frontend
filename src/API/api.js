@@ -89,12 +89,20 @@ export function getPools(body: {
   })
     .then((response) => {
       const poolsResponse: ApiPoolsResponse = response.data;
-      // console.log("Response:")
-      // console.log(poolsResponse);
-
       return poolsResponse;
     })
     .catch((error) => {
       console.log('API::getPools Error: ', error);
+    });
+}
+
+export function listPools(): Promise<ApiPoolsResponse> {
+  return axios
+    .get(`${backendUrl}`)
+    .then((response) => {
+      return (response.data :ApiPoolsResponse);
+    })
+    .catch((error) => {
+      console.log('API::listPools Error: ', error);
     });
 }
