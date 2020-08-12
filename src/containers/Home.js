@@ -74,14 +74,6 @@ function Home(): Node {
       });
   }, []);
 
-<<<<<<< HEAD
-    const search = (searchValue) => {
-        getPools({search: searchValue})
-            .then((poolsData: ApiPoolsResponse) => {
-                setRowData(poolsData.pools);
-            });
-    };
-=======
   const search = (searchValue) => {
     setStatus('pending')
     getPools(searchValue)
@@ -97,7 +89,6 @@ function Home(): Node {
   const randomFuncion = (id) => {
     console.log(id);
   };
->>>>>>> bf80a83af595a262b51a08cc89429e82f51e8d8d
 
   return (
     <Layout>
