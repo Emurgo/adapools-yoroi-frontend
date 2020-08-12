@@ -1,18 +1,21 @@
 // @flow
 
 import React, { useState } from "react";
+import type { Node } from "react";
 import styled from "styled-components";
 
+const Form = styled.form`
+  display: flex;
+`;
 const SearchInput = styled.input`
   height: 40px;
   background-color: #f0f3f5;
-  height: 40px;
   display: block;
   font-size: 14px;
   color: #2b2c32;
   line-height: 1.3;
   padding: 0.6em 1.4em 0.5em 0.8em;
-  width: 322px;
+  width: calc(322px - 44px);
   margin: 0;
   border: none;
   border-radius: 8px;
@@ -24,35 +27,56 @@ const SearchInput = styled.input`
     color: #c4cad7;
   }
 `;
+const InputBtn = styled.button`
+  background: #17d1aa;
+  margin: 0;
+  border: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0 8px 8px 0;
+  padding: 0.6em 0.9em 0.5em 0.9em;
+  i {
+    color: white;
+  }
+`;
 
-const Search = ({ search }: (string) => void) => {
-    const [searchValue, setSearchValue] = useState("");
+type Props = {|
+  search: Function,
+|};
 
-    const handleSearchInputChanges = e => {
-        setSearchValue(e.target.value);
-    };
+const Search = ({ search }: Props): Node => {
+  const [searchValue, setSearchValue] = useState("");
 
-    const resetInputField = () => {
-        setSearchValue("");
-    };
+  const handleSearchInputChanges = (e) => {
+    setSearchValue(e.target.value);
+  };
 
-    const callSearchFunction = e => {
-        e.preventDefault();
-        search(searchValue);
-        resetInputField();
-    };
+  const resetInputField = () => {
+    setSearchValue("");
+  };
 
-    return (
-        <form className="search">
-            <input
-                value={searchValue}
-                onChange={handleSearchInputChanges}
-                type="text"
-            />
+  const callSearchFunction = (e) => {
+    e.preventDefault();
+    search(searchValue);
+    debugger;
+    resetInputField();
+  };
 
-            <input onClick={callSearchFunction} type="submit" value="SEARCH" />
-        </form>
-    );
+  return (
+    <Form className="search">
+      <SearchInput
+        value={searchValue}
+        onChange={handleSearchInputChanges}
+        placeholder="Search By Id"
+        type="text"
+      />
+
+      <InputBtn onClick={callSearchFunction} type="submit">
+        <i className="fas fa-search"></i>
+      </InputBtn>
+    </Form>
+  );
 };
 
 export default Search;
