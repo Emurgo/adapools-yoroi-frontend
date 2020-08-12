@@ -36,7 +36,7 @@ export type Pool = {|
   +tax_computed: number, // not sure
   +blocks_epoch: string,
   +roa: string,
-  +hist_bpe: Array<HistBPE>, // hasmap from server
+  +hist_bpe: { [string]: HistBPE },
   +hist_roa: any, // no examples yet. similar to bpe?
   +score: number,
   +handles: SocialMediaHandles, // social media stuff
@@ -62,7 +62,7 @@ export type SortingEnum = $Values<typeof Sorting>;
 
 export type ApiPoolsResponse = {|
   world: World,
-  pools: Array<Pool>,
+  pools: { [string]: Pool },
 |};
 
 export function getPools(
@@ -81,7 +81,11 @@ export function getPools(
     },
   })
     .then((response) => {
-      return response.data.json();
+      const poolsResponse: ApiPoolsResponse = response.data;
+      // console.log("Response:")
+      // console.log(poolsResponse);
+
+      return poolsResponse;
     })
     .catch((error) => {
       console.log('API::getPools Error: ', error);
