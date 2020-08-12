@@ -21,11 +21,12 @@ const BtnWrapper = styled.button`
 `;
 type Props = {|
   +children: Node,
+  +onClick: Function,
 |};
 
 function Button(props: Props) {
-  const { children } = props;
-  return <BtnWrapper {...props}>{children}</BtnWrapper>;
+  const { children, onClick } = props;
+  return <BtnWrapper onClick={onClick} {...props}>{children}</BtnWrapper>;
 }
 
 export default Button;

@@ -49,6 +49,7 @@ const Table = styled.table`
 
 type Props = {|
   data: Pool,
+  randomFuncion: Function
 |};
 function DesktopTable({ data, randomFuncion }: Props) {
   if (data && Object.entries(data).length <= 0) {
