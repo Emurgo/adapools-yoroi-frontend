@@ -60,7 +60,7 @@ const Search = ({ search }: Props): Node => {
 
   const callSearchFunction = (e) => {
     e.preventDefault();
-    search(searchValue);
+    search({ search: searchValue });
     resetInputField();
   };
 

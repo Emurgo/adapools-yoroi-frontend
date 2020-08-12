@@ -72,8 +72,8 @@ export function getPools(body: {
   // cancelToken: boolean
 }): Promise<ApiPoolsResponse> {
   const requestBody = {
-    ... { search: '', sort: Sorting.ROA, limit: 250 },
-    ... body
+    ...{ search: '', sort: Sorting.ROA, limit: 250 },
+    ... body,
   }
 
   const encodeForm = (data) => {
@@ -93,16 +93,12 @@ export function getPools(body: {
     })
     .catch((error) => {
       console.log('API::getPools Error: ', error);
+      return {
+        pools: {}
+      }
     });
 }
 
 export function listPools(): Promise<ApiPoolsResponse> {
-  return axios
-    .get(`${backendUrl}`)
-    .then((response) => {
-      return (response.data :ApiPoolsResponse);
-    })
-    .catch((error) => {
-      console.log('API::listPools Error: ', error);
-    });
+  return getPools();
 }

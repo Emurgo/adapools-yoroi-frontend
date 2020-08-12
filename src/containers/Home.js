@@ -67,26 +67,26 @@ function Home(): Node {
     listPools()
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved')
-        setRowData(poolsData.pools);
+        setRowData(Object.values(poolsData.pools));
       }).catch((err) => {
         setStatus({ status: 'rejected' });
         console.error(err);
       });
   }, []);
 
-  const search = (searchValue) => {
+  const search = ({ search: searchValue }) => {
     setStatus('pending')
-    getPools(searchValue)
+    getPools({ search: searchValue })
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved')
-        setRowData(poolsData.pools);
+        setRowData(Object.values(poolsData.pools));
       }).catch((err) => {
         setStatus({ status: 'rejected' });
         console.error(err);
       });
   };
 
-  const randomFuncion = (id) => {
+  const randomFunction = (id) => {
     console.log(id);
   };
 
@@ -105,10 +105,10 @@ function Home(): Node {
       </Header>
 
       <DesktopOnly>
-        <DesktopTable status={status} randomFuncion={randomFuncion} data={rowData} />
+        <DesktopTable status={status} randomFunction={randomFunction} data={rowData} />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable status={status} randomFuncion={randomFuncion} data={rowData} />
+        <MobileTable status={status} randomFunction={randomFunction} data={rowData} />
       </MobileOnly>
     </Layout>
   );
