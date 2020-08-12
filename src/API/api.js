@@ -1,7 +1,7 @@
 // @flow
 
-import axios from "axios";
-import { BACKEND_URL } from "../manifestEnvs";
+import axios from 'axios';
+import { BACKEND_URL } from '../manifestEnvs';
 
 const backendUrl: string = BACKEND_URL;
 
@@ -54,8 +54,8 @@ export type World = {|
 |};
 
 export const Sorting = Object.freeze({
-  ROA: "roa",
-  TICKER: "ticker",
+  ROA: 'roa',
+  TICKER: 'ticker',
 });
 
 export type SortingEnum = $Values<typeof Sorting>;
@@ -66,24 +66,24 @@ export type ApiPoolsResponse = {|
 |};
 
 export function getPools(
-  search: string = "",
+  search: string = '',
   sort: SortingEnum = Sorting.ROA,
   limit: number = 250
   // cancelToken: boolean
 ): Promise<ApiPoolsResponse> {
   return axios(`${backendUrl}`, {
     // cancelToken: cancelToken,
-    method: "post",
+    method: 'post',
     data: {
-      limit: limit,
-      sort: sort,
-      search: search,
+      limit,
+      sort,
+      search,
     },
   })
     .then((response) => {
       return response.data.json();
     })
     .catch((error) => {
-      console.log("API::getPools Error: ", error);
+      console.log('API::getPools Error: ', error);
     });
 }

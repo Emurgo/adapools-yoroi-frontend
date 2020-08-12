@@ -1,8 +1,8 @@
 // @flow
 
-import React, { useState } from "react";
-import type { Node } from "react";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import type { Node } from 'react';
+import styled from 'styled-components';
 
 const Form = styled.form`
   display: flex;
@@ -46,14 +46,14 @@ type Props = {|
 |};
 
 const Search = ({ search }: Props): Node => {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
 
   const handleSearchInputChanges = (e) => {
     setSearchValue(e.target.value);
   };
 
   const resetInputField = () => {
-    setSearchValue("");
+    setSearchValue('');
   };
 
   const callSearchFunction = (e) => {
@@ -72,7 +72,7 @@ const Search = ({ search }: Props): Node => {
       />
 
       <InputBtn onClick={callSearchFunction} type="submit">
-        <i className="fas fa-search"></i>
+        <i className="fas fa-search" />
       </InputBtn>
     </Form>
   );

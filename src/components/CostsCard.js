@@ -1,7 +1,7 @@
 // @flow
-import React from "react";
-import type { Node } from "react";
-import styled from "styled-components";
+import React from 'react';
+import type { Node } from 'react';
+import styled from 'styled-components';
 
 const Card = styled.div`
   display: flex;

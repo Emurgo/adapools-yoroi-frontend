@@ -1,9 +1,9 @@
 // @flow
 
-import React from "react";
-import styled from "styled-components";
-import { PieChart } from "react-minimal-pie-chart";
-import type { Node } from "react";
+import React from 'react';
+import styled from 'styled-components';
+import { PieChart } from 'react-minimal-pie-chart';
+import type { Node } from 'react';
 
 const Card = styled.div`
   display: flex;
@@ -47,11 +47,11 @@ function PoolSizeCard({ percentage, value }: Props): Node {
     return [
       {
         value: percent,
-        color: "#FE1351",
+        color: '#FE1351',
       },
       {
         value: 1 - percent,
-        color: "#17D1AA",
+        color: '#17D1AA',
       },
     ];
   }
@@ -60,7 +60,7 @@ function PoolSizeCard({ percentage, value }: Props): Node {
     <Card>
       <div className="tag">
         <div className="piechart">
-          <PieChart totalValue={1} data={formatArray(percentage)}></PieChart>
+          <PieChart totalValue={1} data={formatArray(percentage)} />
         </div>
         <div>{percentage}%</div>
       </div>

@@ -1,9 +1,9 @@
 // @flow
-import React from "react";
-import type { Node } from "react";
-import styled from "styled-components";
-import parse from "html-react-parser";
-import { DesktopOnly } from "./layout/Breakpoints";
+import React from 'react';
+import type { Node } from 'react';
+import styled from 'styled-components';
+import parse from 'html-react-parser';
+import { DesktopOnly } from './layout/Breakpoints';
 
 const MainCardPool = styled.div`
   display: flex;
@@ -57,17 +57,14 @@ function StakingPoolCard({ avatar, fullname, id }: Props): Node {
     if (string.length <= 8) {
       return string;
     }
-    return string.substring(0, 6) + "..." + string.slice(string.length - 2);
+    return `${string.substring(0, 6)}...${string.slice(string.length - 2)}`;
   }
 
   return (
     <MainCardPool>
       <div className="card-image">
         <img
-          src={
-            avatar ||
-            "https://s3.amazonaws.com/learn-verified/identicon-example.png"
-          }
+          src={avatar || 'https://s3.amazonaws.com/learn-verified/identicon-example.png'}
           alt=""
         />
       </div>

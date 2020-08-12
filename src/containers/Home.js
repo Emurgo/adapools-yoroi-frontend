@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from "react";
-import type { Node } from "react";
-import Layout from "../components/layout/Layout";
-import styled from "styled-components";
-import poolData from "../API/data";
-import StakingPoolCard from "../components/StakingPoolCard";
-import PoolSizeCard from "../components/PoolSizeCard";
-import CostsCard from "../components/CostsCard";
-import PledgeCard from "../components/PledgeCard";
-import Search from "../components/Search";
+import React, { useState, useEffect } from 'react';
+import type { Node } from 'react';
+import styled from 'styled-components';
+import Layout from '../components/layout/Layout';
+import poolData from '../API/data';
+import StakingPoolCard from '../components/StakingPoolCard';
+import PoolSizeCard from '../components/PoolSizeCard';
+import CostsCard from '../components/CostsCard';
+import PledgeCard from '../components/PledgeCard';
+import Search from '../components/Search';
 
-import { DesktopOnly, MobileOnly } from "../components/layout/Breakpoints";
-import {
-  roundInteger,
-  roundTwoDecimal,
-  formatBigNumber,
-  roundOneDecimal,
-} from "../utils/utils";
-import { getPools } from "../API/api";
-import type { ApiPoolsResponse } from "../API/api";
+import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
+import { roundInteger, roundTwoDecimal, formatBigNumber, roundOneDecimal } from '../utils/utils';
+import { getPools } from '../API/api';
+import type { ApiPoolsResponse } from '../API/api';
 
 const WrapperSelectInput = styled.div`
   display: flex;
@@ -48,7 +43,7 @@ const SelectInput = styled.select`
   -webkit-appearance: none;
   appearance: none;
   background-color: #f0f3f5;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
   background-repeat: no-repeat, repeat;
   background-position: right 0.7em top 50%, 0 0;
   background-size: 0.65em auto, 100%;
@@ -147,8 +142,8 @@ const WrapperContent = styled.div`
 function Home(): Node {
   const [rowData, setRowData] = useState(null);
 
-  function formatCostLabel(tax_computed, tax_fix) {
-    return `${roundInteger(tax_computed)}% + ${parseInt(tax_fix) / 1000000}`;
+  function formatCostLabel(taxComputed, taxFix) {
+    return `${roundInteger(taxComputed)}% + ${Number(taxFix) / 1000000}`;
   }
 
   useEffect(() => {
@@ -157,15 +152,14 @@ function Home(): Node {
 
   const search = (searchValue) => {
     getPools(searchValue).then((jsonResponse: ApiPoolsResponse) => {
-      console.log("json Response: ", jsonResponse);
+      // eslint-disable-next-line no-console
+      console.log('json Response: ', jsonResponse);
     });
   };
 
   return (
     <Layout>
-      <h1 style={{ textAlign: "center", margin: "30px 0 50px" }}>
-        Delegation Page
-      </h1>
+      <h1 style={{ textAlign: 'center', margin: '30px 0 50px' }}>Delegation Page</h1>
       <Header>
         <Search search={search} />
         <WrapperSelectInput>
@@ -187,12 +181,12 @@ function Home(): Node {
                 <th>Costs</th>
                 <th>Pledge</th>
                 <th>Blocks</th>
-                <th></th>
+                <th />
               </tr>
             </thead>
             <tbody>
               {rowData &&
-                Object.entries(rowData).map(([key, value]) => (
+                Object.entries(rowData).map(([, value]) => (
                   <tr key={value.id}>
                     <td>
                       <StakingPoolCard
@@ -210,10 +204,7 @@ function Home(): Node {
                     <td>
                       <CostsCard
                         percentage={roundTwoDecimal(value.tax_computed)}
-                        value={formatCostLabel(
-                          value.tax_computed,
-                          value.tax_fix
-                        )}
+                        value={formatCostLabel(value.tax_computed, value.tax_fix)}
                       />
                     </td>
                     <td>
@@ -231,14 +222,10 @@ function Home(): Node {
       </DesktopOnly>
       <MobileOnly>
         {rowData &&
-          Object.entries(rowData).map(([key, value]) => (
+          Object.entries(rowData).map(([, value]) => (
             <CardMobile key={value.id}>
-              <StakingPoolCard
-                id={value.id}
-                avatar={value.pool_pic}
-                fullname={value.fullname}
-              />
-              <WrapperContent style={{ display: "flex" }}>
+              <StakingPoolCard id={value.id} avatar={value.pool_pic} fullname={value.fullname} />
+              <WrapperContent style={{ display: 'flex' }}>
                 <div className="item">
                   <div className="label">Pool Size</div>
                   <PoolSizeCard
@@ -259,7 +246,7 @@ function Home(): Node {
                 </div>
               </WrapperContent>
               <div>
-                <Button style={{ width: "100%" }}>Delegate</Button>
+                <Button style={{ width: '100%' }}>Delegate</Button>
               </div>
             </CardMobile>
           ))}

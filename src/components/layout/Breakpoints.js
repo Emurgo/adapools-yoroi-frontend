@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const MobileHidden = styled.div`
   display: none;
@@ -14,10 +14,6 @@ const DesktopHidden = styled.div`
   }
 `;
 
-export const MobileOnly = ({ children }) => (
-  <MobileHidden>{children}</MobileHidden>
-);
+export const MobileOnly = ({ children }) => <MobileHidden>{children}</MobileHidden>;
 
-export const DesktopOnly = ({ children }) => (
-  <DesktopHidden>{children}</DesktopHidden>
-);
+export const DesktopOnly = ({ children }) => <DesktopHidden>{children}</DesktopHidden>;

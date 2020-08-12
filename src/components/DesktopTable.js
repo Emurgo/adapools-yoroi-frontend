@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 function DesktopTable() {
-  return <div></div>;
+  return <div />;
 }
 
 export default DesktopTable;
