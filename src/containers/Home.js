@@ -66,13 +66,12 @@ function Home(): Node {
     setRowData(poolData.pools);
   }, [rowData]);
 
-  const search = (searchValue) => {
-    getPools(searchValue).then((jsonResponse: ApiPoolsResponse) => {
-      // eslint-disable-next-line no-console
-      console.log('json Response: ', jsonResponse);
-      // setRowData(jsonResponse.pools)
-    });
-  };
+    const search = (searchValue) => {
+        getPools(searchValue)
+            .then((poolsData: ApiPoolsResponse) => {
+                setRowData(poolsData.pools);
+            });
+    };
 
   return (
     <Layout>
