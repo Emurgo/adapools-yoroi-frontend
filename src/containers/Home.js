@@ -69,12 +69,21 @@ function Home(): Node {
       fetchData();
   }, [rowData]);
 
+<<<<<<< HEAD
   const search = (searchValue) => {
     getPools(searchValue).then((jsonResponse: ApiPoolsResponse) => {
       console.log('json Response: ', jsonResponse);
       setRowData(jsonResponse.pools)
     });
   };
+=======
+    const search = (searchValue) => {
+        getPools(searchValue)
+            .then((poolsData: ApiPoolsResponse) => {
+                setRowData(poolsData.pools);
+            });
+    };
+>>>>>>> 462da0361a01a32dde0a49daa5bd9611d660afb2
 
   const randomFuncion = (id) => {
     console.log(id);
