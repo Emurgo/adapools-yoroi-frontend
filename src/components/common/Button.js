@@ -20,10 +20,13 @@ const BtnWrapper = styled.button`
   }
   &:disabled {
     opacity: 0.3;
+    background: #15d1aa;
+    color: white;
   }
 `;
 type Props = {|
   +children: Node,
+  +disabled: boolean,
   +onClick: Function,
 |};
 
