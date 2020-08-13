@@ -58,7 +58,7 @@ function SortSelect({ filter }: Props) {
 
   const handleChange = (e) => {
     setSelectValue(e.currentTarget.value);
-    filter(selectValue);
+    filter(e.currentTarget.value);
   };
 
   React.useEffect(() => {
