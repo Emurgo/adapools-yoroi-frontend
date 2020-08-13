@@ -76,7 +76,7 @@ function SortSelect({ filter }: Props) {
       <label htmlFor="sort">Sort by:</label>
       <SelectInput name="" id="sort" value={selectValue} onChange={handleChange}>
         {items.map(({ value, label }) => (
-          <option key={value} value={label}>
+          <option key={value} value={value}>
             {label}
           </option>
         ))}
