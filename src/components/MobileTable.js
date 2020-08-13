@@ -40,9 +40,9 @@ const WrapperContent = styled.div`
 `;
 type Props = {|
   data: Pool,
-  randomFuncion: Function
+  randomFunction: Function
 |};
-function MobileTable({ data, randomFuncion }: Props) {
+function MobileTable({ data, randomFunction }: Props) {
   if (data && Object.entries(data).length <= 0) {
     return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
   }
@@ -74,7 +74,7 @@ function MobileTable({ data, randomFuncion }: Props) {
               </div>
             </WrapperContent>
             <div>
-              <Button onClick={() => randomFuncion(value.id)}>Delegate</Button>
+              <Button onClick={() => randomFunction(value.id)}>Delegate</Button>
             </div>
           </CardMobile>
         ))}

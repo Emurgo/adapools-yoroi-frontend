@@ -65,20 +65,27 @@ export type ApiPoolsResponse = {|
   pools: { [string]: Pool },
 |};
 
-export function getPools(
-  search: string = '',
-  sort: SortingEnum = Sorting.ROA,
-  limit: number = 250
+export function getPools(body: {
+  search: string,
+  sort: SortingEnum,
+  limit: number
   // cancelToken: boolean
-): Promise<ApiPoolsResponse> {
+}): Promise<ApiPoolsResponse> {
+  const requestBody = {
+    ...{ search: '', sort: Sorting.ROA, limit: 250 },
+    ...body,
+  }
+
+  const encodeForm = (data) => {
+    return (Object.keys(data): any)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+        .join('&');
+  }
+
   return axios(`${backendUrl}`, {
-    // cancelToken: cancelToken,
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     method: 'post',
-    data: {
-      limit,
-      sort,
-      search,
-    },
+    data: encodeForm(requestBody),
   })
     .then((response) => {
       const poolsResponse: ApiPoolsResponse = response.data;
@@ -86,16 +93,12 @@ export function getPools(
     })
     .catch((error) => {
       console.log('API::getPools Error: ', error);
+      return {
+        pools: {}
+      }
     });
 }
 
 export function listPools(): Promise<ApiPoolsResponse> {
-  return axios
-    .get(`${backendUrl}`)
-    .then((response) => {
-      return (response.data :ApiPoolsResponse);
-    })
-    .catch((error) => {
-      console.log('API::listPools Error: ', error);
-    });
+  return getPools();
 }

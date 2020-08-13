@@ -37,7 +37,7 @@ const [filterOptions, setFilterOptions] = useState({
     listPools()
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved')
-        setRowData(poolsData.pools);
+        setRowData(Object.values(poolsData.pools));
       }).catch((err) => {
         setStatus({ status: 'rejected' });
         console.error(err);
@@ -54,7 +54,7 @@ const [filterOptions, setFilterOptions] = useState({
     getPools({filterOptions})
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved')
-        setRowData(poolsData.pools);
+        setRowData(Object.values(poolsData.pools));
       }).catch((err) => {
         setStatus({ status: 'rejected' });
         console.error(err);
@@ -78,23 +78,24 @@ const [filterOptions, setFilterOptions] = useState({
       });
   }
 
-  const randomFuncion = (id) => {
+  const randomFunction = (id) => {
     console.log(id);
   };
 
   return (
     <Layout>
       <h1 style={{ textAlign: 'center', margin: '30px 0 50px' }}>Delegation Page</h1>
+
       <Header>
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />
       </Header>
 
       <DesktopOnly>
-        <DesktopTable status={status} randomFuncion={randomFuncion} data={rowData} />
+        <DesktopTable status={status} randomFunction={randomFunction} data={rowData} />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable status={status} randomFuncion={randomFuncion} data={rowData} />
+        <MobileTable status={status} randomFunction={randomFunction} data={rowData} />
       </MobileOnly>
     </Layout>
   );
