@@ -18,15 +18,19 @@ const BtnWrapper = styled.button`
   &:hover {
     opacity: 0.8;
   }
+  &:disabled {
+    opacity: 0.3;
+  }
 `;
 type Props = {|
   +children: Node,
+  +disabled: boolean,
   +onClick: Function,
 |};
 
 function Button(props: Props) {
-  const { children, onClick } = props;
-  return <BtnWrapper onClick={onClick} {...props}>{children}</BtnWrapper>;
+  const { children, onClick, disabled } = props;
+  return <BtnWrapper disabled={disabled} onClick={onClick} {...props}>{children}</BtnWrapper>;
 }
 
 export default Button;

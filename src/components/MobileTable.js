@@ -40,9 +40,10 @@ const WrapperContent = styled.div`
 `;
 type Props = {|
   data: Pool,
-  delegateFunction: Function
+  delegateFunction: Function,
+  messageStatus: boolean
 |};
-function MobileTable({ data, delegateFunction }: Props) {
+function MobileTable({ data, delegateFunction, messageStatus }: Props) {
   if (data && Object.entries(data).length <= 0) {
     return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
   }
@@ -74,7 +75,7 @@ function MobileTable({ data, delegateFunction }: Props) {
               </div>
             </WrapperContent>
             <div>
-              <Button onClick={() => delegateFunction(value.id)}>Delegate</Button>
+              <Button disabled={messageStatus} onClick={() => delegateFunction(value.id)}>Delegate</Button>
             </div>
           </CardMobile>
         ))}

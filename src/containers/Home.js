@@ -38,6 +38,7 @@ export type HomeProps = {|
 |};
 
 function Home(props: HomeProps): Node {
+  const [messageStatus, setMessageStatus] = useState(false);
   const [rowData, setRowData] = useState(null);
   const [status, setStatus] = useState('idle');
   const [filterOptions, setFilterOptions] = useState({
@@ -94,13 +95,24 @@ function Home(props: HomeProps): Node {
   };
 
   const delegateFunction = (id: string): void => {
-    YoroiCallback([{ poolHash: id }], {
+    YoroiCallback(([{ poolHash: id }]), {
       source: props.urlParams.source,
       chromeId: props.urlParams.chromeId,
       mozId: props.urlParams.mozId,
     });
   };
 
+  function handleMessage (event) {
+    // e holds data, origin, source
+    if (event.origin === 'http://example.com'){
+      setMessageStatus(true)
+    }
+  }
+  
+  if (window.parent.addEventListener) {
+    window.parent.addEventListener('message', handleMessage, false);
+  }
+  
   return (
     <Layout>
       <Header>
@@ -109,10 +121,20 @@ function Home(props: HomeProps): Node {
       </Header>
 
       <DesktopOnly>
-        <DesktopTable status={status} delegateFunction={delegateFunction} data={rowData} />
+        <DesktopTable 
+          status={status}
+          delegateFunction={delegateFunction} 
+          data={rowData}
+          messageStatus={messageStatus}
+        />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable status={status} delegateFunction={delegateFunction} data={rowData} />
+        <MobileTable 
+          status={status}
+          delegateFunction={delegateFunction} 
+          data={rowData}
+          messageStatus={messageStatus}
+        />
       </MobileOnly>
     </Layout>
   );
