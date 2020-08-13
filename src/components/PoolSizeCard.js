@@ -59,24 +59,24 @@ function PoolSizeCard({ percentage, value }: Props): Node {
   let backgroundColor = null;
 
   switch (true) {
-    case percentage >= 0.5:
-      backgroundColor = 'hsl(0,80%,80%)';
-      break;
-    case percentage < 0.5 && percentage > 0.4:
-      backgroundColor = 'hsl(38.527896145612,80%,80%)';
-      break;
-    case percentage <= 0.4 && percentage > 0.3:
-      backgroundColor = 'hsl(59.384792622058,80%,80%)';
-      break;
-    case percentage <= 0.3 && percentage > 0.2:
-      backgroundColor = 'hsl(67.359072574924,80%,80%)';
-      break;
-    case percentage <= 0.2 && percentage > 0:
-      backgroundColor = 'hsl(111.21169896469,80%,80%)';
-      break;
-    default:
-      backgroundColor = 'hsl(111.21169896469,80%,80%)';
-      break;
+  case percentage >= 0.5:
+    backgroundColor = 'hsl(0,80%,80%)';
+    break;
+  case percentage < 0.5 && percentage > 0.4:
+    backgroundColor = 'hsl(38.527896145612,80%,80%)';
+    break;
+  case percentage <= 0.4 && percentage > 0.3:
+    backgroundColor = 'hsl(59.384792622058,80%,80%)';
+    break;
+  case percentage <= 0.3 && percentage > 0.2:
+    backgroundColor = 'hsl(67.359072574924,80%,80%)';
+    break;
+  case percentage <= 0.2 && percentage > 0:
+    backgroundColor = 'hsl(111.21169896469,80%,80%)';
+    break;
+  default:
+    backgroundColor = 'hsl(111.21169896469,80%,80%)';
+    break;
   }
 
   return (
