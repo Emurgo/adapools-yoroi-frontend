@@ -94,13 +94,13 @@ function Home(props: HomeProps): Node {
   };
 
   const delegateFunction = (id: string): void => {
-    YoroiCallback([{ poolHash: id }], {
+    YoroiCallback(([{ poolHash: id }]), {
       source: props.urlParams.source,
       chromeId: props.urlParams.chromeId,
       mozId: props.urlParams.mozId,
     });
   };
-
+  
   return (
     <Layout>
       <Header>
@@ -109,10 +109,18 @@ function Home(props: HomeProps): Node {
       </Header>
 
       <DesktopOnly>
-        <DesktopTable status={status} delegateFunction={delegateFunction} data={rowData} />
+        <DesktopTable 
+          status={status}
+          delegateFunction={delegateFunction} 
+          data={rowData}
+        />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable status={status} delegateFunction={delegateFunction} data={rowData} />
+        <MobileTable 
+          status={status}
+          delegateFunction={delegateFunction} 
+          data={rowData}
+        />
       </MobileOnly>
     </Layout>
   );

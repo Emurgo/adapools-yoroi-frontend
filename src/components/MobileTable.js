@@ -40,7 +40,7 @@ const WrapperContent = styled.div`
 `;
 type Props = {|
   data: Pool,
-  delegateFunction: Function
+  delegateFunction: Function,
 |};
 function MobileTable({ data, delegateFunction }: Props) {
   if (data && Object.entries(data).length <= 0) {
