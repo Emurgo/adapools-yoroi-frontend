@@ -18,6 +18,9 @@ const Table = styled.table`
   width: 100%;
   background: white;
   border-spacing: 0 0.8rem;
+  tr td {
+    white-space: nowrap;
+  }
   thead {
     border-bottom: 3px solid rgba(56, 57, 61, 0.2);
     th {

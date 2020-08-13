@@ -73,13 +73,13 @@ export function getPools(body: {
 }): Promise<ApiPoolsResponse> {
   const requestBody = {
     ...{ search: '', sort: Sorting.ROA, limit: 250 },
-    ... body,
+    ...body,
   }
 
   const encodeForm = (data) => {
-    return Object.keys(data)
-        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-        .join('&');
+    return (Object.keys(data): any)
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+      .join('&');
   }
 
   return axios(`${backendUrl}`, {

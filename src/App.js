@@ -4,26 +4,26 @@ import Home from './containers/Home';
 import type { UrlParams } from './containers/Home';
 
 const extractParams = (locationSearch: string): UrlParams => {
-    const params = new URLSearchParams(locationSearch);
-    return {
-        chromeId: params.get('chromeId'),
-        mozId: params.get('mozId'),
-        source: params.get('source'),
-        selectedPoolId: params.get('selectedPoolId'),
-        lang: params.get('lang'),
-    }
+  const params = new URLSearchParams(locationSearch);
+  return {
+    chromeId: params.get('chromeId'),
+    mozId: params.get('mozId'),
+    source: params.get('source'),
+    selectedPoolId: params.get('selectedPoolId'),
+    lang: params.get('lang'),
+  }
 }
 
 function App() {
-    const { location } = window;
-    const params = extractParams(location.search)
+  const { location } = window;
+  const params = extractParams(location.search)
 
-    return (
-      <>
-        <Home props={params} />
-        <GlobalStyle />
-      </>
-    );
+  return (
+    <>
+      <Home props={params} />
+      <GlobalStyle />
+    </>
+  );
 }
 
 export default App;

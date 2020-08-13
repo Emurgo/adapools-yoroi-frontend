@@ -17,6 +17,7 @@ module.exports = {
     es2020: true,
   },
   rules: {
+    'indent': [2, 2],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/jsx-closing-bracket-location': 1,
     'react/jsx-one-expression-per-line': 'off',
@@ -33,7 +34,6 @@ module.exports = {
     'class-methods-use-this': 0,
     'no-continue': 0,
     'no-duplicate-imports': 0,
-    indent: 'off',
     'object-curly-spacing': 1,
     'spaced-comment': 1,
     quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
