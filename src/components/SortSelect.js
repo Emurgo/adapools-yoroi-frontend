@@ -56,7 +56,7 @@ function SortSelect({ filter }: Props) {
       value: 'roa',
     },
   ]);
-  const [selectValue, setSelectValue] = React.useState('');
+  const [selectValue, setSelectValue] = React.useState('ROA');
 
   const handleChange = (e) => {
     setSelectValue(e.currentTarget.value);
