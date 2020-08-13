@@ -52,10 +52,10 @@ const Table = styled.table`
 
 type Props = {|
   data: Pool,
-  randomFuncion: Function,
+  randomFunction: Function,
   +status: 'idle' | 'pending' | 'resolved' | 'rejected',
 |};
-function DesktopTable({ data, randomFuncion, status }: Props) {
+function DesktopTable({ data, randomFunction, status }: Props) {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -114,7 +114,7 @@ function DesktopTable({ data, randomFuncion, status }: Props) {
                 </td>
                 <td>_{value.blocks_epoch}</td>
                 <td>
-                  <Button onClick={() => randomFuncion(value.id)}>Delegate</Button>
+                  <Button onClick={() => randomFunction(value.id)}>Delegate</Button>
                 </td>
               </tr>
             ))}

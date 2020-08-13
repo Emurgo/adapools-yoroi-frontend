@@ -41,8 +41,8 @@ function Home(props: HomeProps): Node {
   const [rowData, setRowData] = useState(null);
   const [status, setStatus] = useState('idle')
   const [filterOptions, setFilterOptions] = useState({
-    searchValue: '',
-    sortValue: ''
+    search: '',
+    sort: 'roa',
   })
 
   useEffect(() => {
@@ -51,6 +51,7 @@ function Home(props: HomeProps): Node {
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved')
         setRowData(Object.values(poolsData.pools));
+
       }).catch((err) => {
         setStatus({ status: 'rejected' });
         console.error(err);
@@ -60,14 +61,15 @@ function Home(props: HomeProps): Node {
   const filterSelect = (value) => {
     setFilterOptions({
       ...filterOptions,
-      sortValue: value
+      sort: value
     })
 
     setStatus('pending')
-    getPools({ filterOptions })
+    getPools({ ...filterOptions })
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved')
         setRowData(Object.values(poolsData.pools));
+
       }).catch((err) => {
         setStatus({ status: 'rejected' });
         console.error(err);
@@ -77,11 +79,11 @@ function Home(props: HomeProps): Node {
   const filterSearch = (value) => {
     setFilterOptions({
       ...filterOptions,
-      searchValue: value
+      search: value
     })
 
     setStatus('pending')
-    getPools({ filterOptions })
+    getPools({ ...filterOptions })
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved')
         setRowData(poolsData.pools);
@@ -91,8 +93,17 @@ function Home(props: HomeProps): Node {
       });
   }
 
-  const randomFunction = (id) => {
+  const randomFunction = (id: string): void => {
+    console.log('calling random function')
     console.log(id);
+    YoroiCallback(
+      [{ poolHash: id }],
+      {
+        source: props.urlParams.source,
+        chromeId: props.urlParams.chromeId,
+        mozId: props.urlParams.mozId,
+      }
+    )
   };
 
   return (

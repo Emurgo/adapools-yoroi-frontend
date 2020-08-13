@@ -76,6 +76,9 @@ export function getPools(body: {
     ...body,
   }
 
+  console.log('body')
+  console.log(body)
+
   const encodeForm = (data) => {
     return (Object.keys(data): any)
       .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)

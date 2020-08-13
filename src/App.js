@@ -16,11 +16,11 @@ const extractParams = (locationSearch: string): UrlParams => {
 
 function App() {
   const { location } = window;
-  const params = extractParams(location.search)
+  const homeParams = { urlParams: extractParams(location.search) }
 
   return (
     <>
-      <Home props={params} />
+      <Home props={homeParams} />
       <GlobalStyle />
     </>
   );

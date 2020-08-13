@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import type { SortingEnum } from '../API/api';
+
 const WrapperSelectInput = styled.div`
   display: flex;
   flex-direction: column;
@@ -46,27 +48,19 @@ function SortSelect({ filter }: Props) {
   // const [items, setItems] = useState([
   const [items] = useState([
     {
-      label: 'Name (ASC)',
-      value: 'NameASC',
+      label: 'Ticker',
+      value: 'ticker',
     },
     {
-      label: 'Name (DESC)',
-      value: 'NameDESC',
-    },
-    {
-      label: 'ROA (ASC)',
-      value: 'ROAAsc',
-    },
-    {
-      label: 'ROA (DESC)',
-      value: 'ROADesc',
+      label: 'ROA',
+      value: 'roa',
     },
   ]);
   const [selectValue, setSelectValue] = React.useState('');
 
   const handleChange = (e) => {
     setSelectValue(e.currentTarget.value);
-    filter( selectValue);
+    filter(selectValue);
   };
 
   React.useEffect(() => {

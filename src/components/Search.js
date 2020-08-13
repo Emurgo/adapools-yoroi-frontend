@@ -54,14 +54,9 @@ const Search = ({ filter }: Props): Node => {
     setSearchValue(e.target.value);
   };
 
-  const resetInputField = () => {
-    setSearchValue('');
-  };
-
   const callSearchFunction = (e) => {
     e.preventDefault();
     filter(searchValue);
-    resetInputField();
   };
 
   return (

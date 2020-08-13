@@ -1,6 +1,6 @@
 // @flow
 
-export type SelectedPools = Array<{|name: string, poolHash: string|}>
+export type SelectedPools = Array<{|poolHash: string|}>
 
 export const Source = Object.freeze({
   CHROME_EXTENSION: 'chrome',
@@ -19,7 +19,7 @@ export type YoroiCallbackProps = {|
     mozId: ?string,
 |}
 
-export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiCallbackProps): Promise<void> => {
+export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiCallbackProps): void => {
   const { value: source } = yoroiCBProps.source;
   const { value: chromeId } = yoroiCBProps.chromeId;
   const { value: mozId } = yoroiCBProps.mozId;
