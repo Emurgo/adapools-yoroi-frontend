@@ -19,7 +19,7 @@ export function formatCostLabel(taxComputed, taxFix) {
 export function formatBigNumber(num) {
   const fNum = Number(num);
   if (fNum >= 1e3) {
-    const units = ['K', 'M', 'B', 'T'];
+    const units = ['k', 'M', 'B', 'T'];
     // Divide to get SI Unit engineering style numbers (1e3,1e6,1e9, etc)
     const unit = Math.floor((fNum.toFixed(0).length - 1) / 3) * 3;
     // Calculate the remainder

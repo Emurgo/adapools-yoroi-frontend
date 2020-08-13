@@ -15,25 +15,25 @@ const Card = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
-  .tag {
-    padding: 2px 8px;
-    background: #c9ede5;
-    border-radius: 8px;
-    color: #2b2c32;
-    margin-right: 23px;
-    display: flex;
-    align-items: center;
-    .piechart {
-      width: 15px;
-      height: 15px;
-      margin-right: 5px;
-    }
-    @media (max-width: 1023px) {
-      margin-bottom: 8px;
-    }
-  }
   .value {
     color: #242838;
+  }
+`;
+const Tag = styled.div`
+  padding: 2px 8px;
+  background: ${(props) => props.background};
+  border-radius: 8px;
+  color: #2b2c32;
+  margin-right: 23px;
+  display: flex;
+  align-items: center;
+  .piechart {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+  }
+  @media (max-width: 1023px) {
+    margin-bottom: 8px;
   }
 `;
 
@@ -56,14 +56,37 @@ function PoolSizeCard({ percentage, value }: Props): Node {
     ];
   }
 
+  let backgroundColor = null;
+
+  switch (true) {
+    case percentage >= 0.5:
+      backgroundColor = 'hsl(0,80%,80%)';
+      break;
+    case percentage < 0.5 && percentage > 0.4:
+      backgroundColor = 'hsl(38.527896145612,80%,80%)';
+      break;
+    case percentage <= 0.4 && percentage > 0.3:
+      backgroundColor = 'hsl(59.384792622058,80%,80%)';
+      break;
+    case percentage <= 0.3 && percentage > 0.2:
+      backgroundColor = 'hsl(67.359072574924,80%,80%)';
+      break;
+    case percentage <= 0.2 && percentage > 0:
+      backgroundColor = 'hsl(111.21169896469,80%,80%)';
+      break;
+    default:
+      backgroundColor = 'hsl(111.21169896469,80%,80%)';
+      break;
+  }
+
   return (
     <Card>
-      <div className="tag">
+      <Tag background={backgroundColor}>
         <div className="piechart">
           <PieChart totalValue={1} data={formatArray(percentage)} />
         </div>
         <div>{percentage}%</div>
-      </div>
+      </Tag>
       <p className="value">{value} ₳</p>
     </Card>
   );

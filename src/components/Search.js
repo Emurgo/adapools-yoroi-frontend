@@ -44,10 +44,10 @@ const InputBtn = styled.button`
 `;
 
 type Props = {|
-  search: Function,
+  filter: Function,
 |};
 
-const Search = ({ search }: Props): Node => {
+const Search = ({ filter }: Props): Node => {
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearchInputChanges = (e) => {
@@ -60,7 +60,7 @@ const Search = ({ search }: Props): Node => {
 
   const callSearchFunction = (e) => {
     e.preventDefault();
-    search(searchValue);
+    filter(searchValue);
     resetInputField();
   };
 
