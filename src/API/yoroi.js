@@ -49,6 +49,8 @@ export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiC
     postMessage(encodedDataForYoroi, 'yoroi://simple-staking/selection')
     break
   default:
+    console.log('Pool Selected for Yoroi: ')
+    console.log(encodedDataForYoroi)
     window.parent.postMessage(encodedDataForYoroi, source)
     break
   }

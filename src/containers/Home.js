@@ -57,33 +57,31 @@ function Home(props: HomeProps): Node {
         console.error(err);
       });
   }, []);
-  
-  const filterSelect = (value) => {
-    setFilterOptions({
-      ...filterOptions,
-      sort: value
-    })
 
+  const filterSelect = (value) => {
+    const newSearch = {
+      ...filterOptions,
+      search: value
+    };
+    setFilterOptions(newSearch)
     setStatus('pending')
-    getPools({ ...filterOptions })
+    getPools(newSearch)
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved')
         setRowData(Object.values(poolsData.pools));
-
       }).catch((err) => {
         setStatus({ status: 'rejected' });
         console.error(err);
       });
   }
-
   const filterSearch = (value) => {
-    setFilterOptions({
+    const newSearch = {
       ...filterOptions,
       search: value
-    })
-
+    };
+    setFilterOptions(newSearch);
     setStatus('pending')
-    getPools({ ...filterOptions })
+    getPools(newSearch)
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved')
         setRowData(poolsData.pools);
@@ -94,8 +92,6 @@ function Home(props: HomeProps): Node {
   }
 
   const randomFunction = (id: string): void => {
-    console.log('calling random function')
-    console.log(id);
     YoroiCallback(
       [{ poolHash: id }],
       {
