@@ -17,13 +17,13 @@ export function formatCostLabel(taxComputed, taxFix) {
 }
 
 export function formatBigNumber(num) {
-  const fNum = Number(num);
+  const fNum = Number(num) / 1000000; // divided in 1,000,000 to convert from Lovelace to ADA
   if (fNum >= 1e3) {
     const units = ['k', 'M', 'B', 'T'];
     // Divide to get SI Unit engineering style numbers (1e3,1e6,1e9, etc)
     const unit = Math.floor((fNum.toFixed(0).length - 1) / 3) * 3;
     // Calculate the remainder
-    const formattedNum = (fNum / `1e${unit}`).toFixed(2);
+    const formattedNum = ((fNum / `1e${unit}`)).toFixed(2);
     const unitname = units[Math.floor(unit / 3) - 1];
     return `${formattedNum}${unitname}`;
   }
