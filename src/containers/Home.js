@@ -58,7 +58,19 @@ const Header = styled.div`
   }
 `;
 
-function Home(): Node {
+export type UrlParams = {|
+    chromeId: ?string,
+    mozId: ?string,
+    source: ?string,
+    selectedPoolId: ?string,
+    lang: ?string,
+|}
+
+export type HomeProps = {|
+    urlParams: UrlParams,
+|}
+
+function Home(props: HomeProps): Node {
   const [rowData, setRowData] = useState(null);
   const [status, setStatus] = useState('idle')
 
