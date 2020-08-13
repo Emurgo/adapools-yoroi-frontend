@@ -26,33 +26,33 @@ const Header = styled.div`
 `;
 
 export type UrlParams = {|
-    chromeId: ?string,
-    mozId: ?string,
-    source: ?string,
-    selectedPoolId: ?string,
-    lang: ?string,
-|}
+  chromeId: ?string,
+  mozId: ?string,
+  source: ?string,
+  selectedPoolId: ?string,
+  lang: ?string,
+|};
 
 export type HomeProps = {|
-    urlParams: UrlParams,
-|}
+  urlParams: UrlParams,
+|};
 
 function Home(props: HomeProps): Node {
   const [rowData, setRowData] = useState(null);
-  const [status, setStatus] = useState('idle')
+  const [status, setStatus] = useState('idle');
   const [filterOptions, setFilterOptions] = useState({
     search: '',
     sort: 'roa',
-  })
+  });
 
   useEffect(() => {
-    setStatus('pending')
+    setStatus('pending');
     listPools()
       .then((poolsData: ApiPoolsResponse) => {
-        setStatus('resolved')
+        setStatus('resolved');
         setRowData(Object.values(poolsData.pools));
-
-      }).catch((err) => {
+      })
+      .catch((err) => {
         setStatus({ status: 'rejected' });
         console.error(err);
       });
@@ -61,45 +61,44 @@ function Home(props: HomeProps): Node {
   const filterSelect = (value) => {
     const newSearch = {
       ...filterOptions,
-      sort: value
+      sort: value,
     };
-    setFilterOptions(newSearch)
-    setStatus('pending')
+    setFilterOptions(newSearch);
+    setStatus('pending');
     getPools(newSearch)
       .then((poolsData: ApiPoolsResponse) => {
-        setStatus('resolved')
+        setStatus('resolved');
         setRowData(Object.values(poolsData.pools));
-      }).catch((err) => {
+      })
+      .catch((err) => {
         setStatus({ status: 'rejected' });
         console.error(err);
       });
-  }
+  };
   const filterSearch = (value) => {
     const newSearch = {
       ...filterOptions,
-      search: value
+      search: value,
     };
     setFilterOptions(newSearch);
-    setStatus('pending')
+    setStatus('pending');
     getPools(newSearch)
       .then((poolsData: ApiPoolsResponse) => {
-        setStatus('resolved')
+        setStatus('resolved');
         setRowData(poolsData.pools);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         setStatus({ status: 'rejected' });
         console.error(err);
       });
-  }
+  };
 
   const randomFunction = (id: string): void => {
-    YoroiCallback(
-      [{ poolHash: id }],
-      {
-        source: props.urlParams.source,
-        chromeId: props.urlParams.chromeId,
-        mozId: props.urlParams.mozId,
-      }
-    )
+    YoroiCallback([{ poolHash: id }], {
+      source: props.urlParams.source,
+      chromeId: props.urlParams.chromeId,
+      mozId: props.urlParams.mozId,
+    });
   };
 
   return (

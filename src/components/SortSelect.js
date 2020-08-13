@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const WrapperSelectInput = styled.div`
@@ -41,24 +41,23 @@ type Props = {|
   filter: Function,
 |};
 
+const selectData = [
+  {
+    label: 'Ticker',
+    value: 'ticker',
+  },
+  {
+    label: 'ROA',
+    value: 'roa',
+  },
+];
+
 function SortSelect({ filter }: Props) {
-  // TO DO
-  // const [items, setItems] = useState([
-  const [items] = useState([
-    {
-      label: 'Ticker',
-      value: 'ticker',
-    },
-    {
-      label: 'ROA',
-      value: 'roa',
-    },
-  ]);
   const [selectValue, setSelectValue] = React.useState('roa');
 
   const handleChange = (e) => {
     setSelectValue(e.currentTarget.value);
-    filter(selectValue);
+    filter(e.currentTarget.value);
   };
 
   React.useEffect(() => {
@@ -73,7 +72,7 @@ function SortSelect({ filter }: Props) {
     <WrapperSelectInput>
       <label htmlFor="sort">Sort by:</label>
       <SelectInput name="" id="sort" value={selectValue} onChange={handleChange}>
-        {items.map(({ value, label }) => (
+        {selectData.map(({ value, label }) => (
           <option key={value} value={value}>
             {label}
           </option>
