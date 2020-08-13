@@ -61,7 +61,7 @@ function Home(props: HomeProps): Node {
   const filterSelect = (value) => {
     const newSearch = {
       ...filterOptions,
-      search: value
+      sort: value
     };
     setFilterOptions(newSearch)
     setStatus('pending')
