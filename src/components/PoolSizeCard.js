@@ -8,8 +8,9 @@ import type { Node } from 'react';
 const Card = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   font-size: 14px;
+  line-height: 22px;
 
   @media (max-width: 1023px) {
     flex-direction: column;
@@ -17,6 +18,7 @@ const Card = styled.div`
   }
   .value {
     color: #242838;
+    line-height: 22px;
   }
 `;
 const Tag = styled.div`

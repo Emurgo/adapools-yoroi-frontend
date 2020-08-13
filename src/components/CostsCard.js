@@ -6,8 +6,9 @@ import styled from 'styled-components';
 const Card = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   font-size: 14px;
+  line-height: 22px;
   @media (max-width: 1023px) {
     flex-direction: column;
     align-items: flex-start;

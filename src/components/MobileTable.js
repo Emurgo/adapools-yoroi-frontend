@@ -40,9 +40,9 @@ const WrapperContent = styled.div`
 `;
 type Props = {|
   data: Pool,
-  randomFunction: Function
+  delegateFunction: Function
 |};
-function MobileTable({ data, randomFunction }: Props) {
+function MobileTable({ data, delegateFunction }: Props) {
   if (data && Object.entries(data).length <= 0) {
     return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
   }
@@ -70,11 +70,11 @@ function MobileTable({ data, randomFunction }: Props) {
               </div>
               <div className="item">
                 <div className="label">Costs</div>
-                <PledgeCard value={formatBigNumber(value.pledge)} />
+                <PledgeCard value={value.pledge} />
               </div>
             </WrapperContent>
             <div>
-              <Button onClick={() => randomFunction(value.id)}>Delegate</Button>
+              <Button onClick={() => delegateFunction(value.id)}>Delegate</Button>
             </div>
           </CardMobile>
         ))}

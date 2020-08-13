@@ -18,11 +18,20 @@ const Table = styled.table`
   width: 100%;
   background: white;
   border-spacing: 0 0.8rem;
+  position: relative;
   tr td {
     white-space: nowrap;
   }
   thead {
-    border-bottom: 3px solid rgba(56, 57, 61, 0.2);
+    &:after {
+      content: '';
+      width: 100%;
+      height: 6px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      box-shadow: inset 0 -1px 10px 0 rgba(255,255,255,0.5), inset 0 2px 4px 0 rgba(56,57,61,0.2), 0 1px 3px 0 rgba(255,255,255,0.5);
+    }
     th {
       &:first-child {
         text-align: left;
@@ -52,10 +61,10 @@ const Table = styled.table`
 
 type Props = {|
   data: Pool,
-  randomFunction: Function,
+  delegateFunction: Function,
   +status: 'idle' | 'pending' | 'resolved' | 'rejected',
 |};
-function DesktopTable({ data, randomFunction, status }: Props) {
+function DesktopTable({ data, delegateFunction, status }: Props) {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -77,19 +86,19 @@ function DesktopTable({ data, randomFunction, status }: Props) {
     <TableContent>
       <Table>
         <thead>
-          <tr>
-            <th>Staking Pool</th>
-            <th>Pool Size</th>
-            <th>Costs</th>
-            <th>Pledge</th>
-            <th>Blocks</th>
-            <th />
+          <tr role="row">
+            <th scope="col">Staking Pool</th>
+            <th scope="col">Pool Size</th>
+            <th scope="col">Costs</th>
+            <th scope="col">Pledge</th>
+            <th scope="col">Blocks</th>
+            <th scope="col" />
           </tr>
         </thead>
         <tbody>
           {data &&
             (Object.entries(data): any).map(([, value]) => (
-              <tr key={value.id}>
+              <tr role="row" key={value.id}>
                 <td>
                   <StakingPoolCard
                     id={value.id}
@@ -110,11 +119,11 @@ function DesktopTable({ data, randomFunction, status }: Props) {
                   />
                 </td>
                 <td>
-                  <PledgeCard value={formatBigNumber(value.pledge)} />
+                  <PledgeCard value={value.pledge} />
                 </td>
                 <td>_{value.blocks_epoch}</td>
                 <td>
-                  <Button onClick={() => randomFunction(value.id)}>Delegate</Button>
+                  <Button onClick={() => delegateFunction(value.id)}>Delegate</Button>
                 </td>
               </tr>
             ))}

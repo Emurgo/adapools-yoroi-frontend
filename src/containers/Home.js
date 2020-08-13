@@ -93,7 +93,7 @@ function Home(props: HomeProps): Node {
       });
   };
 
-  const randomFunction = (id: string): void => {
+  const delegateFunction = (id: string): void => {
     YoroiCallback([{ poolHash: id }], {
       source: props.urlParams.source,
       chromeId: props.urlParams.chromeId,
@@ -103,18 +103,16 @@ function Home(props: HomeProps): Node {
 
   return (
     <Layout>
-      <h1 style={{ textAlign: 'center', margin: '30px 0 50px' }}>Delegation Page</h1>
-
       <Header>
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />
       </Header>
 
       <DesktopOnly>
-        <DesktopTable status={status} randomFunction={randomFunction} data={rowData} />
+        <DesktopTable status={status} delegateFunction={delegateFunction} data={rowData} />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable status={status} randomFunction={randomFunction} data={rowData} />
+        <MobileTable status={status} delegateFunction={delegateFunction} data={rowData} />
       </MobileOnly>
     </Layout>
   );

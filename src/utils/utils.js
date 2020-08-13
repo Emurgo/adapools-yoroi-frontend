@@ -1,6 +1,8 @@
 export function roundOneDecimal(num) {
   const fNum = Number(num);
-  return Math.round(fNum * 10) / 10;
+  const number = Math.round(fNum * 10) / 10;
+  if(number === 0) return number.toFixed(1)
+  return number
 }
 
 export function roundTwoDecimal(num) {

@@ -12,6 +12,7 @@ const SearchInput = styled.input`
   background-color: #f0f3f5;
   display: block;
   font-size: 14px;
+  line-height: 22px;
   color: #2b2c32;
   line-height: 1.3;
   padding: 0.6em 44px 0.5em 0.8em;

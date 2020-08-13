@@ -24,6 +24,7 @@ const MainCardPool = styled.div`
       margin-left: 8px;
       color: #676970;
       font-size: 14px;
+      line-height: 22px;
     }
   }
   .name {
