@@ -10,6 +10,8 @@ export const Source = Object.freeze({
 export type SourceType = $Values<typeof Source>
 
 const relevantDataForYoroi = (selectedPools: SelectedPools) => {
+  console.log('selected pools')
+  console.log(selectedPools)
   return encodeURI(JSON.stringify(selectedPools))
 }
 
@@ -21,6 +23,9 @@ export type YoroiCallbackProps = {|
 
 export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiCallbackProps): void => {
   const { source } = yoroiCBProps;
+
+  console.log('uprp props')
+  console.log(yoroiCBProps)
 
   let postMessage
   const encodedDataForYoroi = relevantDataForYoroi(selectedPools)
