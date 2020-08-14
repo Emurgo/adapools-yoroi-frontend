@@ -20,7 +20,7 @@ export type YoroiCallbackProps = {|
 |}
 
 export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiCallbackProps): void => {
-  const { value: source } = yoroiCBProps.source;
+  const { source } = yoroiCBProps;
 
   let postMessage
   const encodedDataForYoroi = relevantDataForYoroi(selectedPools)
