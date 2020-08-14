@@ -21,8 +21,6 @@ export type YoroiCallbackProps = {|
 
 export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiCallbackProps): void => {
   const { value: source } = yoroiCBProps.source;
-  const { value: chromeId } = yoroiCBProps.chromeId;
-  const { value: mozId } = yoroiCBProps.mozId;
 
   let postMessage
   const encodedDataForYoroi = relevantDataForYoroi(selectedPools)
@@ -30,13 +28,13 @@ export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiC
   case Source.CHROME_EXTENSION:
     window.parent.postMessage(
       encodedDataForYoroi,
-      `chrome-extension://${chromeId}/main_window.html#/staking`
+      `chrome-extension://${yoroiCBProps.chromeId}/main_window.html#/staking`
     )
     break
   case Source.FIREFOX_EXTENSION:
     window.parent.postMessage(
       encodedDataForYoroi,
-      `moz-extension://${mozId}/main_window.html#/staking`
+      `moz-extension://${yoroiCBProps.mozId}/main_window.html#/staking`
     )
     break
   case Source.MOBILE:

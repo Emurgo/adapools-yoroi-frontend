@@ -94,10 +94,12 @@ function Home(props: HomeProps): Node {
   };
 
   const delegateFunction = (id: string): void => {
+    const { urlParams } = props.props
+
     YoroiCallback(([{ poolHash: id }]), {
-      source: props.urlParams.source,
-      chromeId: props.urlParams.chromeId,
-      mozId: props.urlParams.mozId,
+      source: urlParams.source,
+      chromeId: urlParams.chromeId,
+      mozId: urlParams.mozId,
     });
   };
   
