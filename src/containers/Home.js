@@ -12,6 +12,8 @@ import DesktopTable from '../components/DesktopTable';
 import MobileTable from '../components/MobileTable';
 import SortSelect from '../components/SortSelect';
 
+import data from '../API/data'
+
 const Header = styled.div`
   display: flex;
   align-items: flex-end;
@@ -46,16 +48,18 @@ function Home(props: HomeProps): Node {
   });
 
   useEffect(() => {
-    setStatus('pending');
-    listPools()
-      .then((poolsData: ApiPoolsResponse) => {
-        setStatus('resolved');
-        setRowData(Object.values(poolsData.pools));
-      })
-      .catch((err) => {
-        setStatus({ status: 'rejected' });
-        console.error(err);
-      });
+    // setStatus('pending');
+    setStatus('resolved');
+    setRowData(data.pools)
+    // listPools()
+    //   .then((poolsData: ApiPoolsResponse) => {
+    //     setStatus('resolved');
+    //     setRowData(Object.values(poolsData.pools));
+    //   })
+    //   .catch((err) => {
+    //     setStatus({ status: 'rejected' });
+    //     console.error(err);
+    //   });
   }, []);
 
   const filterSelect = (value) => {

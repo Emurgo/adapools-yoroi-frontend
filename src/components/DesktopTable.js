@@ -8,9 +8,10 @@ import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
 import { roundTwoDecimal, formatBigNumber, roundOneDecimal, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
+import Tooltip from './common/Tooltip';
 
 const TableContent = styled.div`
-  display: flex;
+  display: inline-flex;
   align-items: flex-end;
 `;
 
@@ -19,6 +20,7 @@ const Table = styled.table`
   background: white;
   border-spacing: 0 0.8rem;
   position: relative;
+  table-layout: fixed;
   tr td {
     white-space: nowrap;
   }
@@ -44,6 +46,9 @@ const Table = styled.table`
       letter-spacing: 0;
       font-weight: 400;
       padding: 20px 20px 20px 0;
+      &:first-child > div:first-child {
+        justify-content: flex-start;
+      }
     }
   }
   tbody {
@@ -51,11 +56,36 @@ const Table = styled.table`
       border-bottom: 2px solid #dee2ea;
     }
     td {
-      padding-right: 20px;
       &:not(:first-child) {
+      padding-right: 25px;
         text-align: right;
       }
     }
+  }
+  [class^="col"]{
+    width: 180px;
+  }
+  .col-0 {
+    width: 380px;
+  }
+  .col-1, .col-4 {
+    width: 110px;
+  }
+  .col-2 {
+    @media (min-width:1024px) and (max-width: 1200px) {
+      width: 115px;
+    }
+  }
+  .col-3{
+    @media (min-width:1024px) and (max-width: 1200px) {
+      width: 115px;
+    }
+  }
+  .col-5 {
+    width: 60px ;
+  }
+  .col-last {
+    width: 120px;
   }
 `;
 
@@ -82,17 +112,55 @@ function DesktopTable({ data, delegateFunction, status }: Props) {
       <h1>Ups! something wrong happened. Try again!</h1>
     )
   }
+
+  const tableTheads = [
+    {
+      id: 0,
+      label: 'Staking Pool',
+      textInfo: null
+    },
+    {
+      id: 1,
+      label: 'ROA 30d',
+      textInfo: 'Estimated ROA (Return of ADA, annualised) based on staking result from last 30 days'
+    },
+    {
+      id: 2,
+      label: 'Share /    Pool Size',
+      textInfo: 'Total share of all ada being staked in pool / Entire Supply'
+    },
+    {
+      id: 3,
+      label: 'Costs',
+      textInfo: null
+    },
+    {
+      id: 4,
+      label: 'Pledge',
+      textInfo: null
+    },
+    {
+      id: 5,
+      label: 'Blocks',
+      textInfo: null
+    },
+  ]
   return (
     <TableContent>
       <Table>
         <thead>
           <tr role="row">
-            <th scope="col">Staking Pool</th>
-            <th scope="col">Pool Size</th>
-            <th scope="col">Costs</th>
-            <th scope="col">Pledge</th>
-            <th scope="col">Blocks</th>
-            <th scope="col" />
+            {
+              tableTheads.map(({ label, textInfo, id }, ) => 
+                <th key={`col-${id}`} scope="col" className={`col-${id}`}>
+                  <Tooltip
+                    label={label}
+                    textInfo={textInfo}
+                  />
+                </th>
+              )
+            }
+            <th className="col-last" />
           </tr>
         </thead>
         <tbody>
@@ -105,6 +173,9 @@ function DesktopTable({ data, delegateFunction, status }: Props) {
                     avatar={value.pool_pic}
                     fullname={value.fullname}
                   />
+                </td>
+                <td>
+                  unknown
                 </td>
                 <td>
                   <PoolSizeCard

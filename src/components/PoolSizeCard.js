@@ -16,6 +16,10 @@ const Card = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
+  @media (min-width:1024px) and (max-width: 1200px) {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
   .value {
     color: #242838;
     line-height: 22px;
@@ -33,10 +37,18 @@ const Tag = styled.div`
     width: 15px;
     height: 15px;
     margin-right: 5px;
+    @media (min-width:1024px) and (max-width: 1200px) {
+      margin: 0;
+    }
+  }
+  @media (min-width:1024px) and (max-width: 1200px) {
+    margin: 0;
+    margin-top: 4px;
   }
   @media (max-width: 1023px) {
     margin-bottom: 8px;
   }
+  
 `;
 
 type Props = {|

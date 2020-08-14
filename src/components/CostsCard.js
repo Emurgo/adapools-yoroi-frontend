@@ -13,6 +13,10 @@ const Card = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
+  @media (min-width:1024px) and (max-width: 1200px) {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
   .tag {
     padding: 2px 8px;
     background: #c9ede5;
@@ -21,6 +25,10 @@ const Card = styled.div`
     margin-right: 9px;
     @media (max-width: 1023px) {
       margin-bottom: 9px;
+    }
+    @media (min-width:1024px) and (max-width: 1200px) {
+      margin: 0;
+      margin-top: 4px;
     }
   }
   .value {
