@@ -51,13 +51,17 @@ const selectData = [
     value: 'ticker',
   },
   {
-    label: 'ROA',
-    value: 'roa',
+    label: 'Score',
+    value: 'score',
   },
+  // {
+  //   label: 'ROA',
+  //   value: 'roa',
+  // },
 ];
 
 function SortSelect({ filter }: Props) {
-  const [selectValue, setSelectValue] = React.useState('roa');
+  const [selectValue, setSelectValue] = React.useState('score');
 
   const handleChange = (e) => {
     setSelectValue(e.currentTarget.value);

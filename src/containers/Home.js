@@ -42,7 +42,7 @@ function Home(props: HomeProps): Node {
   const [status, setStatus] = useState('idle');
   const [filterOptions, setFilterOptions] = useState({
     search: '',
-    sort: 'roa',
+    sort: 'score',
   });
 
   useEffect(() => {

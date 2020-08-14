@@ -54,8 +54,9 @@ export type World = {|
 |};
 
 export const Sorting = Object.freeze({
-  ROA: 'roa',
+  // ROA: 'roa',
   TICKER: 'ticker',
+  SCORE: 'score',
 });
 
 export type SortingEnum = $Values<typeof Sorting>;
@@ -72,12 +73,9 @@ export function getPools(body: {
   // cancelToken: boolean
 }): Promise<ApiPoolsResponse> {
   const requestBody = {
-    ...{ search: '', sort: Sorting.ROA, limit: 250 },
+    ...{ search: '', sort: Sorting.SCORE, limit: 250 },
     ...body,
   }
-
-  console.log('body')
-  console.log(body)
 
   const encodeForm = (data) => {
     return (Object.keys(data): any)
