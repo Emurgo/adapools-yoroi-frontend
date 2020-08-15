@@ -26,7 +26,7 @@ const Tag = styled.div`
   background: ${(props) => props.background};
   border-radius: 8px;
   color: #2b2c32;
-  margin-right: 23px;
+  margin-right: 10px;
   display: flex;
   align-items: center;
   .piechart {

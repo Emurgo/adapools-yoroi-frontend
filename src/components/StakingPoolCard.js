@@ -3,6 +3,8 @@ import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import parse from 'html-react-parser';
+import { toSvg } from 'jdenticon';
+import SVG from 'react-inlinesvg';
 import { DesktopOnly } from './layout/Breakpoints';
 
 const MainCardPool = styled.div`
@@ -64,10 +66,11 @@ function StakingPoolCard({ avatar, fullname, id }: Props): Node {
   return (
     <MainCardPool>
       <div className="card-image">
-        <img
-          src={avatar || 'https://s3.amazonaws.com/learn-verified/identicon-example.png'}
-          alt=""
-        />
+        { avatar ?
+          <img src={avatar} alt="" />
+          :
+          <SVG src={toSvg(id, 42)} />
+        }
       </div>
       <div className="card-info">
         <div className="name">

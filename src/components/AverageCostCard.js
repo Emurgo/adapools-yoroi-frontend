@@ -13,21 +13,26 @@ const Card = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
-  .value {
-    color: #242838;
-    font-size: 14px;
+  .tag {
+    padding: 2px 8px;
+    background: #c9ede5;
+    border-radius: 8px;
+    color: #2b2c32;
+    @media (max-width: 1023px) {
+      margin-bottom: 9px;
+    }
   }
 `;
 type Props = {|
-  percentage: number,
-  value: number,
+    percentage: number,
+    value: number,
 |};
-function CostsCard({ value }: Props): Node {
+function AverageCostCard({ percentage }: Props): Node {
   return (
     <Card>
-      <p className="value">({value})</p>
+      <div className="tag">{percentage}%</div>
     </Card>
   );
 }
 
-export default CostsCard;
+export default AverageCostCard;

@@ -10,8 +10,6 @@ export const Source = Object.freeze({
 export type SourceType = $Values<typeof Source>
 
 const relevantDataForYoroi = (selectedPools: SelectedPools) => {
-  console.log('selected pools')
-  console.log(selectedPools)
   return encodeURI(JSON.stringify(selectedPools))
 }
 

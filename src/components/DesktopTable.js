@@ -8,6 +8,7 @@ import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
 import { roundTwoDecimal, formatBigNumber, roundOneDecimal, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
+import AverageCostCard from './AverageCostCard';
 
 const TableContent = styled.div`
   display: flex;
@@ -64,13 +65,14 @@ type Props = {|
   delegateFunction: Function,
   +status: 'idle' | 'pending' | 'resolved' | 'rejected',
 |};
+
 function DesktopTable({ data, delegateFunction, status }: Props) {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
   
   if (isResolved && data && Object.entries(data).length <= 0) {
-    return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
+    return <h1 style={{ fontWeight: 400 }}>Ups.. We haven’t found any data</h1>;
   }
 
   if(isLoading) {
@@ -79,7 +81,7 @@ function DesktopTable({ data, delegateFunction, status }: Props) {
 
   if(isRejected) {
     return (
-      <h1>Ups! something wrong happened. Try again!</h1>
+      <h1>Oops! something wrong happened. Try again!</h1>
     )
   }
   return (
@@ -88,8 +90,9 @@ function DesktopTable({ data, delegateFunction, status }: Props) {
         <thead>
           <tr role="row">
             <th scope="col">Staking Pool</th>
-            <th scope="col">Pool Size</th>
+            <th scope="col">Share / Pool Size</th>
             <th scope="col">Costs</th>
+            <th scope="col">Average Cost</th>
             <th scope="col">Pledge</th>
             <th scope="col">Blocks</th>
             <th scope="col" />
@@ -115,7 +118,12 @@ function DesktopTable({ data, delegateFunction, status }: Props) {
                 <td>
                   <CostsCard
                     percentage={roundTwoDecimal(value.tax_computed)}
-                    value={formatCostLabel(value.tax_computed, value.tax_fix)}
+                    value={formatCostLabel(value.tax_ratio, value.tax_fix)}
+                  />
+                </td>
+                <td>
+                  <AverageCostCard
+                    percentage={roundTwoDecimal(value.tax_computed)}
                   />
                 </td>
                 <td>
