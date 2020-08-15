@@ -5,18 +5,18 @@ import infoIcon from '../../assets/info-icon.svg';
 const WrapperToolTip = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   .label {
     padding-left: 3px;
-
   }
   @media (min-width:1024px) and (max-width: 1200px) {
-    /* justify-content: center; */
+    justify-content: center;
   }
 `
 const ToolTip = styled.span`
   position: relative;
   cursor: pointer;
-  flex: 0 0 20px;
+  flex-shrink: 0;
   &:before {
     content: attr(data-text);
     position: absolute;

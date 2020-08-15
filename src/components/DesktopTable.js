@@ -72,11 +72,13 @@ const Table = styled.table`
     width: 110px;
   }
   .col-2 {
+    width: 190px;
     @media (min-width:1024px) and (max-width: 1200px) {
       width: 115px;
     }
   }
   .col-3{
+    width: 150px;
     @media (min-width:1024px) and (max-width: 1200px) {
       width: 115px;
     }
@@ -89,6 +91,15 @@ const Table = styled.table`
   }
 `;
 
+const CardRoa = styled.div`
+  height: 26px;
+  text-align: center;
+  padding: 3px 0;
+  border: 1px solid #FF1351;
+  border-radius: 8px;
+  color: #2B2C32;
+  font-size: 14px;
+`;
 type Props = {|
   data: Pool,
   delegateFunction: Function,
@@ -175,7 +186,10 @@ function DesktopTable({ data, delegateFunction, status }: Props) {
                   />
                 </td>
                 <td>
-                  unknown
+                  <CardRoa> 
+                    {/* Double Check */}
+                    {Number(value.roa) === 0 ? 'unknown' : value.roa } 
+                  </CardRoa>
                 </td>
                 <td>
                   <PoolSizeCard
