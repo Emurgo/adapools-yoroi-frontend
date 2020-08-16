@@ -9,11 +9,11 @@ const Card = styled.div`
   justify-content: space-between;
   font-size: 14px;
   line-height: 22px;
-  @media (max-width: 1023px) {
+  @media (max-width: 1125px) {
     flex-direction: column;
     align-items: flex-start;
   }
-  @media (min-width:1024px) and (max-width: 1200px) {
+  @media (min-width:1125px) and (max-width: 1200px) {
     flex-direction: column-reverse;
     align-items: center;
   }

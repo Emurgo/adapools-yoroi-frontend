@@ -9,7 +9,7 @@ const WrapperToolTip = styled.div`
   .label {
     padding-left: 3px;
   }
-  @media (min-width:1024px) and (max-width: 1200px) {
+  @media (min-width:1125px) and (max-width: 1200px) {
     justify-content: center;
   }
 `

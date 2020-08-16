@@ -20,7 +20,7 @@ const Header = styled.div`
   display: flex;
   align-items: flex-end;
   margin-bottom: 36px;
-  @media (max-width: 1023px) {
+  @media (max-width: 1125px) {
     flex-direction: column;
     align-items: center;
     input {
@@ -38,7 +38,7 @@ const ColorButton = styled.button`
   text-decoration: underline;
   margin-left: auto;
   cursor: pointer;
-  @media (max-width: 1023px){
+  @media (max-width: 1125px){
     margin-top: 30px;
   }
 `;
@@ -128,7 +128,7 @@ function Home(props: HomeProps): Node {
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />
         <ColorButton type="button" onClick={() => setOpenModal(true)}>
-          Colours meaning
+          Colors meaning
         </ColorButton>
       </Header>
 
@@ -148,7 +148,7 @@ function Home(props: HomeProps): Node {
       </MobileOnly>
       {openModal && (
         <Modal
-          title="Colours meaning"
+          title="Colors meaning"
           isOpen={openModal}
           onClose={() => setOpenModal(false)}
         >

@@ -7,7 +7,7 @@ const Tag = styled.div`
   background: ${(props) => props.background};
   border-radius: 8px;
   color: #2b2c32;
-  margin-right: 23px;
+  margin-right: 10px;
   display: flex;
   align-items: center;
   .value {
@@ -20,15 +20,15 @@ const Tag = styled.div`
     width: 15px;
     height: 15px;
     margin-right: 5px;
-    @media (min-width:1024px) and (max-width: 1200px) {
+    @media (min-width:1125px) and (max-width: 1200px) {
       margin: 0;
     }
   }
-  @media (min-width:1024px) and (max-width: 1200px) {
+  @media (min-width:1125px) and (max-width: 1200px) {
     margin: 0;
     margin-top: 4px;
   }
-  @media (max-width: 1023px) {
+  @media (max-width: 1125px) {
     margin-bottom: 8px;
   }
   

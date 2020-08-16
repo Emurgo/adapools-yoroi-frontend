@@ -23,7 +23,7 @@ const WrapperContent = styled.div`
   display: flex;
   align-items: center;
   margin: 15px 0;
-  @media (max-width: 1023px) {
+  @media (max-width: 1125px) {
     align-items: flex-start;
   }
 

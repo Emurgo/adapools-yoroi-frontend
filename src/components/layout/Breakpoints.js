@@ -3,13 +3,13 @@ import styled from 'styled-components';
 
 const MobileHidden = styled.div`
   display: none;
-  @media (max-width: 1023px) {
+  @media (max-width: 1125px) {
     display: block;
   }
 `;
 const DesktopHidden = styled.div`
   display: block;
-  @media (max-width: 1023px) {
+  @media (max-width: 1125px) {
     display: none;
   }
 `;

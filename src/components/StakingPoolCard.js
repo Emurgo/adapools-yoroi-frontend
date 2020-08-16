@@ -80,7 +80,7 @@ function StakingPoolCard({ avatar, fullname, id }: Props): Node {
       <div className="card-info">
         <div className="name">
           <div className="social-media">
-            {parse(fullname)}
+            {parse(fullname.replace(/<a href=.*?(>)/g, '<a>'))}
             <DesktopOnly>
               <span className="id"> {truncateString(id)}</span>
             </DesktopOnly>

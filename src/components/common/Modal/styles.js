@@ -81,7 +81,7 @@ export const StyledModal = styled.div`
         color: #242838;
         text-transform: uppercase;
 
-        @media (max-width: 1023px) {
+        @media (max-width: 1125px) {
           font-size: 17px;
         }
       }
@@ -109,16 +109,16 @@ export const StyledModal = styled.div`
       height: auto;
     }
 
-    @media (max-width: 1023px) {
+    @media (max-width: 1125px) {
       max-width: 100%;
     }
   }
 
-  @media (max-width: 1023px) {
+  @media (max-width: 1125px) {
     height: 70%;
   }
 
-  @media (max-width: 1023px) {
+  @media (max-width: 1125px) {
     width: 70%;
   }
 `;

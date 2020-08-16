@@ -13,7 +13,7 @@ const Card = styled.div`
   background-color: ${(props) => props.background || '#fff'};
   color: #2b2c32;
   padding: 2px 8px;
-  @media (max-width: 1023px) {
+  @media (max-width: 1125px) {
     justify-content: center;
   }
   i {

@@ -8,7 +8,7 @@ const WrapperSelectInput = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 40px;
-  @media (max-width: 1023px) {
+  @media (max-width: 1125px) {
     margin-left: 0;
   }
   label {

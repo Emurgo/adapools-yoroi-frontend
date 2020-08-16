@@ -67,25 +67,28 @@ const Table = styled.table`
     width: 180px;
   }
   .col-0 {
-    width: 380px;
+    width: 360px;
   }
   .col-1, .col-4 {
     width: 110px;
   }
   .col-2 {
-    width: 190px;
-    @media (min-width:1024px) and (max-width: 1200px) {
+    width: 170px;
+    @media (min-width:1125px) and (max-width: 1200px) {
       width: 115px;
     }
   }
-  .col-3{
-    width: 150px;
-    @media (min-width:1024px) and (max-width: 1200px) {
+  .col-3 {
+    width: 115px;
+    @media (min-width:1125px) and (max-width: 1200px) {
       width: 115px;
     }
   }
   .col-5 {
-    width: 60px ;
+    width: 60px;
+  }
+  .col-6 {
+    width: 100px;
   }
   .col-last {
     width: 120px;
