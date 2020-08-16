@@ -12,6 +12,10 @@ import DesktopTable from '../components/DesktopTable';
 import MobileTable from '../components/MobileTable';
 import SortSelect from '../components/SortSelect';
 
+// import data from '../API/data';
+import Modal from '../components/common/Modal';
+import ColoursModal from '../components/ColoursModal';
+
 const Header = styled.div`
   display: flex;
   align-items: flex-end;
@@ -22,6 +26,20 @@ const Header = styled.div`
     input {
       margin-bottom: 20px;
     }
+  }
+`;
+
+const ColorButton = styled.button`
+  border: none;
+  background: none;
+  color: #2B2C32;
+  font-size: 14px;
+  line-height: 22px;
+  text-decoration: underline;
+  margin-left: auto;
+  cursor: pointer;
+  @media (max-width: 1023px){
+    margin-top: 30px;
   }
 `;
 
@@ -44,6 +62,7 @@ function Home(props: HomeProps): Node {
     search: '',
     sort: 'score',
   });
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     setStatus('pending');
@@ -102,12 +121,15 @@ function Home(props: HomeProps): Node {
       mozId: urlParams.mozId,
     });
   };
-  
+
   return (
     <Layout>
       <Header>
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />
+        <ColorButton type="button" onClick={() => setOpenModal(true)}>
+          Colours meaning
+        </ColorButton>
       </Header>
 
       <DesktopOnly>
@@ -124,6 +146,15 @@ function Home(props: HomeProps): Node {
           data={rowData}
         />
       </MobileOnly>
+      {openModal && (
+        <Modal
+          title="Colours meaning"
+          isOpen={openModal}
+          onClose={() => setOpenModal(false)}
+        >
+          <ColoursModal />
+        </Modal>
+      )}
     </Layout>
   );
 }

@@ -26,7 +26,6 @@ const BtnWrapper = styled.button`
 `;
 type Props = {|
   +children: Node,
-  +disabled: boolean,
   +onClick: Function,
 |};
 

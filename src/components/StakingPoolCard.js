@@ -35,15 +35,20 @@ const MainCardPool = styled.div`
   }
   .social-media {
     display: grid;
-    grid-template-columns: repeat(5, auto);
+    grid-template-columns: repeat(6, auto);
     a {
       margin-right: 10px;
     }
-    a[href*="https://adapools.org"]
-    {
+    a[href*="https://adapools.org"] {
       grid-column: -1/1;
       grid-row: 1;
       margin-bottom: 6px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden; 
+    }
+    a[class*="fa"] {
+
     }
   }
   .id {
@@ -74,10 +79,13 @@ function StakingPoolCard({ avatar, fullname, id }: Props): Node {
       </div>
       <div className="card-info">
         <div className="name">
-          <div className="social-media">{parse(fullname)}</div>
-          <DesktopOnly>
-            <span className="id"> {truncateString(id)}</span>
-          </DesktopOnly>
+          <div className="social-media">
+            {parse(fullname)}
+            <DesktopOnly>
+              <span className="id"> {truncateString(id)}</span>
+            </DesktopOnly>
+          </div>
+        
         </div>
       </div>
     </MainCardPool>

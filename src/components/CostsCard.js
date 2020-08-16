@@ -13,6 +13,10 @@ const Card = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
+  @media (min-width:1024px) and (max-width: 1200px) {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
   .value {
     color: #242838;
     font-size: 14px;
