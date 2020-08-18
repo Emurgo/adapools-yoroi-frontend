@@ -16,12 +16,13 @@ const BtnWrapper = styled.button`
   text-transform: uppercase;
   cursor: pointer;
   &:hover {
-    opacity: 0.8;
+    background-color: rgba(23, 226, 184, 0.1);
   }
   &:disabled {
-    opacity: 0.3;
-    background: #15d1aa;
-    color: white;
+    background: transparent;
+    color: #c9ede5;
+    border: 2px solid #c9ede5;
+    cursor: default;
   }
 `;
 type Props = {|

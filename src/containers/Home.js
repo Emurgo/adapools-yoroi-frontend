@@ -48,15 +48,15 @@ const CreditSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin: 10px 0;
+  margin: 24px 0 0;
   color: #676970;
   font-size: 14px;
   img {
     background: #012b51;
-    margin-left: 5px;
+    margin-left: 10px;
     padding: 2px 6px;
     border-radius: 4px;
-    height: 24px;
+    height: 27px;
   }
 `;
 export type UrlParams = {|
@@ -147,12 +147,6 @@ function Home(props: HomeProps): Node {
           Colors meaning
         </ColorButton>
       </Header>
-      <CreditSection>Credits to 
-        <a href='https://adapools.org/' target='_blank' rel='noopener noreferrer'>
-          <img src={adapoolIcon} alt="adapool-logo" />
-        </a>
-      </CreditSection>
-
       <DesktopOnly>
         <DesktopTable 
           status={status}
@@ -176,6 +170,11 @@ function Home(props: HomeProps): Node {
           <ColoursModal />
         </Modal>
       )}
+      <CreditSection>Powered by 
+        <a href='https://adapools.org/' target='_blank' rel='noopener noreferrer'>
+          <img src={adapoolIcon} alt="adapool-logo" />
+        </a>
+      </CreditSection>
     </Layout>
   );
 }
