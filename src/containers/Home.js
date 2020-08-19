@@ -138,7 +138,7 @@ function Home(props: HomeProps): Node {
     });
   };
   
-  const { selectedPoolIds } = props
+  const { props: { urlParams: { selectedPoolIds } } } = props
   return (
     <Layout>
       <Header>
