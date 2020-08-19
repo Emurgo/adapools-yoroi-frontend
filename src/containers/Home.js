@@ -63,7 +63,7 @@ export type UrlParams = {|
   chromeId: ?string,
   mozId: ?string,
   source: ?string,
-  selectedPoolIds: ?string,
+  selectedPoolIds: ?Array<string>,
   lang: ?string,
 |};
 
@@ -79,7 +79,6 @@ function Home(props: HomeProps): Node {
     sort: 'score',
   });
   const [openModal, setOpenModal] = useState(false);
-  const [selectedIdPools, setSelectedIdPools] = useState(null)
 
   useEffect(() => {
     setStatus('pending');
@@ -92,11 +91,7 @@ function Home(props: HomeProps): Node {
         setStatus({ status: 'rejected' });
         console.error(err);
       });
-
-    const { urlParams: { selectedPoolIds } } = props.props
-    const parseIds = JSON.parse(decodeURIComponent(selectedPoolIds));
-    setSelectedIdPools(parseIds)
-  }, [props]);
+  }, []);
 
   const filterSelect = (value) => {
     const newSearch = {
@@ -142,7 +137,8 @@ function Home(props: HomeProps): Node {
       mozId: urlParams.mozId,
     });
   };
-
+  
+  const { selectedPoolIds } = props
   return (
     <Layout>
       <Header>
@@ -157,7 +153,7 @@ function Home(props: HomeProps): Node {
           status={status}
           delegateFunction={delegateFunction} 
           data={rowData}
-          selectedIdPools={selectedIdPools}
+          selectedIdPools={selectedPoolIds}
         />
       </DesktopOnly>
       <MobileOnly>
@@ -165,7 +161,7 @@ function Home(props: HomeProps): Node {
           status={status}
           delegateFunction={delegateFunction} 
           data={rowData}
-          selectedIdPools={selectedIdPools}
+          selectedIdPools={selectedPoolIds}
         />
       </MobileOnly>
       {openModal && (

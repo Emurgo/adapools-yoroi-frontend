@@ -91,7 +91,7 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
             </WrapperContent>
             <div>
               <Button
-                disabled={selectedIdPools.indexOf(value.id) > -1}
+                disabled={selectedIdPools && selectedIdPools.indexOf(value.id) > -1}
                 onClick={() => delegateFunction(value.id)}
               >
                 Delegate
