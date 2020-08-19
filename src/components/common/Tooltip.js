@@ -17,14 +17,16 @@ const ToolTip = styled.span`
   position: relative;
   cursor: pointer;
   flex-shrink: 0;
+  padding-top: 5px;
   &:before {
     content: attr(data-text);
     position: absolute;
     z-index: 99999;
-    bottom: 0;
-    transform: translate(-50%, -50%);
+    bottom: 105%;
+    transform: translate(-50%, 0%);
     left: 50%;
-    width: 200px;
+    min-width: 150px;
+    max-width: 200px;
     padding: 0.4rem 0.75rem;
     border-radius: 10px;
     background: #000;
@@ -41,6 +43,7 @@ const ToolTip = styled.span`
   &:hover:before {
     display: block;
     opacity:1;
+    color: white;
   }
 `;
 
