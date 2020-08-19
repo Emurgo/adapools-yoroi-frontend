@@ -30,19 +30,19 @@ const Header = styled.div`
   }
 `;
 
-const ColorButton = styled.button`
-  border: none;
-  background: none;
-  color: #2B2C32;
-  font-size: 14px;
-  line-height: 22px;
-  text-decoration: underline;
-  margin-left: auto;
-  cursor: pointer;
-  @media (max-width: 1125px){
-    margin-top: 30px;
-  }
-`;
+// const ColorButton = styled.button`
+//   border: none;
+//   background: none;
+//   color: #2B2C32;
+//   font-size: 14px;
+//   line-height: 22px;
+//   text-decoration: underline;
+//   margin-left: auto;
+//   cursor: pointer;
+//   @media (max-width: 1125px){
+//     margin-top: 30px;
+//   }
+// `;
 
 const CreditSection = styled.div`
   display: flex;
@@ -144,9 +144,9 @@ function Home(props: HomeProps): Node {
       <Header>
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />
-        <ColorButton type="button" onClick={() => setOpenModal(true)}>
+        {/* <ColorButton type="button" onClick={() => setOpenModal(true)}>
           Colors meaning
-        </ColorButton>
+        </ColorButton> */}
       </Header>
       <DesktopOnly>
         <DesktopTable 
