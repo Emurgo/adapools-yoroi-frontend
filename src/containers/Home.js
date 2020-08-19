@@ -79,7 +79,7 @@ function Home(props: HomeProps): Node {
     sort: 'score',
   });
   const [openModal, setOpenModal] = useState(false);
-
+console.log({props})
   useEffect(() => {
     setStatus('pending');
     listPools()
@@ -138,7 +138,7 @@ function Home(props: HomeProps): Node {
     });
   };
   
-  const { selectedPoolIds } = props
+  const { props: { urlParams: { selectedPoolIds } } } = props
   return (
     <Layout>
       <Header>
