@@ -9,7 +9,7 @@ const extractParams = (locationSearch: string): UrlParams => {
     chromeId: params.get('chromeId'),
     mozId: params.get('mozId'),
     source: params.get('source'),
-    selectedPoolId: params.get('selectedPoolId'),
+    selectedPoolIds: params.get('delegated'),
     lang: params.get('lang'),
   }
 }

@@ -108,9 +108,10 @@ type Props = {|
   data: Pool,
   delegateFunction: Function,
   +status: 'idle' | 'pending' | 'resolved' | 'rejected',
+  selectedIdPools: Array<string>,
 |};
 
-function DesktopTable({ data, delegateFunction, status }: Props) {
+function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props) {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -223,7 +224,12 @@ function DesktopTable({ data, delegateFunction, status }: Props) {
                 </td>
                 <td>_{value.blocks_epoch}</td>
                 <td>
-                  <Button onClick={() => delegateFunction(value.id)}>Delegate</Button>
+                  <Button 
+                    disabled={selectedIdPools.indexOf(value.id) > -1}
+                    onClick={() => delegateFunction(value.id)}
+                  >
+                    Delegate
+                  </Button>
                 </td>
               </tr>
             ))}

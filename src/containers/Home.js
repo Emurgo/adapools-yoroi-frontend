@@ -63,7 +63,7 @@ export type UrlParams = {|
   chromeId: ?string,
   mozId: ?string,
   source: ?string,
-  selectedPoolId: ?string,
+  selectedPoolIds: ?string,
   lang: ?string,
 |};
 
@@ -79,6 +79,7 @@ function Home(props: HomeProps): Node {
     sort: 'score',
   });
   const [openModal, setOpenModal] = useState(false);
+  const [selectedIdPools, setSelectedIdPools] = useState(null)
 
   useEffect(() => {
     setStatus('pending');
@@ -91,7 +92,11 @@ function Home(props: HomeProps): Node {
         setStatus({ status: 'rejected' });
         console.error(err);
       });
-  }, []);
+
+    const { urlParams: { selectedPoolIds } } = props.props
+    const parseIds = JSON.parse(decodeURIComponent(selectedPoolIds));
+    setSelectedIdPools(parseIds)
+  }, [props]);
 
   const filterSelect = (value) => {
     const newSearch = {
@@ -152,6 +157,7 @@ function Home(props: HomeProps): Node {
           status={status}
           delegateFunction={delegateFunction} 
           data={rowData}
+          selectedIdPools={selectedIdPools}
         />
       </DesktopOnly>
       <MobileOnly>
@@ -159,6 +165,7 @@ function Home(props: HomeProps): Node {
           status={status}
           delegateFunction={delegateFunction} 
           data={rowData}
+          selectedIdPools={selectedIdPools}
         />
       </MobileOnly>
       {openModal && (
