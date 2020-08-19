@@ -24,6 +24,14 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src * 'self' data: blob: ws: wss:;
+      style-src * 'unsafe-inline'; 
+      script-src * 'self';
+      connect-src http://*.adapools.org  ws: wss:;"
+      >
+      <!-- allowing websocket for safari issues -->
     <title>Ada Pools</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   </head>
