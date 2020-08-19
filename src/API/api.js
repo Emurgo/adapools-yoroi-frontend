@@ -42,6 +42,10 @@ export type Pool = {|
   +handles: SocialMediaHandles, // social media stuff
   +last_rewards: string,
   +position: number,
+  +color_roa: string, // hsl(240,95%,95%)
+  +color_stake: string, // hsl(240,95%,95%)
+  +color_fees: string, // hsl(240,95%,95%)
+  +color_pledge: string, // hsl(240,95%,95%)
 |};
 
 export type World = {|
