@@ -24,6 +24,7 @@ const SearchInput = styled.input`
   -webkit-appearance: none;
   appearance: none;
   background-color: #f0f3f5;
+  outline: none;
   ::placeholder {
     color: #c4cad7;
   }

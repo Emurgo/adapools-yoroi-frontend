@@ -16,22 +16,24 @@ const BtnWrapper = styled.button`
   text-transform: uppercase;
   cursor: pointer;
   &:hover {
-    opacity: 0.8;
+    background-color: rgba(23, 226, 184, 0.1);
   }
   &:disabled {
-    opacity: 0.3;
-    background: #15d1aa;
-    color: white;
+    background: transparent;
+    color: #c9ede5;
+    border: 2px solid #c9ede5;
+    cursor: default;
   }
 `;
 type Props = {|
   +children: Node,
   +onClick: Function,
+  +disabled: boolean,
 |};
 
 function Button(props: Props) {
-  const { children, onClick } = props;
-  return <BtnWrapper onClick={onClick} {...props}>{children}</BtnWrapper>;
+  const { children, onClick, disabled } = props;
+  return <BtnWrapper disabled={disabled} onClick={onClick} {...props}>{children}</BtnWrapper>;
 }
 
 export default Button;

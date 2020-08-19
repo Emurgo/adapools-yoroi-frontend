@@ -3,13 +3,17 @@ import GlobalStyle from './helpers/globalStyles';
 import Home from './containers/Home';
 import type { UrlParams } from './containers/Home';
 
+const parseIds = (array: string): Array<string> => (
+  JSON.parse(decodeURIComponent(array))
+);
+
 const extractParams = (locationSearch: string): UrlParams => {
   const params = new URLSearchParams(locationSearch);
   return {
     chromeId: params.get('chromeId'),
     mozId: params.get('mozId'),
     source: params.get('source'),
-    selectedPoolId: params.get('selectedPoolId'),
+    selectedPoolIds: parseIds(params.get('delegated')),
     lang: params.get('lang'),
   }
 }

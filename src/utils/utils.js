@@ -29,5 +29,5 @@ export function formatBigNumber(num) {
     const unitname = units[Math.floor(unit / 3) - 1];
     return `${formattedNum}${unitname}`;
   }
-  return num.toLocaleString();
+  return fNum.toLocaleString();
 }

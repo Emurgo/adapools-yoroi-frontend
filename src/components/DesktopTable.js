@@ -69,7 +69,7 @@ const Table = styled.table`
   .col-0 {
     width: 360px;
   }
-  .col-1, .col-4 {
+  .col-1 {
     width: 110px;
   }
   .col-2 {
@@ -84,8 +84,17 @@ const Table = styled.table`
       width: 115px;
     }
   }
+  .col-4 {
+    width: 110px;
+    @media (min-width:1125px) and (max-width: 1200px) {
+      width: 110px;
+    }
+  }
   .col-5 {
-    width: 60px;
+    width: 80px;
+    @media (min-width:1125px) and (max-width: 1200px) {
+      width: 60px;
+    }
   }
   .col-6 {
     width: 100px;
@@ -108,9 +117,10 @@ type Props = {|
   data: Pool,
   delegateFunction: Function,
   +status: 'idle' | 'pending' | 'resolved' | 'rejected',
+  selectedIdPools: Array<string>,
 |};
 
-function DesktopTable({ data, delegateFunction, status }: Props) {
+function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props) {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -133,7 +143,7 @@ function DesktopTable({ data, delegateFunction, status }: Props) {
     {
       id: 0,
       label: 'Staking Pool',
-      textInfo: null
+      textInfo: 'Details registered in registry CF'
     },
     {
       id: 1,
@@ -148,22 +158,22 @@ function DesktopTable({ data, delegateFunction, status }: Props) {
     {
       id: 3,
       label: 'Costs',
-      textInfo: null
+      textInfo: 'Tax ratio + Fix'
     },
     {
       id: 4,
       label: 'Average Cost',
-      textInfo: null
+      textInfo: 'Real average fees'
     },
     {
       id: 5,
       label: 'Pledge',
-      textInfo: null
+      textInfo: 'Available Pledge'
     },
     {
       id: 6,
       label: 'Blocks',
-      textInfo: null
+      textInfo: 'Minted blocks in actual epoch + block trend; Background = today estimated performance'
     },
   ]
   return (
@@ -223,7 +233,12 @@ function DesktopTable({ data, delegateFunction, status }: Props) {
                 </td>
                 <td>_{value.blocks_epoch}</td>
                 <td>
-                  <Button onClick={() => delegateFunction(value.id)}>Delegate</Button>
+                  <Button 
+                    disabled={selectedIdPools && selectedIdPools.indexOf(value.id) > -1}
+                    onClick={() => delegateFunction(value.id)}
+                  >
+                    Delegate
+                  </Button>
                 </td>
               </tr>
             ))}

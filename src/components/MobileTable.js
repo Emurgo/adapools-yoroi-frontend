@@ -41,10 +41,26 @@ const WrapperContent = styled.div`
 type Props = {|
   data: Pool,
   delegateFunction: Function,
+  +status: 'idle' | 'pending' | 'resolved' | 'rejected',
+  selectedIdPools: Array<string>,
 |};
-function MobileTable({ data, delegateFunction }: Props) {
-  if (data && Object.entries(data).length <= 0) {
+function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props) {
+  const isLoading = status === 'pending' || status === 'idle';
+  const isRejected = status === 'rejected';
+  const isResolved = status === 'resolved';
+
+  if (isResolved && data && Object.entries(data).length <= 0) {
     return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
+  }
+
+  if(isLoading) {
+    return <h1 style={{ fontWeight: 400 }}>Loading...</h1>;
+  }
+
+  if(isRejected) {
+    return (
+      <h1>Oops! something wrong happened. Try again!</h1>
+    )
   }
 
   return (
@@ -74,7 +90,12 @@ function MobileTable({ data, delegateFunction }: Props) {
               </div>
             </WrapperContent>
             <div>
-              <Button onClick={() => delegateFunction(value.id)}>Delegate</Button>
+              <Button
+                disabled={selectedIdPools && selectedIdPools.indexOf(value.id) > -1}
+                onClick={() => delegateFunction(value.id)}
+              >
+                Delegate
+              </Button>
             </div>
           </CardMobile>
         ))}

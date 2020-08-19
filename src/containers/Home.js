@@ -15,6 +15,7 @@ import SortSelect from '../components/SortSelect';
 // import data from '../API/data';
 import Modal from '../components/common/Modal';
 import ColoursModal from '../components/ColoursModal';
+import adapoolIcon from '../assets/adapool-logo-extend.svg'
 
 const Header = styled.div`
   display: flex;
@@ -29,25 +30,40 @@ const Header = styled.div`
   }
 `;
 
-const ColorButton = styled.button`
-  border: none;
-  background: none;
-  color: #2B2C32;
+// const ColorButton = styled.button`
+//   border: none;
+//   background: none;
+//   color: #2B2C32;
+//   font-size: 14px;
+//   line-height: 22px;
+//   text-decoration: underline;
+//   margin-left: auto;
+//   cursor: pointer;
+//   @media (max-width: 1125px){
+//     margin-top: 30px;
+//   }
+// `;
+
+const CreditSection = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 24px 0 0;
+  color: #676970;
   font-size: 14px;
-  line-height: 22px;
-  text-decoration: underline;
-  margin-left: auto;
-  cursor: pointer;
-  @media (max-width: 1125px){
-    margin-top: 30px;
+  img {
+    background: #012b51;
+    margin-left: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    height: 27px;
   }
 `;
-
 export type UrlParams = {|
   chromeId: ?string,
   mozId: ?string,
   source: ?string,
-  selectedPoolId: ?string,
+  selectedPoolIds: ?Array<string>,
   lang: ?string,
 |};
 
@@ -121,22 +137,23 @@ function Home(props: HomeProps): Node {
       mozId: urlParams.mozId,
     });
   };
-
+  
+  const { props: { urlParams: { selectedPoolIds } } } = props
   return (
     <Layout>
       <Header>
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />
-        <ColorButton type="button" onClick={() => setOpenModal(true)}>
+        {/* <ColorButton type="button" onClick={() => setOpenModal(true)}>
           Colors meaning
-        </ColorButton>
+        </ColorButton> */}
       </Header>
-
       <DesktopOnly>
         <DesktopTable 
           status={status}
           delegateFunction={delegateFunction} 
           data={rowData}
+          selectedIdPools={selectedPoolIds}
         />
       </DesktopOnly>
       <MobileOnly>
@@ -144,6 +161,7 @@ function Home(props: HomeProps): Node {
           status={status}
           delegateFunction={delegateFunction} 
           data={rowData}
+          selectedIdPools={selectedPoolIds}
         />
       </MobileOnly>
       {openModal && (
@@ -155,6 +173,11 @@ function Home(props: HomeProps): Node {
           <ColoursModal />
         </Modal>
       )}
+      <CreditSection>Powered by 
+        <a href='https://adapools.org/' target='_blank' rel='noopener noreferrer'>
+          <img src={adapoolIcon} alt="adapool-logo" />
+        </a>
+      </CreditSection>
     </Layout>
   );
 }
