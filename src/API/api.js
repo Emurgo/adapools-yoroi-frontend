@@ -71,9 +71,9 @@ export type ApiPoolsResponse = {|
 |};
 
 export function getPools(body: {
-  search: string,
-  sort: SortingEnum,
-  limit: number
+  search?: string,
+  sort?: SortingEnum,
+  limit?: number
   // cancelToken: boolean
 }): Promise<ApiPoolsResponse> {
   const requestBody = {
@@ -105,5 +105,5 @@ export function getPools(body: {
 }
 
 export function listPools(): Promise<ApiPoolsResponse> {
-  return getPools();
+  return getPools({});
 }
