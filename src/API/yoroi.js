@@ -22,7 +22,7 @@ export type YoroiCallbackProps = {|
 export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiCallbackProps): void => {
   const { source } = yoroiCBProps;
 
-  console.log('uprp props')
+  console.log('callback props')
   console.log(yoroiCBProps)
 
   let postMessage
