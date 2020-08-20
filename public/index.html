@@ -29,9 +29,9 @@
       content="default-src 'self'  https://kit-free.fontawesome.com https://*.adapools.org https://fonts.gstatic.com/s/rubik/;
                 style-src 'unsafe-inline' https://fonts.googleapis.com/ https://kit-free.fontawesome.com/; 
                 script-src 'self';
-                connect-src https://*.adapools.org ws:"
+                connect-src https://*.adapools.org "
       >
-      <!-- allowing websocket for safari issues -->
+      <!-- add in connect-src => ws: for development mode -->
     <title>Ada Pools</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   </head>
