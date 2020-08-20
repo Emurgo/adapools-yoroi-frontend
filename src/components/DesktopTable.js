@@ -231,7 +231,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
                 <td>
                   <PledgeCard value={value.pledge} />
                 </td>
-                <td>_{value.blocks_epoch}</td>
+                <td>{value.blocks_epoch}</td>
                 <td>
                   <Button 
                     disabled={selectedIdPools && selectedIdPools.indexOf(value.id) > -1}
