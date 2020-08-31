@@ -9,6 +9,7 @@ import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
 import { roundTwoDecimal, formatBigNumber, roundOneDecimal, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
+import AverageCostCard from './AverageCostCard';
 
 const CardMobile = styled.div`
   display: flex;
@@ -36,6 +37,10 @@ const WrapperContent = styled.div`
   }
   .item {
     flex: 1;
+  }
+  .cost-wrapper {
+    display: flex;
+    flex-direction: column;
   }
 `;
 type Props = {|
@@ -79,13 +84,18 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
               </div>
               <div className="item">
                 <div className="label">Costs</div>
-                <CostsCard
-                  percentage={roundTwoDecimal(value.tax_computed)}
-                  value={formatCostLabel(value.tax_computed, value.tax_fix)}
-                />
+                <div className="cost-wrapper">
+                  <AverageCostCard
+                    percentage={roundTwoDecimal(value.tax_computed)}
+                  />
+                  <CostsCard
+                    percentage={roundTwoDecimal(value.tax_computed)}
+                    value={formatCostLabel(value.tax_ratio, value.tax_fix)}
+                  />
+                </div>
               </div>
               <div className="item">
-                <div className="label">Costs</div>
+                <div className="label">Pledge</div>
                 <PledgeCard value={value.pledge} />
               </div>
             </WrapperContent>
