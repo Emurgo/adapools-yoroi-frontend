@@ -41,7 +41,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
+    "@babel/cli": "^7.11.5",
     "@babel/core": "^7.11.1",
     "@babel/preset-flow": "^7.10.4",
     "@testing-library/jest-dom": "^4.2.4",
