@@ -208,12 +208,12 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
                 <td>
                   <CardRoa> 
                     {/* Double Check */}
-                    {Number(value.roa) === 0 ? 'unknown' : value.roa } 
+                    {Number(value.roa) === 0 ? 'unknown' : value.roa+'%' }
                   </CardRoa>
                 </td>
                 <td>
                   <PoolSizeCard
-                    percentage={roundOneDecimal(value.total_size)}
+                    percentage={roundOneDecimal(value.saturation)}
                     value={formatBigNumber(value.total_stake)}
                   />
                 </td>
