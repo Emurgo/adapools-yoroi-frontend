@@ -39,7 +39,7 @@ type Props = {|
 |};
 
 function PoolSizeTag({ value }: Props) {
-  const totalValue = 0.7
+  const totalValue = 1
   function formatArray(percent) {
     return [
       {
@@ -56,26 +56,20 @@ function PoolSizeTag({ value }: Props) {
   let backgroundColor = null;
 
   switch (true) {
-  case value >= 0.6:
+  case value > 0.9:
     backgroundColor = '#FFC3D3';
     break;
-  case value < 0.6 && value >= 0.5:
-    backgroundColor = '#FFDCE5';
-    break;
-  case value < 0.5 && value >= 0.4:
+  case value > 0.8:
     backgroundColor = '#FCE4BC';
     break;
-  case value < 0.4 && value >= 0.3:
+  case value > 0.7:
     backgroundColor = '#FBF6B6';
     break;
-  case value < 0.3 && value >= 0.2:
+  case value > 0.6:
     backgroundColor = '#DDFBB6';
     break;
-  case value < 0.2 && value >= 0:
-    backgroundColor = '#C9EDE5';
-    break;
   default:
-    backgroundColor = 'none';
+    backgroundColor = '#C9EDE5';
     break;
   }
 

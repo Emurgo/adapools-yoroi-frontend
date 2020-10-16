@@ -78,7 +78,7 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
               <div className="item">
                 <div className="label">Pool Size</div>
                 <PoolSizeCard
-                  percentage={roundOneDecimal(value.total_size)}
+                  percentage={roundOneDecimal(value.saturation)}
                   value={formatBigNumber(value.total_stake)}
                 />
               </div>
