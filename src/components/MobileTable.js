@@ -7,6 +7,7 @@ import StakingPoolCard from './StakingPoolCard';
 import PoolSizeCard from './PoolSizeCard';
 import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
+import CardRoa from './CardRoa';
 import { roundTwoDecimal, formatBigNumber, roundOneDecimal, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
 import AverageCostCard from './AverageCostCard';
@@ -74,6 +75,12 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
         (Object.entries(data): any).map(([, value]) => (
           <CardMobile key={value.id}>
             <StakingPoolCard id={value.id} avatar={value.pool_pic} fullname={value.fullname} />
+            <CardRoa
+              roa={value.roa}
+              data={value.hist_roa}
+              description={"Estimated ROA: "}
+          />
+
             <WrapperContent style={{ display: 'flex' }}>
               <div className="item">
                 <div className="label">Pool Size</div>
@@ -96,7 +103,7 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
               </div>
               <div className="item">
                 <div className="label">Pledge</div>
-                <PledgeCard value={value.pledge} />
+                <PledgeCard value={value.pledge} real={value.pledge_real} />
               </div>
             </WrapperContent>
             <div>
