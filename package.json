@@ -9,7 +9,7 @@
     "axios": "^0.19.2",
     "html-react-parser": "^0.13.0",
     "jdenticon": "^3.0.1",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-dom": "^16.13.1",
     "react-inlinesvg": "^2.0.1",
     "react-minimal-pie-chart": "^8.0.1",
