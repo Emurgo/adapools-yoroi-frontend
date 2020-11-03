@@ -202,12 +202,14 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
                   <StakingPoolCard
                     id={value.id}
                     avatar={value.pool_pic}
+                    tickerName={value.db_ticker}
+                    name={value.db_name}
+                    links={value.handles}
                     fullname={value.fullname}
                   />
                 </td>
                 <td>
                   <CardRoa> 
-                    {/* Double Check */}
                     {Number(value.roa) === 0 ? 'unknown' : `${value.roa}%` }
                   </CardRoa>
                 </td>
