@@ -31,7 +31,7 @@ type Props = {|
   +disabled: boolean,
 |};
 
-function Button(props: Props) {
+function Button(props: Props): React$Node {
   const { children, onClick, disabled } = props;
   return <BtnWrapper disabled={disabled} onClick={onClick} {...props}>{children}</BtnWrapper>;
 }

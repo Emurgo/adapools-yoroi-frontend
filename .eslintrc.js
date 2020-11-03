@@ -38,6 +38,7 @@ module.exports = {
     'spaced-comment': 1,
     quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
     'no-multiple-empty-lines': 1,
+    'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     'import/imports-first': 1,
     'flowtype/define-flow-type': 1,
     'flowtype/use-flow-type': 1,
