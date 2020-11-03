@@ -31,19 +31,19 @@ export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiC
   case Source.CHROME_EXTENSION:
     window.parent.postMessage(
       encodedDataForYoroi,
-      `chrome-extension://${yoroiCBProps.chromeId}/main_window.html#/staking`
+      `chrome-extension://${yoroiCBProps.chromeId ?? ''}/main_window.html#/staking`
     )
     break
   case Source.FIREFOX_EXTENSION:
     window.parent.postMessage(
       encodedDataForYoroi,
-      `moz-extension://${yoroiCBProps.mozId}/main_window.html#/staking`
+      `moz-extension://${yoroiCBProps.mozId ?? ''}/main_window.html#/staking`
     )
     break
   case Source.MOBILE:
     postMessage = window.parent.postMessage
     if (window.ReactNativeWebView) {
-      postMessage = function(data) {
+      postMessage = function(data, _targetOrigin) {
         window.ReactNativeWebView.postMessage(data)
       }
     }

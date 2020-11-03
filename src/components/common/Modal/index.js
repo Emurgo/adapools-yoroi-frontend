@@ -28,7 +28,7 @@ const Index = ({
   title,
   success,
   setSuccessMode,
-}: Props) => {
+}: Props): React$Node => {
   const [fadeType, setFadeType] = useState(null);
 
   const background = useRef(null);

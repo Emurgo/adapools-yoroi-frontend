@@ -120,7 +120,7 @@ type Props = {|
   selectedIdPools: Array<string>,
 |};
 
-function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props) {
+function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';

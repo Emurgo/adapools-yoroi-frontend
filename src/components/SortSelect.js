@@ -60,7 +60,7 @@ const selectData = [
   // },
 ];
 
-function SortSelect({ filter }: Props) {
+function SortSelect({ filter }: Props): React$Node {
   const [selectValue, setSelectValue] = React.useState('score');
 
   const handleChange = (e) => {

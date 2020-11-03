@@ -49,7 +49,7 @@ type Props = {|
   +status: 'idle' | 'pending' | 'resolved' | 'rejected',
   selectedIdPools: Array<string>,
 |};
-function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props) {
+function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
