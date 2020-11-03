@@ -73,7 +73,14 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
       {data &&
         (Object.entries(data): any).map(([, value]) => (
           <CardMobile key={value.id}>
-            <StakingPoolCard id={value.id} avatar={value.pool_pic} fullname={value.fullname} />
+            <StakingPoolCard
+              id={value.id}
+              avatar={value.pool_pic}
+              tickerName={value.db_ticker}
+              name={value.db_name}
+              links={value.handles}
+              fullname={value.fullname}
+            />
             <WrapperContent style={{ display: 'flex' }}>
               <div className="item">
                 <div className="label">Pool Size</div>

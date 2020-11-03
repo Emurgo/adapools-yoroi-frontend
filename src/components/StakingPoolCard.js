@@ -11,6 +11,7 @@ const MainCardPool = styled.div`
   padding: 15px 0;
   .card-image {
     width: 45px;
+    min-width: 45px;
     margin-right: 15px;
     img {
       width: 100%;
@@ -26,6 +27,9 @@ const MainCardPool = styled.div`
     a {
       display: block;
     }
+    i {
+      font-size: 16px;
+    }
   }
   .name {
     margin-right: 8px;
@@ -33,7 +37,7 @@ const MainCardPool = styled.div`
   }
   .social-media {
     display: flex;
-    flex: 1 1 50%;
+    flex: 1 1 60%;
     a {
       margin-right: 10px;
       font-size: 20px;
@@ -70,7 +74,7 @@ function StakingPoolCard({
   name,
   links,
   fullname }: Props): Node {
-  function truncateString(string) {
+  function truncateString(string: string): string {
     if (string.length <= 8) {
       return string;
     }
