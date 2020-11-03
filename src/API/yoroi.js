@@ -43,7 +43,7 @@ export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiC
   case Source.MOBILE:
     postMessage = window.parent.postMessage
     if (window.ReactNativeWebView) {
-      postMessage = function(data, _targetOrigin) {
+      postMessage = function postToReactNative (data, _targetOrigin) {
         window.ReactNativeWebView.postMessage(data)
       }
     }

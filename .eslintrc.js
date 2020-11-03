@@ -32,6 +32,7 @@ module.exports = {
     'react/static-property-placement': ['warn', 'static public field'],
     'react/jsx-curly-newline': 'off',
     'class-methods-use-this': 0,
+    'no-console': 0,
     'no-continue': 0,
     'no-duplicate-imports': 0,
     'object-curly-spacing': 1,

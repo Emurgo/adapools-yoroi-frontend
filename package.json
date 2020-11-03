@@ -14,7 +14,7 @@
     "react-inlinesvg": "^2.1.1",
     "react-minimal-pie-chart": "^8.0.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.2",
+    "react-scripts": "4.0.0",
     "styled-components": "^5.2.1"
   },
   "scripts": {
@@ -48,7 +48,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^7.2.1",
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.6.0",
+    "eslint": "^7.12.1",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-flowtype": "^5.1.3",
