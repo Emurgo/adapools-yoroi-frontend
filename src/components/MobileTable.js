@@ -84,7 +84,6 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
             />
             <CardRoa
               roa={value.roa}
-              data={value.hist_roa}
               description={"Estimated ROA: "}
           />
 

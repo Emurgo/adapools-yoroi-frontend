@@ -204,7 +204,6 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
                 <td>
                   <CardRoa
                     roa={value.roa}
-                    data={value.hist_roa}
                   />
                 </td>
                 <td>

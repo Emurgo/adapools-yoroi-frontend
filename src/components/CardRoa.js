@@ -12,8 +12,7 @@ const RoaElement = styled.div`
   font-size: 14px;
 `;
 
-function CardRoa({ roa, data, description }: Props) {
-
+function CardRoa({ roa, description }: Props) {
 
   return (
     <div>
