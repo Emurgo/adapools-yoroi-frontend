@@ -6,6 +6,7 @@ import StakingPoolCard from './StakingPoolCard';
 import PoolSizeCard from './PoolSizeCard';
 import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
+import CardRoa from './CardRoa';
 import { roundTwoDecimal, formatBigNumber, roundOneDecimal, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
 import Tooltip from './common/Tooltip';
@@ -104,15 +105,6 @@ const Table = styled.table`
   }
 `;
 
-const CardRoa = styled.div`
-  height: 26px;
-  text-align: center;
-  padding: 3px 0;
-  border: 1px solid #FF1351;
-  border-radius: 8px;
-  color: #2B2C32;
-  font-size: 14px;
-`;
 type Props = {|
   data: Pool,
   delegateFunction: Function,
@@ -209,9 +201,9 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
                   />
                 </td>
                 <td>
-                  <CardRoa> 
-                    {Number(value.roa) === 0 ? 'unknown' : `${value.roa}%` }
-                  </CardRoa>
+                  <CardRoa
+                    roa={value.roa}
+                  />
                 </td>
                 <td>
                   <PoolSizeCard
@@ -231,7 +223,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
                   />
                 </td>
                 <td>
-                  <PledgeCard value={value.pledge} />
+                  <PledgeCard value={value.pledge} real={value.pledge_real} />
                 </td>
                 <td>{value.blocks_epoch}</td>
                 <td>

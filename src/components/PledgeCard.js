@@ -25,9 +25,10 @@ const Card = styled.div`
 
 type Props = {|
   value: string,
+  real: string,
 |};
 
-function PledgeCard({ value }: Props): Node {
+function PledgeCard({ value, real }: Props): Node {
   
   // to fix according to ranges
   let backgroundColor = null;
@@ -56,7 +57,7 @@ function PledgeCard({ value }: Props): Node {
   
   return (
     <Card background={backgroundColor}>
-      <i className="fas fa-check" />
+      { (Number(real) >= Number(value)) && <i className="fas fa-check" /> }
       <span>{formatBigNumber(value)}</span>
     </Card>
   );
