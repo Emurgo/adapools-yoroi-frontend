@@ -25,6 +25,7 @@ const Card = styled.div`
 
 type Props = {|
   value: string,
+  real: string,
 |};
 
 function PledgeCard({ value, real }: Props): Node {
