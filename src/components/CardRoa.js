@@ -18,7 +18,7 @@ function CardRoa({ roa, description }: Props) {
     <div>
       <RoaElement>
         {description}
-        {parseFloat(roa) === 0 ? 'unknown' : parseFloat(roa).toFixed(2)+'% '}
+        {parseFloat(roa) === 0 ? 'unknown' : `${parseFloat(roa).toFixed(2)}% `}
       </RoaElement>
     </div>
 )

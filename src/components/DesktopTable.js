@@ -105,7 +105,6 @@ const Table = styled.table`
   }
 `;
 
-
 type Props = {|
   data: Pool,
   delegateFunction: Function,

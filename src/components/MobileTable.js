@@ -84,8 +84,8 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
             />
             <CardRoa
               roa={value.roa}
-              description={"Estimated ROA: "}
-          />
+              description='Estimated ROA: '
+            />
 
             <WrapperContent style={{ display: 'flex' }}>
               <div className="item">
