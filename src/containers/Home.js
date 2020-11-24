@@ -3,6 +3,7 @@ import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
 import Search from '../components/Search';
+import Alert from '../components/Alert';
 import { YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
@@ -137,10 +138,11 @@ function Home(props: HomeProps): Node {
       mozId: urlParams.mozId,
     });
   };
-  
+  const alertText = 'Saturation drops to 63.6m ADA from 6th Dec, this will impact lower rewards and hence it is recommended to re-delegate from the impacted pools.';
   const { props: { urlParams: { selectedPoolIds } } } = props
   return (
     <Layout>
+      <Alert title={alertText} />
       <Header>
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />
