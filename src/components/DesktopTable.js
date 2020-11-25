@@ -106,7 +106,7 @@ const Table = styled.table`
 `;
 
 type Props = {|
-  data: Pool,
+  data: Array<Pool>,
   delegateFunction: Function,
   +status: 'idle' | 'pending' | 'resolved' | 'rejected',
   selectedIdPools: Array<string>,
@@ -135,7 +135,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
  
   const saturationLimit = 63600000000000;
   if (isResolved && data && data.length) {
-    filteredData = data.filter(function(item) {
+    filteredData = data.filter(item => {
       if(Number(item.total_stake) >= saturationLimit){
         return false;
       };
