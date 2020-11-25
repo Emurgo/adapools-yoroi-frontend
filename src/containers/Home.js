@@ -3,6 +3,7 @@ import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
 import Search from '../components/Search';
+import Alert from '../components/Alert';
 import { YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
@@ -137,10 +138,11 @@ function Home(props: HomeProps): Node {
       mozId: urlParams.mozId,
     });
   };
-  
+  const alertText = 'The new saturation point for Stakepools will be 63.6 million ADA from December 6th. Delegate to a new stakepool to avoid less than expected rewards.';
   const { props: { urlParams: { selectedPoolIds } } } = props
   return (
     <Layout>
+      <Alert title={alertText} />
       <Header>
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />

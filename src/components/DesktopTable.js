@@ -131,6 +131,18 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
     )
   }
 
+  let filteredData=data;
+ 
+  const saturationLimit = 63600000000000;
+  if (isResolved && data && data.length) {
+    filteredData = data.filter(function(item) {
+      if(Number(item.total_stake) >= saturationLimit){
+        return false;
+      };
+      return true;
+    })
+  }
+
   const tableTheads = [
     {
       id: 0,
@@ -187,8 +199,8 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
           </tr>
         </thead>
         <tbody>
-          {data &&
-            (Object.entries(data): any).map(([, value]) => (
+          {filteredData &&
+            (Object.entries(filteredData): any).map(([, value]) => (
               <tr role="row" key={value.id}>
                 <td>
                   <StakingPoolCard
