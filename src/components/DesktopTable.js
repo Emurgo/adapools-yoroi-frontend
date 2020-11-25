@@ -134,7 +134,6 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
   let filteredData=data;
  
   const saturationLimit = 63600000000000;
-  console.log(data);
   if (isResolved && data && data.length) {
     filteredData = data.filter(item => {
       if(Number(item.total_stake) >= saturationLimit){
