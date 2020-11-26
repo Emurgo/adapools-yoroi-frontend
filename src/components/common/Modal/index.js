@@ -6,17 +6,17 @@ import closeIcon from '../../../assets/close-icon.svg';
 
 const modalRoot = document.getElementById('modal-root');
 
-type Props = {
+type Props = {|
   children: any,
-  id: string,
+  id?: string,
   modalSize?: string,
   modalClass?: string,
   onClose: Function,
   isOpen: Function,
-  setSuccessMode: Function,
+  setSuccessMode?: Function,
   title: string,
-  success: boolean,
-};
+  success?: boolean,
+|};
 
 const Index = ({
   children,
@@ -53,7 +53,9 @@ const Index = ({
     if (success === true) {
       setTimeout(() => {
         setFadeType('out');
-        setSuccessMode(false);
+        if (setSuccessMode) {
+          setSuccessMode(false);
+        }
       }, 2000);
     }
   }, [success, setSuccessMode]);

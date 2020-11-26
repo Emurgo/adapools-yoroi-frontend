@@ -1,7 +1,9 @@
+// @flow
+
 import styled from 'styled-components';
 
 // eslint-disable-next-line import/prefer-default-export
-export const StyledModal = styled.div`
+export const StyledModal: any = styled.div`
   position: absolute;
   top: 0;
   left: 0;

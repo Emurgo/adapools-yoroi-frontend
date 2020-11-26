@@ -1,4 +1,7 @@
+// @flow
+
 import React from 'react';
+import type { Node } from 'react';
 import styled from 'styled-components';
 import PoolSizeTag from './PoolSizeTag';
 import PledgeCard from './PledgeCard';
@@ -47,32 +50,32 @@ const colorsLegend = [
     ranges: [
       {
         id: 0,
-        value: '0.0',
+        value: 0.0,
         description: '0.0% - 0.1% Lorem ipsum dolor sit amet, consectetur elit.',
       },
       {
         id: 1,
-        value: '0.2',
+        value: 0.2,
         description: '0.2% Lorem ipsum dolor sit amet, consectetur elit.',
       },
       {
         id: 3,
-        value: '0.3',
+        value: 0.3,
         description: '0.3% Lorem ipsum dolor sit amet, consectetur elit.',
       },
       {
         id: 4,
-        value: '0.4',
+        value: 0.4,
         description: '0.4% Lorem ipsum dolor sit amet, consectetur elit.',
       },
       {
         id: 5,
-        value: '0.5',
+        value: 0.5,
         description: '0.5% Lorem ipsum dolor sit amet, consectetur elit.',
       },
       {
         id: 6,
-        value: '0.6',
+        value: 0.6,
         description: '0.6% Lorem ipsum dolor sit amet, consectetur elit.',
       },
     ],
@@ -111,7 +114,7 @@ const colorsLegend = [
   },
 ];
 
-function ColoursModal() {
+function ColoursModal(): Node {
   return (
     <Wrapper>
       {colorsLegend.map(({ text, subtitle, ranges, piechart }) => (

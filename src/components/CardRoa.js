@@ -1,5 +1,8 @@
+// @flow
+
 /* eslint-disable indent */
 import React from 'react';
+import type { Node } from 'react';
 import styled from 'styled-components';
 
 const RoaElement = styled.div`
@@ -12,8 +15,12 @@ const RoaElement = styled.div`
   font-size: 14px;
 `;
 
-function CardRoa({ roa, description }: Props) {
+type Props = {|
+  roa: string,
+  description?: string,
+|};
 
+function CardRoa({ roa, description }: Props): Node {
   return (
     <div>
       <RoaElement>

@@ -31,13 +31,13 @@ export type Pool = {|
   +pledge: string,
   +pledge_real: string, // not sure diff with "pledge"
   +total_stake: string, // in lovelace
-  +total_size: string, // percentage of total
+  +total_size: number, // percentage of total
   +tax_fix: string, // fix tax in lovelace
   +tax_ratio: string, // ratio tax in percentage
   +tax_computed: number, // not sure
   +blocks_epoch: string,
   +roa: string,
-  +hist_bpe: { [string]: HistBPE },
+  +hist_bpe: {| [string]: HistBPE |},
   +hist_roa: any, // no examples yet. similar to bpe?
   +score: number,
   +handles: SocialMediaHandles, // social media stuff
@@ -51,12 +51,13 @@ export type Pool = {|
 |};
 
 export type World = {|
-  +epoch: number, // string from api
-  +slot: number, // string from api
+  +epoch: string,
+  +slot: string,
   +stake: string,
-  +supply: string, // number from api
+  +supply: number,
   +pools: string,
   +price: number,
+  +delegators: string,
 |};
 
 export const Sorting = Object.freeze({
@@ -67,17 +68,18 @@ export const Sorting = Object.freeze({
 
 export type SortingEnum = $Values<typeof Sorting>;
 
-export type ApiPoolsResponse = {|
-  world: World,
-  pools: { [string]: Pool },
+export type SearchParams = {|
+  limit?: number,
+  search?: string,
+  sort?: SortingEnum
 |};
 
-export function getPools(body: {
-  search?: string,
-  sort?: SortingEnum,
-  limit?: number
-  // cancelToken: boolean
-}): Promise<ApiPoolsResponse> {
+export type ApiPoolsResponse = {|
+  world: World,
+  pools: {| [string]: Pool |},
+|};
+
+export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
   const requestBody = {
     ...{ search: '', sort: Sorting.SCORE, limit: 250 },
     ...body,
@@ -107,5 +109,5 @@ export function getPools(body: {
 }
 
 export function listPools(): Promise<ApiPoolsResponse> {
-  return getPools({});
+  return getPools(({}: any));
 }

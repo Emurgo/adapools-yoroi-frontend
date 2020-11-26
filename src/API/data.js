@@ -1,4 +1,8 @@
-export default {
+// @flow
+
+import type { ApiPoolsResponse } from './api';
+
+export default ({
   world: {
     epoch: '210',
     slot: '241680',
@@ -51,6 +55,11 @@ export default {
       },
       last_rewards: '0',
       position: 2,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(70.90058712452,80%,80%)',
+      color_fees: 'hsl(103.97795347187,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.32302249181499
     },
     '1': {
       id: '1b268f4cba3faa7e36d8a0cc4adca2096fb856119412ee7330f692b5',
@@ -95,6 +104,11 @@ export default {
       },
       last_rewards: '0',
       position: 3,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(70.90058712452,80%,80%)',
+      color_fees: 'hsl(103.97795347187,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.32302249181499
     },
     '2': {
       id: '00000036d515e12e18cd3c88c74f09a67984c2c279a5296aa96efe89',
@@ -139,6 +153,11 @@ export default {
       },
       last_rewards: '0',
       position: 4,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(70.90058712452,80%,80%)',
+      color_fees: 'hsl(103.97795347187,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.32302249181499
     },
     '3': {
       id: 'eaa778d97077ff7725fe4cbb70b514d840407a45a3c244ac05f6a83d',
@@ -183,6 +202,11 @@ export default {
       },
       last_rewards: '0',
       position: 5,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(70.90058712452,80%,80%)',
+      color_fees: 'hsl(103.97795347187,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.32302249181499
     },
     '4': {
       id: 'fcbfb4a3c18f890de7a51f68603b18e654f8b432abdda17c53a0d586',
@@ -226,6 +250,11 @@ export default {
       },
       last_rewards: '0',
       position: 6,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(70.90058712452,80%,80%)',
+      color_fees: 'hsl(103.97795347187,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.32302249181499
     },
     '5': {
       id: '6184f6e7229530a2d1f9f746112406100e2696dd7439ff8c52750700',
@@ -269,6 +298,11 @@ export default {
       },
       last_rewards: '0',
       position: 7,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(70.90058712452,80%,80%)',
+      color_fees: 'hsl(103.97795347187,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.32302249181499
     },
     '6': {
       id: '618ab17ec8ea7239b4ac0c826b667c599489e25524ce74841a29d510',
@@ -313,6 +347,11 @@ export default {
       },
       last_rewards: '0',
       position: 8,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(70.90058712452,80%,80%)',
+      color_fees: 'hsl(103.97795347187,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.32302249181499
     },
     '7': {
       id: 'c1cadab46b74defa9f79b59b617fe2a50bdbce6b367e472b6109a7bc',
@@ -356,6 +395,11 @@ export default {
       },
       last_rewards: '0',
       position: 9,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(70.90058712452,80%,80%)',
+      color_fees: 'hsl(103.97795347187,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.32302249181499
     },
     '8': {
       id: '91ab082852ea331c39eebae35a3e2a390ea26423d82a91c72a02fb85',
@@ -399,6 +443,11 @@ export default {
       },
       last_rewards: '0',
       position: 10,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(70.90058712452,80%,80%)',
+      color_fees: 'hsl(103.97795347187,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.32302249181499
     },
     '9': {
       id: 'fd832d27b5fbe0489409613f50e2139b54a21e613c8a7609dcff556e',
@@ -442,6 +491,11 @@ export default {
       },
       last_rewards: '0',
       position: 11,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(70.90058712452,80%,80%)',
+      color_fees: 'hsl(103.97795347187,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.32302249181499
     },
     '10': {
       id: 'bcd7cf751b59f949170a7e6599f9ac03e49b32c19f3f1d8dad3ac210',
@@ -485,6 +539,11 @@ export default {
       },
       last_rewards: '0',
       position: 12,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(75.232344880759,80%,80%)',
+      color_fees: 'hsl(85.321510124674,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.29452408211082
     },
     '11': {
       id: '0c2e0c5a062389a3fd6fafddae26344d490866d7a34cad981b20f96b',
@@ -528,6 +587,11 @@ export default {
       },
       last_rewards: '0',
       position: 13,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(62.027684679808,80%,80%)',
+      color_fees: 'hsl(110.66354824296,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.3813968569951
     },
     '12': {
       id: '94864d27407c1dd0569e4acb9c7fa6ec2cc19a6193d9171f2d811232',
@@ -572,6 +636,11 @@ export default {
       },
       last_rewards: '0',
       position: 14,
+      color_roa: 'hsl(120,80%,80%)',
+      color_stake: 'hsl(75.84433006697,80%,80%)',
+      color_fees: 'hsl(103.5243451627,80%,80%)',
+      color_pledge: 'hsl(240,95%,95%)',
+      saturation: 0.29049786329829
     },
     // "13": {
     //     "id": "04c60c78417132a195cbb74975346462410f72612952a7c4ade7e438",
@@ -6224,4 +6293,4 @@ export default {
     //     "position": 152
     // }
   },
-};
+}: ApiPoolsResponse);

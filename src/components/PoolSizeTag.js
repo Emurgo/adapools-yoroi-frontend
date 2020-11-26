@@ -1,6 +1,10 @@
+// @flow
+
 import React from 'react';
+import type { Node } from 'react';
 import styled from 'styled-components';
 import { PieChart } from 'react-minimal-pie-chart';
+import { roundOneDecimal, } from '../utils/utils';
 
 const Tag = styled.div`
   padding: 2px 8px;
@@ -38,7 +42,7 @@ type Props = {|
   +value: number,
 |};
 
-function PoolSizeTag({ value }: Props) {
+function PoolSizeTag({ value }: Props): Node {
   const totalValue = 1
   function formatArray(percent) {
     return [
@@ -78,7 +82,7 @@ function PoolSizeTag({ value }: Props) {
       <div className="piechart">
         <PieChart totalValue={totalValue} data={formatArray(value)} />
       </div>
-      <div className="value">{value}%</div>
+      <div className="value">{roundOneDecimal(value)}%</div>
     </Tag>
   )
 }

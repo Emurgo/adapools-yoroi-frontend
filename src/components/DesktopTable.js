@@ -7,10 +7,11 @@ import PoolSizeCard from './PoolSizeCard';
 import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
 import CardRoa from './CardRoa';
-import { roundTwoDecimal, formatBigNumber, roundOneDecimal, formatCostLabel } from '../utils/utils';
+import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
 import Tooltip from './common/Tooltip';
 import AverageCostCard from './AverageCostCard';
+import type { QueryState } from '../utils/types';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -107,9 +108,9 @@ const Table = styled.table`
 
 type Props = {|
   data: ?Array<Pool>,
-  delegateFunction: Function,
-  +status: 'idle' | 'pending' | 'resolved' | 'rejected',
-  selectedIdPools: Array<string>,
+  delegateFunction: string => void,
+  +status: QueryState,
+  selectedIdPools: ?Array<string>,
 |};
 
 function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props): React$Node {
@@ -207,14 +208,13 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
                 </td>
                 <td>
                   <PoolSizeCard
-                    percentage={roundOneDecimal(pool.saturation)}
+                    percentage={pool.saturation}
                     value={formatBigNumber(pool.total_stake)}
                   />
                 </td>
                 <td>
                   <CostsCard
-                    percentage={roundTwoDecimal(pool.tax_computed)}
-                    value={formatCostLabel(pool.tax_ratio, pool.tax_fix)}
+                    value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
                   />
                 </td>
                 <td>
@@ -228,7 +228,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
                 <td>{pool.blocks_epoch}</td>
                 <td>
                   <Button 
-                    disabled={selectedIdPools && selectedIdPools.indexOf(pool.id) > -1}
+                    disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
                     onClick={() => delegateFunction(pool.id)}
                   >
                     Delegate

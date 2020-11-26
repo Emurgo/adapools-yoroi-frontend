@@ -24,8 +24,8 @@ const Card = styled.div`
 `;
 
 type Props = {|
-  value: string,
-  real: string,
+  value: string | number,
+  real?: string | number,
 |};
 
 function PledgeCard({ value, real }: Props): Node {
@@ -57,8 +57,8 @@ function PledgeCard({ value, real }: Props): Node {
   
   return (
     <Card background={backgroundColor}>
-      { (Number(real) >= Number(value)) && <i className="fas fa-check" /> }
-      <span>{formatBigNumber(value)}</span>
+      { real != null && (Number(real) >= Number(value)) && <i className="fas fa-check" /> }
+      <span>{formatBigNumber(value.toString())}</span>
     </Card>
   );
 }

@@ -25,7 +25,7 @@ const Card = styled.div`
   }
 `;
 type Props = {|
-  +percentage: number,
+  +percentage: string,
 |};
 function AverageCostCard({ percentage }: Props): Node {
   return (

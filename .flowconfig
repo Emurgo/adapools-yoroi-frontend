@@ -5,6 +5,12 @@
 [libs]
 
 [lints]
+sketchy-null=warn
+sketchy-number=warn
+unnecessary-optional-chain=warn
+ambiguous-object-type=error
+unnecessary-invariant=warn
+deprecated-utility=error
 
 [options]
 

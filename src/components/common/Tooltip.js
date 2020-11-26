@@ -1,4 +1,7 @@
+// @flow
+
 import React from 'react';
+import type { Node } from 'react';
 import styled from 'styled-components';
 import infoIcon from '../../assets/info-icon.svg';
 
@@ -52,7 +55,7 @@ type Props = {|
   textInfo: string,
 |};
 
-function Tooltip({ label, textInfo }: Props) {
+function Tooltip({ label, textInfo }: Props): Node {
   return (
     <WrapperToolTip>
       <ToolTip data-text={textInfo}>

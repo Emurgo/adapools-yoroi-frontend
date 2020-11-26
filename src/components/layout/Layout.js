@@ -1,4 +1,7 @@
+// @flow
+
 import React from 'react';
+import type { Node } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -14,7 +17,7 @@ const Background = styled.div`
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
 `;
 
-function Layout({ children }) {
+function Layout({ children }: {| children?: ?Node |}): Node {
   return (
     <Background>
       <Container>
