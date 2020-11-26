@@ -45,7 +45,7 @@ const WrapperContent = styled.div`
   }
 `;
 type Props = {|
-  data: Pool,
+  data: Array<Pool>,
   delegateFunction: Function,
   +status: 'idle' | 'pending' | 'resolved' | 'rejected',
   selectedIdPools: Array<string>,
@@ -69,10 +69,22 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
     )
   }
 
+  let filteredData=data;
+ 
+  const saturationLimit = 63600000000000;
+  if (isResolved && data && data.length) {
+    filteredData = data.filter(item => {
+      if(Number(item.total_stake) >= saturationLimit){
+        return false;
+      };
+      return true;
+    })
+  }
+
   return (
     <>
-      {data &&
-        (Object.entries(data): any).map(([, value]) => (
+      {filteredData &&
+        (Object.entries(filteredData): any).map(([, value]) => (
           <CardMobile key={value.id}>
             <StakingPoolCard
               id={value.id}
