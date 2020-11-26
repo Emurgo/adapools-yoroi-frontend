@@ -138,7 +138,7 @@ function Home(props: HomeProps): Node {
       mozId: urlParams.mozId,
     });
   };
-  const alertText = 'The new saturation point for Stakepools will be 63.6 million ADA from December 6th. Delegate to a new stakepool to avoid less than expected rewards.';
+  const alertText = 'The new saturation point for Stakepools will be 63.6 million ADA from December 6th. If the "Pool Size" parameter of your Stakepool is over this limit, delegate to a new stakepool to avoid less than expected rewards';
   const { props: { urlParams: { selectedPoolIds } } } = props
   return (
     <Layout>
