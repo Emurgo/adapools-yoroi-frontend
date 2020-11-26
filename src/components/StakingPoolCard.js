@@ -51,11 +51,11 @@ const MainCardPool = styled.div`
   }
 `;
 type Props = {|
-  avatar: string,
-  fullname: string,
+  avatar: ?string,
+  fullname: ?string,
   id: string,
-  tickerName: string,
-  name: string,
+  tickerName: ?string,
+  name: ?string,
   links: {|
     tw: ?string,
     tg: ?string,
@@ -64,6 +64,7 @@ type Props = {|
     tc: ?string,
     di: ?string,
     gh: ?string,
+    icon: ?string,
   |},
 |};
 
@@ -82,7 +83,9 @@ function StakingPoolCard({ id, avatar, tickerName, name, links, fullname }: Prop
   const twitch = links && links.tc;
   const discord = links && links.di;
   const github = links && links.gh;
-  const websiteUrl = fullname.match(/(https?:\/\/[^\s]+"?utm_source=adapools.org)/g);
+  const websiteUrl = fullname == null
+    ? undefined
+    : fullname.match(/(https?:\/\/[^\s]+"?utm_source=adapools.org)/g);
 
   return (
     <MainCardPool>

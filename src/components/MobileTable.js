@@ -56,7 +56,7 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
   const isResolved = status === 'resolved';
 
   if (isResolved && data && Object.entries(data).length <= 0) {
-    return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
+    return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
   }
 
   if(isLoading) {

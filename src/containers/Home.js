@@ -121,7 +121,7 @@ function Home(props: HomeProps): Node {
     getPools(newSearch)
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved');
-        setRowData(poolsData.pools);
+        setRowData(Object.values(poolsData.pools));
       })
       .catch((err) => {
         setStatus({ status: 'rejected' });
@@ -139,6 +139,28 @@ function Home(props: HomeProps): Node {
     });
   };
   const alertText = 'The new saturation point for Stakepools will be 63.6 million ADA from December 6th. If the "Pool Size" parameter of your Stakepool is over this limit, delegate to a new stakepool to avoid less than expected rewards';
+
+  function filterPools(
+    pools: ?Array<Pool>
+  ): ?Array<Pool> {
+    if (pools == null) return pools;
+
+    // don't filter out saturated pools if the user explicitly searches
+    if (filterOptions.search != null && filterOptions.search !== '') {
+      return pools;
+    }
+
+    // k = 500
+    const saturationLimit = 63600000000000;
+
+    return pools.filter(item => {
+      if(Number(item.total_stake) >= saturationLimit){
+        return false;
+      };
+      return true;
+    });
+  }
+
   const { props: { urlParams: { selectedPoolIds } } } = props
   return (
     <Layout>
@@ -154,7 +176,7 @@ function Home(props: HomeProps): Node {
         <DesktopTable 
           status={status}
           delegateFunction={delegateFunction} 
-          data={rowData}
+          data={filterPools(rowData)}
           selectedIdPools={selectedPoolIds}
         />
       </DesktopOnly>
@@ -162,7 +184,7 @@ function Home(props: HomeProps): Node {
         <MobileTable 
           status={status}
           delegateFunction={delegateFunction} 
-          data={rowData}
+          data={filterPools(rowData)}
           selectedIdPools={selectedPoolIds}
         />
       </MobileOnly>

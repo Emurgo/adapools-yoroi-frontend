@@ -12,6 +12,7 @@ export type HistBPE = {|
 |};
 
 export type SocialMediaHandles = {|
+  tw: ?string,
   tg: ?string,
   fb: ?string,
   yt: ?string,
@@ -46,6 +47,7 @@ export type Pool = {|
   +color_stake: string, // hsl(240,95%,95%)
   +color_fees: string, // hsl(240,95%,95%)
   +color_pledge: string, // hsl(240,95%,95%)
+  +saturation: number,
 |};
 
 export type World = {|
