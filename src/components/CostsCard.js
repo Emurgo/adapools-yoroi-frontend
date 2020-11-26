@@ -23,8 +23,7 @@ const Card = styled.div`
   }
 `;
 type Props = {|
-  percentage: number,
-  value: number,
+  value: string,
 |};
 function CostsCard({ value }: Props): Node {
   return (

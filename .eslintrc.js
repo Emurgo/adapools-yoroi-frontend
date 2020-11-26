@@ -1,3 +1,5 @@
+// @flow
+
 module.exports = {
   extends: ['airbnb', 'prettier'],
   parser: 'babel-eslint',
@@ -26,7 +28,7 @@ module.exports = {
     'react/prefer-stateless-function': 'off',
     'react/no-unused-prop-types': 'off',
     'react/prop-types': 0,
-    'react/require-default-props': 1,
+    'react/require-default-props': 0,
     'react/sort-comp': 0,
     'react/jsx-fragments': 'off',
     'react/static-property-placement': ['warn', 'static public field'],
@@ -42,6 +44,7 @@ module.exports = {
     'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     'import/imports-first': 1,
     'flowtype/define-flow-type': 1,
+    'flowtype/require-valid-file-annotation': [2, 'always'],
     'flowtype/use-flow-type': 1,
     'jsx-a11y/label-has-associated-control': 0,
     'jsx-a11y/control-has-associated-label': 0,

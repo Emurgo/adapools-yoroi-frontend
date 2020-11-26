@@ -7,10 +7,11 @@ import PoolSizeCard from './PoolSizeCard';
 import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
 import CardRoa from './CardRoa';
-import { roundTwoDecimal, formatBigNumber, roundOneDecimal, formatCostLabel } from '../utils/utils';
+import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
 import Tooltip from './common/Tooltip';
 import AverageCostCard from './AverageCostCard';
+import type { QueryState } from '../utils/types';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -106,10 +107,10 @@ const Table = styled.table`
 `;
 
 type Props = {|
-  data: Array<Pool>,
-  delegateFunction: Function,
-  +status: 'idle' | 'pending' | 'resolved' | 'rejected',
-  selectedIdPools: Array<string>,
+  data: ?Array<Pool>,
+  delegateFunction: string => void,
+  +status: QueryState,
+  selectedIdPools: ?Array<string>,
 |};
 
 function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props): React$Node {
@@ -117,8 +118,8 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
   
-  if (isResolved && data && Object.entries(data).length <= 0) {
-    return <h1 style={{ fontWeight: 400 }}>Ups.. We haven’t found any data</h1>;
+  if (isResolved && data != null && data.length <= 0) {
+    return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
   }
 
   if(isLoading) {
@@ -129,18 +130,6 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
     return (
       <h1>Oops! something wrong happened. Try again!</h1>
     )
-  }
-
-  let filteredData=data;
- 
-  const saturationLimit = 63600000000000;
-  if (isResolved && data && data.length) {
-    filteredData = data.filter(item => {
-      if(Number(item.total_stake) >= saturationLimit){
-        return false;
-      };
-      return true;
-    })
   }
 
   const tableTheads = [
@@ -199,49 +188,48 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
           </tr>
         </thead>
         <tbody>
-          {filteredData &&
-            (Object.entries(filteredData): any).map(([, value]) => (
-              <tr role="row" key={value.id}>
+          {data != null &&
+            data.map(pool => (
+              <tr role="row" key={pool.id}>
                 <td>
                   <StakingPoolCard
-                    id={value.id}
-                    avatar={value.pool_pic}
-                    tickerName={value.db_ticker}
-                    name={value.db_name}
-                    links={value.handles}
-                    fullname={value.fullname}
+                    id={pool.id}
+                    avatar={pool.pool_pic}
+                    tickerName={pool.db_ticker}
+                    name={pool.db_name}
+                    links={pool.handles}
+                    fullname={pool.fullname}
                   />
                 </td>
                 <td>
                   <CardRoa
-                    roa={value.roa}
+                    roa={pool.roa}
                   />
                 </td>
                 <td>
                   <PoolSizeCard
-                    percentage={roundOneDecimal(value.saturation)}
-                    value={formatBigNumber(value.total_stake)}
+                    percentage={pool.saturation}
+                    value={formatBigNumber(pool.total_stake)}
                   />
                 </td>
                 <td>
                   <CostsCard
-                    percentage={roundTwoDecimal(value.tax_computed)}
-                    value={formatCostLabel(value.tax_ratio, value.tax_fix)}
+                    value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
                   />
                 </td>
                 <td>
                   <AverageCostCard
-                    percentage={roundTwoDecimal(value.tax_computed)}
+                    percentage={roundTwoDecimal(pool.tax_computed)}
                   />
                 </td>
                 <td>
-                  <PledgeCard value={value.pledge} real={value.pledge_real} />
+                  <PledgeCard value={pool.pledge} real={pool.pledge_real} />
                 </td>
-                <td>{value.blocks_epoch}</td>
+                <td>{pool.blocks_epoch}</td>
                 <td>
                   <Button 
-                    disabled={selectedIdPools && selectedIdPools.indexOf(value.id) > -1}
-                    onClick={() => delegateFunction(value.id)}
+                    disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
+                    onClick={() => delegateFunction(pool.id)}
                   >
                     Delegate
                   </Button>

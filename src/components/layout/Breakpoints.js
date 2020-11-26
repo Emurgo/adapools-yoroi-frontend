@@ -1,4 +1,7 @@
+// @flow
+
 import React from 'react';
+import type { Node } from 'react';
 import styled from 'styled-components';
 
 const MobileHidden = styled.div`
@@ -14,6 +17,6 @@ const DesktopHidden = styled.div`
   }
 `;
 
-export const MobileOnly = ({ children }) => <MobileHidden>{children}</MobileHidden>;
+export const MobileOnly = ({ children }: {| children?: ?Node |}): Node => <MobileHidden>{children}</MobileHidden>;
 
-export const DesktopOnly = ({ children }) => <DesktopHidden>{children}</DesktopHidden>;
+export const DesktopOnly = ({ children }: {| children?: ?Node |}): Node => <DesktopHidden>{children}</DesktopHidden>;

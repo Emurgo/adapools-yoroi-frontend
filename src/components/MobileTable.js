@@ -8,9 +8,10 @@ import PoolSizeCard from './PoolSizeCard';
 import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
 import CardRoa from './CardRoa';
-import { roundTwoDecimal, formatBigNumber, roundOneDecimal, formatCostLabel } from '../utils/utils';
+import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
 import AverageCostCard from './AverageCostCard';
+import type { QueryState } from '../utils/types';
 
 const CardMobile = styled.div`
   display: flex;
@@ -45,18 +46,18 @@ const WrapperContent = styled.div`
   }
 `;
 type Props = {|
-  data: Pool,
-  delegateFunction: Function,
-  +status: 'idle' | 'pending' | 'resolved' | 'rejected',
-  selectedIdPools: Array<string>,
+  data: ?Array<Pool>,
+  delegateFunction: string => void,
+  +status: QueryState,
+  selectedIdPools: ?Array<string>,
 |};
 function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
 
-  if (isResolved && data && Object.entries(data).length <= 0) {
-    return <h1 style={{ fontWeight: 400 }}>Ups.. We havent found any data</h1>;
+  if (isResolved && data != null && data.length <= 0) {
+    return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
   }
 
   if(isLoading) {
@@ -72,18 +73,18 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
   return (
     <>
       {data &&
-        (Object.entries(data): any).map(([, value]) => (
-          <CardMobile key={value.id}>
+        data.map(pool => (
+          <CardMobile key={pool.id}>
             <StakingPoolCard
-              id={value.id}
-              avatar={value.pool_pic}
-              tickerName={value.db_ticker}
-              name={value.db_name}
-              links={value.handles}
-              fullname={value.fullname}
+              id={pool.id}
+              avatar={pool.pool_pic}
+              tickerName={pool.db_ticker}
+              name={pool.db_name}
+              links={pool.handles}
+              fullname={pool.fullname}
             />
             <CardRoa
-              roa={value.roa}
+              roa={pool.roa}
               description='Estimated ROA: '
             />
 
@@ -91,31 +92,30 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
               <div className="item">
                 <div className="label">Pool Size</div>
                 <PoolSizeCard
-                  percentage={roundOneDecimal(value.saturation)}
-                  value={formatBigNumber(value.total_stake)}
+                  percentage={pool.saturation}
+                  value={formatBigNumber(pool.total_stake)}
                 />
               </div>
               <div className="item">
                 <div className="label">Costs</div>
                 <div className="cost-wrapper">
                   <AverageCostCard
-                    percentage={roundTwoDecimal(value.tax_computed)}
+                    percentage={roundTwoDecimal(pool.tax_computed)}
                   />
                   <CostsCard
-                    percentage={roundTwoDecimal(value.tax_computed)}
-                    value={formatCostLabel(value.tax_ratio, value.tax_fix)}
+                    value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
                   />
                 </div>
               </div>
               <div className="item">
                 <div className="label">Pledge</div>
-                <PledgeCard value={value.pledge} real={value.pledge_real} />
+                <PledgeCard value={pool.pledge} real={pool.pledge_real} />
               </div>
             </WrapperContent>
             <div>
               <Button
-                disabled={selectedIdPools && selectedIdPools.indexOf(value.id) > -1}
-                onClick={() => delegateFunction(value.id)}
+                disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
+                onClick={() => delegateFunction(pool.id)}
               >
                 Delegate
               </Button>

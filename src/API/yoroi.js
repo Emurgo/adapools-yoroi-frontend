@@ -1,6 +1,6 @@
 // @flow
 
-export type SelectedPools = Array<{|poolHash: string|}>
+export type SelectedPools = Array<string>
 
 export const Source = Object.freeze({
   CHROME_EXTENSION: 'chrome',

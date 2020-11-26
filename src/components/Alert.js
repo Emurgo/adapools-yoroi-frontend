@@ -1,5 +1,8 @@
+// @flow
+
 /* eslint-disable indent */
 import React from 'react';
+import type { Node } from 'react';
 import styled from 'styled-components';
 import attentionIcon from '../assets/attention.svg';
 
@@ -33,7 +36,11 @@ const AlertText = styled.div`
   margin-right: 12px;
 `;
 
-function Alert({ title }: Props) {
+type Props = {|
+  title: string,
+|};
+
+function Alert({ title }: Props): Node {
 
   return (
     <Banner>

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+// @flow
+
+import React, { useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
@@ -8,10 +10,11 @@ import { YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
 import { getPools, listPools } from '../API/api';
-import type { ApiPoolsResponse } from '../API/api';
+import type { ApiPoolsResponse, Pool, SearchParams } from '../API/api';
 import DesktopTable from '../components/DesktopTable';
 import MobileTable from '../components/MobileTable';
 import SortSelect from '../components/SortSelect';
+import type { QueryState } from '../utils/types';
 
 // import data from '../API/data';
 import Modal from '../components/common/Modal';
@@ -73,23 +76,23 @@ export type HomeProps = {|
 |};
 
 function Home(props: HomeProps): Node {
-  const [rowData, setRowData] = useState(null);
-  const [status, setStatus] = useState('idle');
-  const [filterOptions, setFilterOptions] = useState({
+  const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
+  const [status, setStatus] = React.useState<QueryState>('idle');
+  const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
     search: '',
     sort: 'score',
   });
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = React.useState<boolean>(false);
 
   useEffect(() => {
     setStatus('pending');
     listPools()
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved');
-        setRowData(Object.values(poolsData.pools));
+        setRowData(Object.keys(poolsData.pools).map(key => poolsData.pools[key]));
       })
       .catch((err) => {
-        setStatus({ status: 'rejected' });
+        setStatus('rejected');
         console.error(err);
       });
   }, []);
@@ -104,10 +107,10 @@ function Home(props: HomeProps): Node {
     getPools(newSearch)
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved');
-        setRowData(Object.values(poolsData.pools));
+        setRowData(Object.keys(poolsData.pools).map(key => poolsData.pools[key]));
       })
       .catch((err) => {
-        setStatus({ status: 'rejected' });
+        setStatus('rejected');
         console.error(err);
       });
   };
@@ -121,16 +124,16 @@ function Home(props: HomeProps): Node {
     getPools(newSearch)
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved');
-        setRowData(poolsData.pools);
+        setRowData(Object.keys(poolsData.pools).map(key => poolsData.pools[key]));
       })
       .catch((err) => {
-        setStatus({ status: 'rejected' });
+        setStatus('rejected');
         console.error(err);
       });
   };
 
   const delegateFunction = (id: string): void => {
-    const { urlParams } = props.props
+    const { urlParams } = props;
 
     YoroiCallback(([id]), {
       source: urlParams.source,
@@ -139,7 +142,29 @@ function Home(props: HomeProps): Node {
     });
   };
   const alertText = 'The new saturation point for Stakepools will be 63.6 million ADA from December 6th. If the "Pool Size" parameter of your Stakepool is over this limit, delegate to a new stakepool to avoid less than expected rewards';
-  const { props: { urlParams: { selectedPoolIds } } } = props
+
+  function filterPools(
+    pools: ?Array<Pool>
+  ): ?Array<Pool> {
+    if (pools == null) return pools;
+
+    // don't filter out saturated pools if the user explicitly searches
+    if (filterOptions.search != null && filterOptions.search !== '') {
+      return pools;
+    }
+
+    // k = 500
+    const saturationLimit = 63600000000000;
+
+    return pools.filter(item => {
+      if(Number(item.total_stake) >= saturationLimit){
+        return false;
+      };
+      return true;
+    });
+  }
+
+  const { urlParams: { selectedPoolIds } } = props
   return (
     <Layout>
       <Alert title={alertText} />
@@ -154,7 +179,7 @@ function Home(props: HomeProps): Node {
         <DesktopTable 
           status={status}
           delegateFunction={delegateFunction} 
-          data={rowData}
+          data={filterPools(rowData)}
           selectedIdPools={selectedPoolIds}
         />
       </DesktopOnly>
@@ -162,7 +187,7 @@ function Home(props: HomeProps): Node {
         <MobileTable 
           status={status}
           delegateFunction={delegateFunction} 
-          data={rowData}
+          data={filterPools(rowData)}
           selectedIdPools={selectedPoolIds}
         />
       </MobileOnly>

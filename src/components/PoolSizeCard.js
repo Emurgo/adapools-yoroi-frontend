@@ -28,7 +28,7 @@ const Card = styled.div`
 
 type Props = {|
   percentage: number,
-  value: number,
+  value: string,
 |};
 
 function PoolSizeCard({ percentage, value }: Props): Node {
