@@ -84,12 +84,17 @@ function Home(props: HomeProps): Node {
   });
   const [openModal, setOpenModal] = React.useState<boolean>(false);
 
+  const toPoolArray: ?{| [string]: Pool |} => Array<Pool> = (pools) => {
+    if (pools == null) return [];
+    return Object.keys(pools).map(key => pools[key]);
+  };
+
   useEffect(() => {
     setStatus('pending');
     listPools()
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved');
-        setRowData(Object.keys(poolsData.pools).map(key => poolsData.pools[key]));
+        setRowData(toPoolArray(poolsData.pools))
       })
       .catch((err) => {
         setStatus('rejected');
@@ -107,7 +112,7 @@ function Home(props: HomeProps): Node {
     getPools(newSearch)
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved');
-        setRowData(Object.keys(poolsData.pools).map(key => poolsData.pools[key]));
+        setRowData(toPoolArray(poolsData.pools));
       })
       .catch((err) => {
         setStatus('rejected');
@@ -124,7 +129,7 @@ function Home(props: HomeProps): Node {
     getPools(newSearch)
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved');
-        setRowData(Object.keys(poolsData.pools).map(key => poolsData.pools[key]));
+        setRowData(toPoolArray(poolsData.pools));
       })
       .catch((err) => {
         setStatus('rejected');

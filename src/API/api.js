@@ -75,8 +75,8 @@ export type SearchParams = {|
 |};
 
 export type ApiPoolsResponse = {|
-  world: World,
-  pools: {| [string]: Pool |},
+  world?: World,
+  pools?: {| [string]: Pool |},
 |};
 
 export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
