@@ -81,7 +81,7 @@ export type ApiPoolsResponse = {|
 
 export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
   const requestBody = {
-    ...{ search: '', sort: Sorting.SCORE, limit: 250 },
+    ...{ search: '', sort: Sorting.SCORE, limit: 500 },
     ...body,
   }
 
