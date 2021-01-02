@@ -12,6 +12,7 @@ import Button from './common/Button';
 import Tooltip from './common/Tooltip';
 import AverageCostCard from './AverageCostCard';
 import type { QueryState } from '../utils/types';
+import type { DelegationProps } from '../containers/Home';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -108,12 +109,13 @@ const Table = styled.table`
 
 type Props = {|
   data: ?Array<Pool>,
-  delegateFunction: string => void,
+  delegateFunction: (DelegationProps, ?number) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
+  totalAda: ?number,
 |};
 
-function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props): React$Node {
+function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -229,7 +231,14 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools }: Props
                 <td>
                   <Button 
                     disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
-                    onClick={() => delegateFunction(pool.id)}
+                    onClick={() => (
+                      delegateFunction({
+                        stakepoolName: pool.db_name,
+                        stakepoolTotalStake: pool.total_stake,
+                        isAlreadySaturated: pool.saturation >= 1,
+                        id: pool.id },
+                      totalAda)
+                    )}
                   >
                     Delegate
                   </Button>

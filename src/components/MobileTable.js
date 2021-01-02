@@ -50,8 +50,10 @@ type Props = {|
   delegateFunction: string => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
+  totalAda: ?number,
 |};
-function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props): React$Node {
+
+function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -115,7 +117,14 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props)
             <div>
               <Button
                 disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
-                onClick={() => delegateFunction(pool.id)}
+                onClick={() => (
+                  delegateFunction({
+                    stakepoolName: pool.db_name,
+                    stakepoolTotalStake: pool.total_stake,
+                    isAlreadySaturated: pool.saturation >= 1,
+                    id: pool.id },
+                  totalAda)
+                )}
               >
                 Delegate
               </Button>

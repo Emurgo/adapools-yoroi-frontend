@@ -21,7 +21,7 @@ type Props = {|
 const Index = ({
   children,
   id,
-  modalSize = 'md',
+  modalSize = 'md', // TODO: make this actually change
   modalClass = '',
   onClose,
   isOpen,
@@ -56,7 +56,7 @@ const Index = ({
         if (setSuccessMode) {
           setSuccessMode(false);
         }
-      }, 2000);
+      }, 1000);
     }
   }, [success, setSuccessMode]);
 

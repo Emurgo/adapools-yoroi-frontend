@@ -22,9 +22,6 @@ export type YoroiCallbackProps = {|
 export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiCallbackProps): void => {
   const { source } = yoroiCBProps;
 
-  console.log('callback props')
-  console.log(yoroiCBProps)
-
   let postMessage
   const encodedDataForYoroi = relevantDataForYoroi(selectedPools)
   switch (source) {
@@ -50,8 +47,6 @@ export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiC
     postMessage(encodedDataForYoroi, 'yoroi://simple-staking/selection')
     break
   default:
-    console.log('Pool Selected for Yoroi: ')
-    console.log(encodedDataForYoroi)
     window.parent.postMessage(encodedDataForYoroi, source)
     break
   }

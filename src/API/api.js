@@ -101,7 +101,7 @@ export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
       return poolsResponse;
     })
     .catch((error) => {
-      console.log('API::getPools Error: ', error);
+      console.error('API::getPools Error: ', error);
       return {
         pools: {}
       }

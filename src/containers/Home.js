@@ -16,10 +16,12 @@ import MobileTable from '../components/MobileTable';
 import SortSelect from '../components/SortSelect';
 import type { QueryState } from '../utils/types';
 
-// import data from '../API/data';
 import Modal from '../components/common/Modal';
-import ColoursModal from '../components/ColoursModal';
+import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
 import adapoolIcon from '../assets/adapool-logo-extend.svg'
+
+// k = 500
+const SATURATION_LIMIT = 63600000000000;
 
 const Header = styled.div`
   display: flex;
@@ -64,16 +66,24 @@ const CreditSection = styled.div`
   }
 `;
 export type UrlParams = {|
-  chromeId: ?string,
-  mozId: ?string,
-  source: ?string,
-  selectedPoolIds: ?Array<string>,
-  lang: ?string,
+    chromeId: ?string,
+    mozId: ?string,
+    source: ?string,
+    selectedPoolIds: ?Array<string>,
+    lang: ?string,
+    totalAda: ?number,
 |};
 
 export type HomeProps = {|
   urlParams: UrlParams,
 |};
+
+export type DelegationProps = {|
+    stakepoolName: string,
+    stakepoolTotalStake: string,
+    isAlreadySaturated: boolean,
+    id: string,
+|}
 
 function Home(props: HomeProps): Node {
   const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
@@ -83,6 +93,8 @@ function Home(props: HomeProps): Node {
     sort: 'score',
   });
   const [openModal, setOpenModal] = React.useState<boolean>(false);
+  const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);
+  const [delegationModalData, setDelegationModalData] = React.useState<Object>({});
 
   const toPoolArray: ?{| [string]: Pool |} => Array<Pool> = (pools) => {
     if (pools == null) return [];
@@ -137,7 +149,7 @@ function Home(props: HomeProps): Node {
       });
   };
 
-  const delegateFunction = (id: string): void => {
+  const confirmedDelegateFunction = (id: string): void => {
     const { urlParams } = props;
 
     YoroiCallback(([id]), {
@@ -145,11 +157,27 @@ function Home(props: HomeProps): Node {
       chromeId: urlParams.chromeId,
       mozId: urlParams.mozId,
     });
+  }
+
+  const delegateFunction = (delegation: DelegationProps, totalAda: ?number): void => {
+    if (delegation == null) return;
+    const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
+
+    if (Number(delegation.stakepoolTotalStake) + lovelaceDelegation >= SATURATION_LIMIT) {
+      setDelegationModalData({ ...delegation, totalAda })
+      setConfirmDelegationModal(true)
+      setOpenModal(true)
+    }
+    else {
+      confirmedDelegateFunction(delegation.id)
+    }
   };
+
   const alertText = 'The new saturation point for Stakepools will be 63.6 million ADA from December 6th. If the "Pool Size" parameter of your Stakepool is over this limit, delegate to a new stakepool to avoid less than expected rewards';
 
   function filterPools(
-    pools: ?Array<Pool>
+    pools: ?Array<Pool>,
+    totalAda: ?number,
   ): ?Array<Pool> {
     if (pools == null) return pools;
 
@@ -158,53 +186,67 @@ function Home(props: HomeProps): Node {
       return pools;
     }
 
-    // k = 500
-    const saturationLimit = 63600000000000;
+    const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
 
-    return pools.filter(item => {
-      if(Number(item.total_stake) >= saturationLimit){
-        return false;
-      };
-      return true;
-    });
+    if (lovelaceDelegation > SATURATION_LIMIT) return pools;
+
+    return pools.filter(item => (
+      Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT
+    ));
   }
-
-  const { urlParams: { selectedPoolIds } } = props
+  
+  const { urlParams: { selectedPoolIds, totalAda } } = props
   return (
     <Layout>
       <Alert title={alertText} />
       <Header>
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />
-        {/* <ColorButton type="button" onClick={() => setOpenModal(true)}>
-          Colors meaning
-        </ColorButton> */}
+        {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
+        {/*  Colors meaning */}
+        {/* </ColorButton> */}
       </Header>
       <DesktopOnly>
         <DesktopTable 
           status={status}
           delegateFunction={delegateFunction} 
-          data={filterPools(rowData)}
+          data={filterPools(rowData, totalAda)}
           selectedIdPools={selectedPoolIds}
+          totalAda={totalAda}
         />
       </DesktopOnly>
       <MobileOnly>
         <MobileTable 
           status={status}
           delegateFunction={delegateFunction} 
-          data={filterPools(rowData)}
+          data={filterPools(rowData, totalAda)}
           selectedIdPools={selectedPoolIds}
+          totalAda={totalAda}
         />
       </MobileOnly>
-      {openModal && (
+      {openModal && confirmDelegationModal && (
         <Modal
-          title="Colors meaning"
-          isOpen={openModal}
-          onClose={() => setOpenModal(false)}
+          title=""
+          isOpen={openModal && confirmDelegationModal}
+          onClose={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
         >
-          <ColoursModal />
+          <SaturatedPoolAlert
+            delegation={delegationModalData}
+            onSuccess={confirmedDelegateFunction}
+            close={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+          />
         </Modal>
       )}
+      {/* {openModal && ( */}
+      {/*  <Modal */}
+      {/*    title="Saturated Stakepool" */}
+      {/*    isOpen={openModal} */}
+      {/*    success={confirmedDelegateFunction} */}
+      {/*    onClose={() => {setOpenModal(false); setConfirmDelegationModal(false)}} */}
+      {/*  > */}
+      {/*    <SaturatedPoolAlert /> */}
+      {/*  </Modal> */}
+      {/* )} */}
       <CreditSection>Powered by 
         <a href='https://adapools.org/' target='_blank' rel='noopener noreferrer'>
           <img src={adapoolIcon} alt="adapool-logo" />
