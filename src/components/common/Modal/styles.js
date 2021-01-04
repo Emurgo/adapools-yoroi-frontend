@@ -21,8 +21,8 @@ export const StyledModal: any = styled.div`
 
   position: fixed;
   overflow: hidden;
-  width: 700px;
-  height: 600px;
+  width: 400px;
+  height: 420px;
   margin: 50px auto;
 
   &.fade-in {

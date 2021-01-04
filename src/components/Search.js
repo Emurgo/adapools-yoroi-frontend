@@ -66,7 +66,7 @@ const Search = ({ filter }: Props): Node => {
       <SearchInput
         value={searchValue}
         onChange={handleSearchInputChanges}
-        placeholder="Search By Id"
+        placeholder="Search By Id or Name"
         type="text"
       />
 

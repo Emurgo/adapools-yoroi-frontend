@@ -19,6 +19,7 @@ const extractParams = (locationSearch: string): UrlParams => {
     source: params.get('source'),
     selectedPoolIds: parseIds(params.get('delegated')),
     lang: params.get('lang'),
+    totalAda: params.get('totalAda'),
   }
 }
 
