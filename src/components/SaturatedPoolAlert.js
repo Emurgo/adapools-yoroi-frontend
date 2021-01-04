@@ -44,7 +44,7 @@ function SaturatedPoolAlert({ delegation, onSuccess, close }: Props): Node {
     :
     `${delegation.stakepoolName} will be saturated after your delegation. If you continue, you will get less than the expected rewards.`
 
-  const poolShare = Number(delegation.stakepoolTotalStake) / 1000000;
+  const poolShare = Number(delegation.stakepoolTotalStake) / 1000000; // divided in 1,000,000 to convert from Lovelace to ADA
   const yourAda = delegation.totalAda == null ? '' : `Your ADA: ${new Intl.NumberFormat().format(delegation.totalAda)}`;
   const yourAdaNotEmpty = yourAda !== '';
 

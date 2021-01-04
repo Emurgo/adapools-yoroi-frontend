@@ -237,17 +237,7 @@ function Home(props: HomeProps): Node {
           />
         </Modal>
       )}
-      {/* {openModal && ( */}
-      {/*  <Modal */}
-      {/*    title="Saturated Stakepool" */}
-      {/*    isOpen={openModal} */}
-      {/*    success={confirmedDelegateFunction} */}
-      {/*    onClose={() => {setOpenModal(false); setConfirmDelegationModal(false)}} */}
-      {/*  > */}
-      {/*    <SaturatedPoolAlert /> */}
-      {/*  </Modal> */}
-      {/* )} */}
-      <CreditSection>Powered by 
+      <CreditSection>Powered by
         <a href='https://adapools.org/' target='_blank' rel='noopener noreferrer'>
           <img src={adapoolIcon} alt="adapool-logo" />
         </a>
