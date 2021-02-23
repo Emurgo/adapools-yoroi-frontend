@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { SortingEnum } from '../API/api';
+import type { ProviderEnum } from '../API/api';
 import { SelectInput, SelectLabel } from './common/Inputs';
 
 const WrapperSelectInput = styled.div`
@@ -14,43 +14,31 @@ const WrapperSelectInput = styled.div`
 `;
 
 type Props = {|
-  filter: Function,
+  setProvider: Function,
 |};
 
 const selectData = [
   {
-    label: 'Ticker',
-    value: 'ticker',
+    label: 'Adapools (Advanced)',
+    value: 'adapools',
   },
   {
-    label: 'Score',
-    value: 'score',
+    label: 'Daedalus Official (Simple)',
+    value: 'daedalus-simple',
   },
-  // {
-  //   label: 'ROA',
-  //   value: 'roa',
-  // },
 ];
 
-function SortSelect({ filter }: Props): React$Node {
-  const [selectValue, setSelectValue] = React.useState<SortingEnum>('score');
+function ProviderSelect({ setProvider }: Props): React$Node {
+  const [selectValue, setSelectValue] = React.useState<ProviderEnum>('adapools');
 
   const handleChange = (e) => {
     setSelectValue(e.currentTarget.value);
-    filter(e.currentTarget.value);
+    setProvider(e.currentTarget.value);
   };
-
-  React.useEffect(() => {
-    // async function getSortCategories() {
-    //   const response = await fetchCategories();
-    //   setItems(response.data.map(({ name }) => ({ label: name, value: name })));
-    // }
-    // getSortCategories();
-  }, []);
 
   return (
     <WrapperSelectInput>
-      <SelectLabel htmlFor="sort">Sort by:</SelectLabel>
+      <SelectLabel htmlFor="sort">Provider:</SelectLabel>
       <SelectInput name="" id="sort" value={selectValue} onChange={handleChange}>
         {selectData.map(({ value, label }) => (
           <option key={value} value={value}>
@@ -62,4 +50,4 @@ function SortSelect({ filter }: Props): React$Node {
   );
 }
 
-export default SortSelect;
+export default ProviderSelect;
