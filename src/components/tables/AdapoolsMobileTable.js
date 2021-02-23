@@ -1,18 +1,18 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { Pool } from '../API/api';
+import type { PoolDaedalusSimple } from '../../API/api';
 
-import StakingPoolCard from './StakingPoolCard';
-import PoolSizeCard from './PoolSizeCard';
-import CostsCard from './CostsCard';
-import PledgeCard from './PledgeCard';
-import CardRoa from './CardRoa';
-import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/utils';
-import Button from './common/Button';
-import AverageCostCard from './AverageCostCard';
-import type { QueryState } from '../utils/types';
-import type { DelegationProps } from '../containers/HomeContainer';
+import StakingPoolCard from '../StakingPoolCard';
+import PoolSizeCard from '../PoolSizeCard';
+import CostsCard from '../CostsCard';
+import PledgeCard from '../PledgeCard';
+import CardRoa from '../CardRoa';
+import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../../utils/utils';
+import Button from '../common/Button';
+import AverageCostCard from '../AverageCostCard';
+import type { QueryState } from '../../utils/types';
+import type { DelegationProps } from '../../containers/HomeContainer';
 
 const CardMobile = styled.div`
   display: flex;
@@ -47,14 +47,14 @@ const WrapperContent = styled.div`
   }
 `;
 type Props = {|
-  data: ?Array<Pool>,
+  data: ?Array<PoolDaedalusSimple>,
   delegateFunction: (DelegationProps, ?number) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
   totalAda: ?number,
 |};
 
-function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
+function AdapoolsMobileTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -136,4 +136,4 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
   );
 }
 
-export default MobileTable;
+export default AdapoolsMobileTable;

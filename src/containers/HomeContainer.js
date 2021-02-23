@@ -5,6 +5,7 @@ import type { Node } from 'react';
 import Layout from '../components/layout/Layout';
 import AdapoolsTable from './AdapoolsTable';
 import { useViewProvider } from '../context/provider-context';
+import DaedalusSimpleTable from './DaedalusSimpleTable';
 
 export type UrlParams = {|
   chromeId: ?string,
@@ -35,7 +36,7 @@ function HomeContainer(props: UrlParamsProps): Node {
     component = <AdapoolsTable {...props} />;
     break;
   case 'daedalus_simple':
-    component = <h1>Your dadules! reports </h1>;
+    component = <DaedalusSimpleTable {...props} />;
     break;
   default:
     component = <AdapoolsTable {...props} />;

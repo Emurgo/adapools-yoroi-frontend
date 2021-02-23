@@ -8,16 +8,15 @@ import Alert from '../components/Alert';
 import { YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
-import { getPools, listPools } from '../API/api';
-import type { ApiPoolsResponse, Pool, SearchParams } from '../API/api';
-import AdapoolsDesktopTable from '../components/tables/AdapoolsDesktopTable';
-import AdapoolsMobileTable from '../components/tables/AdapoolsMobileTable';
-import SortSelect from '../components/SortSelect';
+import { getPools, getPoolsByDaedalusSimple } from '../API/api';
+import type { ApiPoolsDaedalusSimpleResponse, PoolDaedalusSimple, SearchParams } from '../API/api';
 import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
 import ProviderSelect from '../components/ProviderSelect';
+import DaedalusSimpleDesktopTable from '../components/tables/DaedalusSimpleDesktopTable';
+import DaedalusSimpleMobileTable from '../components/tables/DaedalusSimpleMobileTable';
 
 // k = 500
 const SATURATION_LIMIT = 63600000000000;
@@ -58,19 +57,19 @@ export type UrlParams = {|
     totalAda: ?number,
 |};
 
-export type AdapoolsTableProps = {|
+export type DaedalusSimpleTableProps = {|
   urlParams: UrlParams,
 |};
 
 export type DelegationProps = {|
-    stakepoolName: string,
-    stakepoolTotalStake: string,
-    isAlreadySaturated: boolean,
-    id: string,
+  stakepoolName: string,
+  stakepoolTotalStake: string,
+  isAlreadySaturated: boolean,
+  id: string,
 |}
 
-function AdapoolsTable(props: AdapoolsTableProps): Node {
-  const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
+function DaedalusSimpleTable(props: DaedalusSimpleTableProps): Node {
+  const [rowData, setRowData] = React.useState<?Array<PoolDaedalusSimple>>(null);
   const [status, setStatus] = React.useState<QueryState>('idle');
   const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
     search: '',
@@ -80,15 +79,15 @@ function AdapoolsTable(props: AdapoolsTableProps): Node {
   const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);
   const [delegationModalData, setDelegationModalData] = React.useState<Object>({});
 
-  const toPoolArray: ?{| [string]: Pool |} => Array<Pool> = (pools) => {
+  const toPoolArray: ?{| [string]: PoolDaedalusSimple |} => Array<PoolDaedalusSimple> = (pools) => {
     if (pools == null) return [];
     return Object.keys(pools).map(key => pools[key]);
   };
 
   useEffect(() => {
     setStatus('pending');
-    listPools()
-      .then((poolsData: ApiPoolsResponse) => {
+    getPoolsByDaedalusSimple()
+      .then((poolsData: ApiPoolsDaedalusSimpleResponse) => {
         setStatus('resolved');
         setRowData(toPoolArray(poolsData.pools))
       })
@@ -98,23 +97,6 @@ function AdapoolsTable(props: AdapoolsTableProps): Node {
       });
   }, []);
 
-  const filterSelect = (value) => {
-    const newSearch = {
-      ...filterOptions,
-      sort: value,
-    };
-    setFilterOptions(newSearch);
-    setStatus('pending');
-    getPools(newSearch)
-      .then((poolsData: ApiPoolsResponse) => {
-        setStatus('resolved');
-        setRowData(toPoolArray(poolsData.pools));
-      })
-      .catch((err) => {
-        setStatus('rejected');
-        console.error(err);
-      });
-  };
   const filterSearch = (value) => {
     const newSearch = {
       ...filterOptions,
@@ -123,7 +105,7 @@ function AdapoolsTable(props: AdapoolsTableProps): Node {
     setFilterOptions(newSearch);
     setStatus('pending');
     getPools(newSearch)
-      .then((poolsData: ApiPoolsResponse) => {
+      .then((poolsData: ApiPoolsDaedalusSimpleResponse) => {
         setStatus('resolved');
         setRowData(toPoolArray(poolsData.pools));
       })
@@ -159,9 +141,9 @@ function AdapoolsTable(props: AdapoolsTableProps): Node {
   const alertText = 'The new saturation point for Stakepools will be 63.6 million ADA from December 6th. If the "Pool Size" parameter of your Stakepool is over this limit, delegate to a new stakepool to avoid less than expected rewards';
 
   function filterPools(
-    pools: ?Array<Pool>,
+    pools: ?Array<PoolDaedalusSimple>,
     totalAda: ?number,
-  ): ?Array<Pool> {
+  ): ?Array<PoolDaedalusSimple> {
     if (pools == null) return pools;
 
     // don't filter out saturated pools if the user explicitly searches
@@ -185,13 +167,9 @@ function AdapoolsTable(props: AdapoolsTableProps): Node {
       <Header>
         <Search filter={filterSearch} />
         <ProviderSelect />
-        <SortSelect filter={filterSelect} />
-        {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
-        {/*  Colors meaning */}
-        {/* </ColorButton> */}
       </Header>
       <DesktopOnly>
-        <AdapoolsDesktopTable
+        <DaedalusSimpleDesktopTable
           status={status}
           delegateFunction={delegateFunction}
           data={filterPools(rowData, totalAda)}
@@ -200,7 +178,7 @@ function AdapoolsTable(props: AdapoolsTableProps): Node {
         />
       </DesktopOnly>
       <MobileOnly>
-        <AdapoolsMobileTable
+        <DaedalusSimpleMobileTable
           status={status}
           delegateFunction={delegateFunction}
           data={filterPools(rowData, totalAda)}
@@ -225,4 +203,4 @@ function AdapoolsTable(props: AdapoolsTableProps): Node {
   );
 }
 
-export default AdapoolsTable;
+export default DaedalusSimpleTable;
