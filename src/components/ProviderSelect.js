@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { ProviderEnum } from '../API/api';
 import { SelectInput, SelectLabel } from './common/Inputs';
+import { useViewProvider } from '../context/provider-context';
 
 const WrapperSelectInput = styled.div`
   display: flex;
@@ -13,10 +13,6 @@ const WrapperSelectInput = styled.div`
   }
 `;
 
-type Props = {|
-  setProvider: Function,
-|};
-
 const selectData = [
   {
     label: 'Adapools (Advanced)',
@@ -24,22 +20,20 @@ const selectData = [
   },
   {
     label: 'Daedalus Official (Simple)',
-    value: 'daedalus-simple',
+    value: 'daedalus_simple',
   },
 ];
 
-function ProviderSelect({ setProvider }: Props): React$Node {
-  const [selectValue, setSelectValue] = React.useState<ProviderEnum>('adapools');
-
+function ProviderSelect(): React$Node {
+  const [provider, setProvider] = useViewProvider()
   const handleChange = (e) => {
-    setSelectValue(e.currentTarget.value);
     setProvider(e.currentTarget.value);
   };
 
   return (
     <WrapperSelectInput>
       <SelectLabel htmlFor="sort">Provider:</SelectLabel>
-      <SelectInput name="" id="sort" value={selectValue} onChange={handleChange}>
+      <SelectInput name="" id="sort" value={provider} onChange={handleChange}>
         {selectData.map(({ value, label }) => (
           <option key={value} value={value}>
             {label}

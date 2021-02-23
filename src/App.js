@@ -3,8 +3,9 @@
 import React from 'react';
 import type { Node } from 'react';
 import GlobalStyle from './helpers/globalStyles';
-import Home from './containers/Home';
-import type { UrlParams } from './containers/Home';
+import type { UrlParams } from './containers/HomeContainer';
+import HomeContainer from './containers/HomeContainer';
+import { ViewProvider } from './context/provider-context';
 
 const parseIds = (array: ?string): Array<string> => {
   if (array == null) return [];
@@ -28,10 +29,10 @@ function App(): Node {
   const homeParams = { urlParams: extractParams(location.search) }
 
   return (
-    <>
-      <Home {...homeParams} />
+    <ViewProvider>
+      <HomeContainer {...homeParams} />
       <GlobalStyle />
-    </>
+    </ViewProvider>
   );
 }
 
