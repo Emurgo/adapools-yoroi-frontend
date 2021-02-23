@@ -12,6 +12,7 @@ import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/util
 import Button from './common/Button';
 import AverageCostCard from './AverageCostCard';
 import type { QueryState } from '../utils/types';
+import type { DelegationProps } from '../containers/Home';
 
 const CardMobile = styled.div`
   display: flex;
@@ -47,7 +48,7 @@ const WrapperContent = styled.div`
 `;
 type Props = {|
   data: ?Array<Pool>,
-  delegateFunction: string => void,
+  delegateFunction: (DelegationProps, ?number) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
   totalAda: ?number,
