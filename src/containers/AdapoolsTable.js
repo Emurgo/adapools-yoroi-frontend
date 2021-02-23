@@ -3,7 +3,6 @@
 import React, { useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
-import Layout from '../components/layout/Layout';
 import Search from '../components/Search';
 import Alert from '../components/Alert';
 import { YoroiCallback } from '../API/yoroi';
@@ -18,6 +17,7 @@ import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
+import ProviderSelect from '../components/ProviderSelect';
 
 // k = 500
 const SATURATION_LIMIT = 63600000000000;
@@ -58,7 +58,7 @@ export type UrlParams = {|
     totalAda: ?number,
 |};
 
-export type HomeProps = {|
+export type AdapoolsTableProps = {|
   urlParams: UrlParams,
 |};
 
@@ -69,7 +69,7 @@ export type DelegationProps = {|
     id: string,
 |}
 
-function Home(props: HomeProps): Node {
+function AdapoolsTable(props: AdapoolsTableProps): Node {
   const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
   const [status, setStatus] = React.useState<QueryState>('idle');
   const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
@@ -180,11 +180,12 @@ function Home(props: HomeProps): Node {
 
   const { urlParams: { selectedPoolIds, totalAda } } = props
   return (
-    <Layout>
+    <>
       <Alert title={alertText} />
       <Header>
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />
+        <ProviderSelect />
         {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
         {/*  Colors meaning */}
         {/* </ColorButton> */}
@@ -220,8 +221,8 @@ function Home(props: HomeProps): Node {
           />
         </Modal>
       )}
-    </Layout>
+    </>
   );
 }
 
-export default Home;
+export default AdapoolsTable;

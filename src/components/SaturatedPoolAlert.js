@@ -4,7 +4,7 @@ import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Button from './common/Button';
-import type { DelegationProps } from '../containers/Home';
+import type { DelegationProps } from '../containers/HomeContainer';
 
 const Wrapper = styled.div`
   .section {

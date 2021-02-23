@@ -12,7 +12,7 @@ import Button from './common/Button';
 import Tooltip from './common/Tooltip';
 import AverageCostCard from './AverageCostCard';
 import type { QueryState } from '../utils/types';
-import type { DelegationProps } from '../containers/Home';
+import type { DelegationProps } from '../containers/HomeContainer';
 
 const TableContent = styled.div`
   display: inline-flex;

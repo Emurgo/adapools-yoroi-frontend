@@ -12,7 +12,7 @@ import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/util
 import Button from './common/Button';
 import AverageCostCard from './AverageCostCard';
 import type { QueryState } from '../utils/types';
-import type { DelegationProps } from '../containers/Home';
+import type { DelegationProps } from '../containers/HomeContainer';
 
 const CardMobile = styled.div`
   display: flex;
