@@ -65,8 +65,15 @@ export const Sorting = Object.freeze({
   TICKER: 'ticker',
   SCORE: 'score',
 });
+export const Provider = Object.freeze({
+  ADAPOOLS: 'adapools',
+  POOLTOOL: 'pooltool',
+  DAEDALUS_SIMPLE: 'daedalus_simple',
+  DAEDALUS_ADVANCED: 'daedalus_advanced',
+});
 
 export type SortingEnum = $Values<typeof Sorting>;
+export type ProviderEnum = $Values<typeof Provider>;
 
 export type SearchParams = {|
   limit?: number,
