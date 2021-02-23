@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import { BACKEND_URL } from '../manifestEnvs';
+import { daedalusSimpleResponse } from './data'
 
 const backendUrl: string = BACKEND_URL;
 
@@ -49,6 +50,41 @@ export type Pool = {|
   +color_pledge: string, // hsl(240,95%,95%)
   +saturation: number,
 |};
+export type PoolDaedalusSimple = {|
+  +id: string, // hash
+  +db_ticker: ?string, // may not have a ticker
+  +db_name: ?string, // may not have a name
+  +pool_pic: ?string, // may not have a pic
+  +fullname: ?string,
+  +pledge: string,
+  +pledge_real: string, // not sure diff with "pledge"
+  +total_stake: string, // in lovelace
+  +total_size: number, // percentage of total
+  +tax_fix: string, // fix tax in lovelace
+  +tax_ratio: string, // ratio tax in percentage
+  +tax_computed: number, // not sure
+  +blocks_epoch: string,
+  +roa: string,
+  +hist_bpe: {| [string]: HistBPE |},
+  +hist_roa: any, // no examples yet. similar to bpe?
+  +score: number,
+  +handles: SocialMediaHandles, // social media stuff
+  +last_rewards: string,
+  +position: number,
+  +color_roa: string, // hsl(240,95%,95%)
+  +color_stake: string, // hsl(240,95%,95%)
+  +color_fees: string, // hsl(240,95%,95%)
+  +color_pledge: string, // hsl(240,95%,95%)
+  +saturation: number,
+  +saturation: number,
+  // TODO: fix with right prop
+  +potential_reward_epoch: number,
+  +potential_reward_epoch_computed: number,
+  +potential_reward_month: number,
+  +potential_reward_month_computed: number,
+  +potential_reward_year: number,
+  +potential_reward_year_computed: number,
+|};
 
 export type World = {|
   +epoch: string,
@@ -85,6 +121,10 @@ export type ApiPoolsResponse = {|
   world?: World,
   pools?: {| [string]: Pool |},
 |};
+export type ApiPoolsDaedalusSimpleResponse = {|
+  world?: World,
+  pools?: {| [string]: PoolDaedalusSimple |},
+|};
 
 export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
   const requestBody = {
@@ -113,6 +153,12 @@ export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
         pools: {}
       }
     });
+}
+// TODO: call the right endpoint for daedalus simple view
+export function getPoolsByDaedalusSimple(): Promise<ApiPoolsDaedalusSimpleResponse>{
+  return new Promise(resolve => {
+    // $FlowFixMe:
+    setTimeout(resolve(daedalusSimpleResponse), 3000)})
 }
 
 export function listPools(): Promise<ApiPoolsResponse> {
