@@ -113,10 +113,6 @@ function DaedalusSimpleDesktopTable({
   selectedIdPools,
   totalAda,
 }: Props): React$Node {
-  console.log(
-    '🚀 ~ file: DaedalusSimpleDesktopTable.js ~ line 119 ~ DaedalusSimpleDesktopTable ~ data',
-    data,
-  );
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';

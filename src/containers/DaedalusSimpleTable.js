@@ -75,7 +75,6 @@ function DaedalusSimpleTable(props: DaedalusSimpleTableProps): Node {
     setStatus('pending');
     getPoolsByDaedalusSimple()
       .then((poolsData: ApiPoolsDaedalusSimpleResponse) => {
-        console.log('🚀 ~ file: DaedalusSimpleTable.js ~ line 91 ~ .then ~ poolsData', poolsData);
         setStatus('resolved');
         setRowData(toPoolArray(poolsData.pools));
       })
@@ -133,10 +132,6 @@ function DaedalusSimpleTable(props: DaedalusSimpleTableProps): Node {
     pools: ?Array<PoolDaedalusSimple>,
     totalAda: ?number,
   ): ?Array<PoolDaedalusSimple> {
-    console.log(
-      '🚀 ~ file: DaedalusSimpleTable.js ~ line 150 ~ DaedalusSimpleTable ~ pools',
-      pools,
-    );
     if (pools == null) return pools;
 
     // don't filter out saturated pools if the user explicitly searches
