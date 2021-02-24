@@ -99,6 +99,10 @@ const Table = styled.table`
   }
 `;
 
+const RankLabel = styled.p`
+  padding-left: 6px;
+`;
+
 type Props = {|
   data: ?Array<PoolDaedalusSimple>,
   delegateFunction: (DelegationProps, ?number) => void,
@@ -181,7 +185,9 @@ function DaedalusSimpleDesktopTable({
             data.map((pool, idx) => (
               <tr role="row" key={pool.id}>
                 {/* TODO: fix ranking */}
-                <td>{idx + 1}</td>
+                <td>
+                  <RankLabel>{idx + 1}</RankLabel>
+                </td>
                 <td>
                   <StakingPoolCard
                     id={pool.id}
