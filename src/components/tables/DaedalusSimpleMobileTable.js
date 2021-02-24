@@ -10,6 +10,7 @@ import type { QueryState } from '../../utils/types';
 import type { DelegationProps } from '../../containers/HomeContainer';
 import PotentialRewardCard from '../PotentialRewardCard';
 import AlertsCard from '../AlertsCard';
+import Loader from '../common/Loader';
 
 const CardMobile = styled.div`
   display: flex;
@@ -103,7 +104,7 @@ function DaedalusSimpleMobileTable({
   }
 
   if (isLoading) {
-    return <h1 style={{ fontWeight: 400 }}>Loading...</h1>;
+    return <Loader />;
   }
 
   if (isRejected) {

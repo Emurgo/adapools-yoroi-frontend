@@ -13,6 +13,7 @@ import Button from '../common/Button';
 import AverageCostCard from '../AverageCostCard';
 import type { QueryState } from '../../utils/types';
 import type { DelegationProps } from '../../containers/HomeContainer';
+import Loader from '../common/Loader';
 
 const CardMobile = styled.div`
   display: flex;
@@ -70,7 +71,7 @@ function AdapoolsMobileTable({
   }
 
   if (isLoading) {
-    return <h1 style={{ fontWeight: 400 }}>Loading...</h1>;
+    return <Loader />;
   }
 
   if (isRejected) {

@@ -13,6 +13,7 @@ import Tooltip from '../common/Tooltip';
 import AverageCostCard from '../AverageCostCard';
 import type { QueryState } from '../../utils/types';
 import type { DelegationProps } from '../../containers/HomeContainer';
+import Loader from '../common/Loader';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -132,7 +133,7 @@ function AdapoolsDesktopTable({
   }
 
   if (isLoading) {
-    return <h1 style={{ fontWeight: 400 }}>Loading..</h1>;
+    return <Loader />;
   }
 
   if (isRejected) {
