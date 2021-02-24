@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import { BACKEND_URL } from '../manifestEnvs';
-import { daedalusSimpleResponse } from './data'
+import { daedalusSimpleResponse } from './data';
 
 const backendUrl: string = BACKEND_URL;
 
@@ -50,6 +50,8 @@ export type Pool = {|
   +color_pledge: string, // hsl(240,95%,95%)
   +saturation: number,
 |};
+
+// TODO: fix with right data
 export type PoolDaedalusSimple = {|
   +id: string, // hash
   +db_ticker: ?string, // may not have a ticker
@@ -77,7 +79,7 @@ export type PoolDaedalusSimple = {|
   +color_pledge: string, // hsl(240,95%,95%)
   +saturation: number,
   +saturation: number,
-  // TODO: fix with right prop
+  // added for daedalus
   +potential_reward_epoch: number,
   +potential_reward_epoch_computed: number,
   +potential_reward_month: number,
@@ -114,7 +116,7 @@ export type ProviderEnum = $Values<typeof Provider>;
 export type SearchParams = {|
   limit?: number,
   search?: string,
-  sort?: SortingEnum
+  sort?: SortingEnum,
 |};
 
 export type ApiPoolsResponse = {|
@@ -130,13 +132,13 @@ export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
   const requestBody = {
     ...{ search: '', sort: Sorting.SCORE, limit: 250 },
     ...body,
-  }
+  };
 
   const encodeForm = (data) => {
     return (Object.keys(data): any)
-      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
       .join('&');
-  }
+  };
 
   return axios(`${backendUrl}`, {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -150,15 +152,16 @@ export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
     .catch((error) => {
       console.error('API::getPools Error: ', error);
       return {
-        pools: {}
-      }
+        pools: {},
+      };
     });
 }
 // TODO: call the right endpoint for daedalus simple view
-export function getPoolsByDaedalusSimple(): Promise<ApiPoolsDaedalusSimpleResponse>{
-  return new Promise(resolve => {
+export function getPoolsByDaedalusSimple(): Promise<ApiPoolsDaedalusSimpleResponse> {
+  return new Promise((resolve) => {
     // $FlowFixMe:
-    setTimeout(resolve(daedalusSimpleResponse), 3000)})
+    setTimeout(resolve(daedalusSimpleResponse), 3000);
+  });
 }
 
 export function listPools(): Promise<ApiPoolsResponse> {

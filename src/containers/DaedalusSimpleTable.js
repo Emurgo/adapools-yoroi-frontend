@@ -8,7 +8,7 @@ import Alert from '../components/Alert';
 import { YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
-import { getPools, getPoolsByDaedalusSimple } from '../API/api';
+import { getPoolsByDaedalusSimple } from '../API/api';
 import type { ApiPoolsDaedalusSimpleResponse, PoolDaedalusSimple, SearchParams } from '../API/api';
 import type { QueryState } from '../utils/types';
 
@@ -34,27 +34,13 @@ const Header = styled.div`
   }
 `;
 
-// const ColorButton = styled.button`
-//   border: none;
-//   background: none;
-//   color: #2B2C32;
-//   font-size: 14px;
-//   line-height: 22px;
-//   text-decoration: underline;
-//   margin-left: auto;
-//   cursor: pointer;
-//   @media (max-width: 1125px){
-//     margin-top: 30px;
-//   }
-// `;
-
 export type UrlParams = {|
-    chromeId: ?string,
-    mozId: ?string,
-    source: ?string,
-    selectedPoolIds: ?Array<string>,
-    lang: ?string,
-    totalAda: ?number,
+  chromeId: ?string,
+  mozId: ?string,
+  source: ?string,
+  selectedPoolIds: ?Array<string>,
+  lang: ?string,
+  totalAda: ?number,
 |};
 
 export type DaedalusSimpleTableProps = {|
@@ -66,30 +52,32 @@ export type DelegationProps = {|
   stakepoolTotalStake: string,
   isAlreadySaturated: boolean,
   id: string,
-|}
+|};
 
 function DaedalusSimpleTable(props: DaedalusSimpleTableProps): Node {
   const [rowData, setRowData] = React.useState<?Array<PoolDaedalusSimple>>(null);
   const [status, setStatus] = React.useState<QueryState>('idle');
   const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
     search: '',
-    sort: 'score',
   });
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);
   const [delegationModalData, setDelegationModalData] = React.useState<Object>({});
 
-  const toPoolArray: ?{| [string]: PoolDaedalusSimple |} => Array<PoolDaedalusSimple> = (pools) => {
+  const toPoolArray: (?{| [string]: PoolDaedalusSimple |}) => Array<PoolDaedalusSimple> = (
+    pools,
+  ) => {
     if (pools == null) return [];
-    return Object.keys(pools).map(key => pools[key]);
+    return Object.keys(pools).map((key) => pools[key]);
   };
 
   useEffect(() => {
     setStatus('pending');
     getPoolsByDaedalusSimple()
       .then((poolsData: ApiPoolsDaedalusSimpleResponse) => {
+        console.log('🚀 ~ file: DaedalusSimpleTable.js ~ line 91 ~ .then ~ poolsData', poolsData);
         setStatus('resolved');
-        setRowData(toPoolArray(poolsData.pools))
+        setRowData(toPoolArray(poolsData.pools));
       })
       .catch((err) => {
         setStatus('rejected');
@@ -104,7 +92,7 @@ function DaedalusSimpleTable(props: DaedalusSimpleTableProps): Node {
     };
     setFilterOptions(newSearch);
     setStatus('pending');
-    getPools(newSearch)
+    getPoolsByDaedalusSimple(newSearch)
       .then((poolsData: ApiPoolsDaedalusSimpleResponse) => {
         setStatus('resolved');
         setRowData(toPoolArray(poolsData.pools));
@@ -118,32 +106,37 @@ function DaedalusSimpleTable(props: DaedalusSimpleTableProps): Node {
   const confirmedDelegateFunction = (id: string): void => {
     const { urlParams } = props;
 
-    YoroiCallback(([id]), {
+    YoroiCallback([id], {
       source: urlParams.source,
       chromeId: urlParams.chromeId,
       mozId: urlParams.mozId,
     });
-  }
+  };
 
   const delegateFunction = (delegation: DelegationProps, totalAda: ?number): void => {
     if (delegation == null) return;
     const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
 
     if (Number(delegation.stakepoolTotalStake) + lovelaceDelegation >= SATURATION_LIMIT) {
-      setDelegationModalData({ ...delegation, totalAda })
-      setConfirmDelegationModal(true)
-      setOpenModal(true)
+      setDelegationModalData({ ...delegation, totalAda });
+      setConfirmDelegationModal(true);
+      setOpenModal(true);
     } else {
-      confirmedDelegateFunction(delegation.id)
+      confirmedDelegateFunction(delegation.id);
     }
   };
 
-  const alertText = 'The new saturation point for Stakepools will be 63.6 million ADA from December 6th. If the "Pool Size" parameter of your Stakepool is over this limit, delegate to a new stakepool to avoid less than expected rewards';
+  const alertText =
+    'The new saturation point for Stakepools will be 63.6 million ADA from December 6th. If the "Pool Size" parameter of your Stakepool is over this limit, delegate to a new stakepool to avoid less than expected rewards';
 
   function filterPools(
     pools: ?Array<PoolDaedalusSimple>,
     totalAda: ?number,
   ): ?Array<PoolDaedalusSimple> {
+    console.log(
+      '🚀 ~ file: DaedalusSimpleTable.js ~ line 150 ~ DaedalusSimpleTable ~ pools',
+      pools,
+    );
     if (pools == null) return pools;
 
     // don't filter out saturated pools if the user explicitly searches
@@ -155,12 +148,16 @@ function DaedalusSimpleTable(props: DaedalusSimpleTableProps): Node {
 
     if (lovelaceDelegation > SATURATION_LIMIT) return pools;
 
-    return pools.filter(item => (
-      Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT
-    ));
+    // const arr = pools.filter(
+    //   (item) => Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT,
+    // );
+    return pools;
   }
 
-  const { urlParams: { selectedPoolIds, totalAda } } = props
+  const {
+    urlParams: { selectedPoolIds, totalAda },
+  } = props;
+
   return (
     <>
       <Alert title={alertText} />
@@ -190,12 +187,18 @@ function DaedalusSimpleTable(props: DaedalusSimpleTableProps): Node {
         <Modal
           title=""
           isOpen={openModal && confirmDelegationModal}
-          onClose={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+          onClose={() => {
+            setOpenModal(false);
+            setConfirmDelegationModal(false);
+          }}
         >
           <SaturatedPoolAlert
             delegation={delegationModalData}
             onSuccess={confirmedDelegateFunction}
-            close={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+            close={() => {
+              setOpenModal(false);
+              setConfirmDelegationModal(false);
+            }}
           />
         </Modal>
       )}

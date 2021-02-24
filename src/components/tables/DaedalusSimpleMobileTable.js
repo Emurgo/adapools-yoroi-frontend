@@ -1,18 +1,15 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { Pool } from '../../API/api';
+import type { PoolDaedalusSimple } from '../../API/api';
 
 import StakingPoolCard from '../StakingPoolCard';
-import PoolSizeCard from '../PoolSizeCard';
-import CostsCard from '../CostsCard';
-import PledgeCard from '../PledgeCard';
-import CardRoa from '../CardRoa';
-import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../../utils/utils';
+import { roundTwoDecimal } from '../../utils/utils';
 import Button from '../common/Button';
-import AverageCostCard from '../AverageCostCard';
 import type { QueryState } from '../../utils/types';
 import type { DelegationProps } from '../../containers/HomeContainer';
+import PotentialRewardCard from '../PotentialRewardCard';
+import AlertsCard from '../AlertsCard';
 
 const CardMobile = styled.div`
   display: flex;
@@ -26,6 +23,7 @@ const CardMobile = styled.div`
 const WrapperContent = styled.div`
   display: flex;
   align-items: center;
+  text-align: left;
   margin: 15px 0;
   @media (max-width: 1125px) {
     align-items: flex-start;
@@ -40,21 +38,62 @@ const WrapperContent = styled.div`
   }
   .item {
     flex: 1;
-  }
-  .cost-wrapper {
+    margin-right: 20px;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+`;
+const AlertContent = styled.div`
+  margin-top: 10px;
+  margin-bottom: 24px;
+  .label {
+    color: #6b7384;
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 22px;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .alerts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    & > div {
+      margin: 0;
+    }
+  }
+`;
+const RankWrapper = styled.div`
+  margin-right: 20px;
+  text-align: center;
+  .label {
+    color: #6b7384;
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 22px;
+  }
+  .value {
+    display: flex;
+    flex-wrap: wrap;
   }
 `;
 type Props = {|
-  data: ?Array<Pool>,
+  data: ?Array<PoolDaedalusSimple>,
   delegateFunction: (DelegationProps, ?number) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
   totalAda: ?number,
 |};
 
-function DaedalusSimpleMobileTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
+function DaedalusSimpleMobileTable({
+  data,
+  delegateFunction,
+  status,
+  selectedIdPools,
+  totalAda,
+}: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -63,69 +102,82 @@ function DaedalusSimpleMobileTable({ data, delegateFunction, status, selectedIdP
     return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
   }
 
-  if(isLoading) {
+  if (isLoading) {
     return <h1 style={{ fontWeight: 400 }}>Loading...</h1>;
   }
 
-  if(isRejected) {
-    return (
-      <h1>Oops! something wrong happened. Try again!</h1>
-    )
+  if (isRejected) {
+    return <h1>Oops! something wrong happened. Try again!</h1>;
   }
 
   return (
     <>
       {data &&
-        data.map(pool => (
+        data.map((pool, idx) => (
           <CardMobile key={pool.id}>
-            <StakingPoolCard
-              id={pool.id}
-              avatar={pool.pool_pic}
-              tickerName={pool.db_ticker}
-              name={pool.db_name}
-              links={pool.handles}
-              fullname={pool.fullname}
-            />
-            <CardRoa
-              roa={pool.roa}
-              description='Estimated ROA: '
-            />
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <RankWrapper>
+                <div className="label">Rank</div>
+                <p>{idx + 1}</p>
+              </RankWrapper>
+              <StakingPoolCard
+                id={pool.id}
+                avatar={pool.pool_pic}
+                tickerName={pool.db_ticker}
+                name={pool.db_name}
+                links={pool.handles}
+                fullname={pool.fullname}
+              />
+            </div>
 
             <WrapperContent style={{ display: 'flex' }}>
               <div className="item">
-                <div className="label">Pool Size</div>
-                <PoolSizeCard
-                  percentage={pool.saturation}
-                  value={formatBigNumber(pool.total_stake)}
+                <div className="label">Potential Reward Per Epoch</div>
+                <PotentialRewardCard
+                  value={pool.potential_reward_epoch}
+                  percentage={roundTwoDecimal(pool.potential_reward_epoch_computed)}
                 />
               </div>
               <div className="item">
-                <div className="label">Costs</div>
-                <div className="cost-wrapper">
-                  <AverageCostCard
-                    percentage={roundTwoDecimal(pool.tax_computed)}
-                  />
-                  <CostsCard
-                    value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
-                  />
-                </div>
+                <div className="label">Potential Reward Per Month</div>
+                <PotentialRewardCard
+                  value={pool.potential_reward_month}
+                  percentage={roundTwoDecimal(pool.potential_reward_month_computed)}
+                />
               </div>
               <div className="item">
-                <div className="label">Pledge</div>
-                <PledgeCard value={pool.pledge} real={pool.pledge_real} />
+                <div className="label">Potential Reward Per Year</div>
+                <PotentialRewardCard
+                  value={pool.potential_reward_year}
+                  percentage={roundTwoDecimal(pool.potential_reward_year_computed)}
+                />
               </div>
             </WrapperContent>
+            <AlertContent>
+              <div className="label">Alerts</div>
+              <div className="alerts">
+                <AlertsCard
+                  isSaturated={idx !== 0 && idx % 6 === 0}
+                  isRetiring={idx % 7 === 0}
+                  isNew={idx !== 0 && idx % 3 === 0}
+                  isChanging={idx % 9 === 0}
+                />
+              </div>
+            </AlertContent>
             <div>
               <Button
                 disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
-                onClick={() => (
-                  delegateFunction({
-                    stakepoolName: pool.db_name,
-                    stakepoolTotalStake: pool.total_stake,
-                    isAlreadySaturated: pool.saturation >= 1,
-                    id: pool.id },
-                  totalAda)
-                )}
+                onClick={() =>
+                  delegateFunction(
+                    {
+                      stakepoolName: pool.db_name,
+                      stakepoolTotalStake: pool.total_stake,
+                      isAlreadySaturated: pool.saturation >= 1,
+                      id: pool.id,
+                    },
+                    totalAda,
+                  )
+                }
               >
                 Delegate
               </Button>

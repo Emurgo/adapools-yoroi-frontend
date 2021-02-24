@@ -1,18 +1,15 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { Pool } from '../../API/api';
+import type { PoolDaedalusSimple } from '../../API/api';
 import StakingPoolCard from '../StakingPoolCard';
-import PoolSizeCard from '../PoolSizeCard';
-import CostsCard from '../CostsCard';
-import PledgeCard from '../PledgeCard';
-import CardRoa from '../CardRoa';
-import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../../utils/utils';
+import { roundTwoDecimal } from '../../utils/utils';
 import Button from '../common/Button';
 import Tooltip from '../common/Tooltip';
-import AverageCostCard from '../AverageCostCard';
 import type { QueryState } from '../../utils/types';
 import type { DelegationProps } from '../../containers/HomeContainer';
+import PotentialRewardCard from '../PotentialRewardCard';
+import AlertsCard from '../AlertsCard';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -36,12 +33,10 @@ const Table = styled.table`
       position: absolute;
       left: 0;
       right: 0;
-      box-shadow: inset 0 -1px 10px 0 rgba(255,255,255,0.5), inset 0 2px 4px 0 rgba(56,57,61,0.2), 0 1px 3px 0 rgba(255,255,255,0.5);
+      box-shadow: inset 0 -1px 10px 0 rgba(255, 255, 255, 0.5),
+        inset 0 2px 4px 0 rgba(56, 57, 61, 0.2), 0 1px 3px 0 rgba(255, 255, 255, 0.5);
     }
     th {
-      &:first-child {
-        text-align: left;
-      }
       &:not(:first-child) {
         text-align: right;
       }
@@ -50,8 +45,10 @@ const Table = styled.table`
       letter-spacing: 0;
       font-weight: 400;
       padding: 20px 20px 20px 0;
-      &:first-child > div:first-child {
+      &:first-child > div,
+      &:nth-child(2) > div {
         justify-content: flex-start;
+        text-align: left;
       }
     }
   }
@@ -61,46 +58,40 @@ const Table = styled.table`
     }
     td {
       &:not(:first-child) {
-      padding-right: 25px;
+        padding-right: 20px;
         text-align: right;
       }
     }
   }
-  [class^="col"]{
-    width: 180px;
+  [class^='col'] {
+    width: 90px;
   }
   .col-0 {
-    width: 360px;
+    width: 44px;
   }
   .col-1 {
-    width: 110px;
+    width: 200px;
   }
   .col-2 {
-    width: 170px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 115px;
     }
   }
   .col-3 {
-    width: 115px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 115px;
     }
   }
   .col-4 {
-    width: 110px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 110px;
     }
   }
   .col-5 {
-    width: 80px;
-    @media (min-width:1125px) and (max-width: 1200px) {
-      width: 60px;
+    width: 130px;
+    @media (min-width: 1125px) and (max-width: 1200px) {
+      width: 110px;
     }
-  }
-  .col-6 {
-    width: 100px;
   }
   .col-last {
     width: 120px;
@@ -108,78 +99,90 @@ const Table = styled.table`
 `;
 
 type Props = {|
-  data: ?Array<Pool>,
+  data: ?Array<PoolDaedalusSimple>,
   delegateFunction: (DelegationProps, ?number) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
   totalAda: ?number,
 |};
 
-function DaedalusSimpleDesktopTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
+function DaedalusSimpleDesktopTable({
+  data,
+  delegateFunction,
+  status,
+  selectedIdPools,
+  totalAda,
+}: Props): React$Node {
+  console.log(
+    '🚀 ~ file: DaedalusSimpleDesktopTable.js ~ line 119 ~ DaedalusSimpleDesktopTable ~ data',
+    data,
+  );
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
-  
+
   if (isResolved && data != null && data.length <= 0) {
     return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
   }
 
-  if(isLoading) {
+  if (isLoading) {
     return <h1 style={{ fontWeight: 400 }}>Loading..</h1>;
   }
 
-  if(isRejected) {
-    return (
-      <h1>Oops! something wrong happened. Try again!</h1>
-    )
+  if (isRejected) {
+    return <h1>Oops! something wrong happened. Try again!</h1>;
   }
 
   const tableTheads = [
     {
       id: 0,
-      label: 'Potential reward Per Epoch',
-      textInfo: 'Lorem ipsum Lorem ipsumLorem ipsum Lorem ipsum'
+      label: 'Rank',
     },
     {
       id: 1,
-      label: 'Potential reward Per Month',
-      textInfo: 'Lorem ipsum Lorem ipsumLorem ipsum Lorem ipsum'
+      label: 'Name',
     },
     {
       id: 2,
-      label: 'Potential reward Per Year',
-      textInfo: 'Lorem ipsum Lorem ipsumLorem ipsum Lorem ipsum'
+      label: 'Potential Reward Per Epoch',
+      textInfo: 'Lorem ipsum Lorem ipsumLorem ipsum Lorem ipsum',
     },
     {
       id: 3,
-      label: 'Alerts',
-      textInfo: ''
+      label: 'Potential Reward Per Month',
+      textInfo: 'Lorem ipsum Lorem ipsumLorem ipsum Lorem ipsum',
     },
-  ]
+    {
+      id: 4,
+      label: 'Potential Reward Per Year',
+      textInfo: 'Lorem ipsum Lorem ipsumLorem ipsum Lorem ipsum',
+    },
+    {
+      id: 5,
+      label: 'Alerts',
+    },
+  ];
 
   return (
     <TableContent>
       <Table>
         <thead>
           <tr role="row">
-            {
-              tableTheads.map(({ label, textInfo, id }, ) => 
-                <th key={`col-${id}`} scope="col" className={`col-${id}`}>
-                  <Tooltip
-                    label={label}
-                    textInfo={textInfo}
-                  />
-                </th>
-              )
-            }
+            {tableTheads.map(({ label, textInfo, id }) => (
+              <th key={`col-${id}`} scope="col" className={`col-${id}`}>
+                <Tooltip label={label} textInfo={textInfo} />
+              </th>
+            ))}
             <th className="col-last" />
           </tr>
         </thead>
         <tbody>
           {data != null &&
-            data.map(pool => (
+            data.map((pool, idx) => (
               <tr role="row" key={pool.id}>
-                {/* <td>
+                {/* TODO: fix ranking */}
+                <td>{idx + 1}</td>
+                <td>
                   <StakingPoolCard
                     id={pool.id}
                     avatar={pool.pool_pic}
@@ -190,41 +193,46 @@ function DaedalusSimpleDesktopTable({ data, delegateFunction, status, selectedId
                   />
                 </td>
                 <td>
-                  <CardRoa
-                    roa={pool.roa}
+                  <PotentialRewardCard
+                    value={pool.potential_reward_epoch}
+                    percentage={roundTwoDecimal(pool.potential_reward_epoch_computed)}
                   />
                 </td>
                 <td>
-                  <PoolSizeCard
-                    percentage={pool.saturation}
-                    value={formatBigNumber(pool.total_stake)}
+                  <PotentialRewardCard
+                    value={pool.potential_reward_month}
+                    percentage={roundTwoDecimal(pool.potential_reward_month_computed)}
                   />
                 </td>
                 <td>
-                  <CostsCard
-                    value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
+                  <PotentialRewardCard
+                    value={pool.potential_reward_year}
+                    percentage={roundTwoDecimal(pool.potential_reward_year_computed)}
                   />
                 </td>
                 <td>
-                  <AverageCostCard
-                    percentage={roundTwoDecimal(pool.tax_computed)}
+                  {/* TODO: */}
+                  <AlertsCard
+                    isSaturated={idx !== 0 && idx % 6 === 0}
+                    isRetiring={idx % 7 === 0}
+                    isNew={idx !== 0 && idx % 3 === 0}
+                    isChanging={idx % 9 === 0}
                   />
                 </td>
                 <td>
-                  <PledgeCard value={pool.pledge} real={pool.pledge_real} />
-                </td>
-                <td>{pool.blocks_epoch}</td> */}
-                <td>
-                  <Button 
+                  <Button
                     disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
-                    onClick={() => (
-                      delegateFunction({
-                        stakepoolName: pool.db_name,
-                        stakepoolTotalStake: pool.total_stake,
-                        isAlreadySaturated: pool.saturation >= 1,
-                        id: pool.id },
-                      totalAda)
-                    )}
+                    onClick={() =>
+                      delegateFunction(
+                        {
+                          stakepoolName: pool.db_name,
+                          stakepoolTotalStake: pool.total_stake,
+                          isAlreadySaturated: pool.saturation >= 1,
+                          id: pool.id,
+                        },
+                        totalAda,
+                      )
+                    }
                   >
                     Delegate
                   </Button>
