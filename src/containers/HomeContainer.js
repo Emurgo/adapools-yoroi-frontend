@@ -3,9 +3,9 @@
 import * as React from 'react';
 import type { Node } from 'react';
 import Layout from '../components/layout/Layout';
-import AdapoolsTable from './AdapoolsTable';
 import { useViewProvider } from '../context/provider-context';
-import DaedalusSimpleTable from './DaedalusSimpleTable';
+import DaedalusSimpleContainer from './DaedalusSimpleContainer';
+import AdapoolsContainer from './AdapoolsContainer';
 
 export type UrlParams = {|
   chromeId: ?string,
@@ -33,13 +33,13 @@ function HomeContainer(props: UrlParamsProps): Node {
   let component;
   switch (provider) {
   case 'adapools':
-    component = <AdapoolsTable {...props} />;
+    component = <AdapoolsContainer {...props} />;
     break;
   case 'daedalus_simple':
-    component = <DaedalusSimpleTable {...props} />;
+    component = <DaedalusSimpleContainer {...props} />;
     break;
   default:
-    component = <AdapoolsTable {...props} />;
+    component = <AdapoolsContainer {...props} />;
   }
   return (
     <Layout>{component}</Layout>
