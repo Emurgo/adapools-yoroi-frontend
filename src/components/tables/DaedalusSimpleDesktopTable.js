@@ -133,10 +133,12 @@ function DaedalusSimpleDesktopTable({
     {
       id: 0,
       label: 'Rank',
+      textInfo: null,
     },
     {
       id: 1,
       label: 'Name',
+      textInfo: null,
     },
     {
       id: 2,
@@ -156,6 +158,7 @@ function DaedalusSimpleDesktopTable({
     {
       id: 5,
       label: 'Alerts',
+      textInfo: null,
     },
   ];
 
@@ -164,9 +167,9 @@ function DaedalusSimpleDesktopTable({
       <Table>
         <thead>
           <tr role="row">
-            {tableTheads.map(({ label, textInfo, id }) => (
-              <th key={`col-${id}`} scope="col" className={`col-${id}`}>
-                <Tooltip label={label} textInfo={textInfo} />
+            {tableTheads.map((item) => (
+              <th key={`col-${item.id}`} scope="col" className={`col-${item.id}`}>
+                <Tooltip label={item.label} textInfo={item.textInfo ?? ''} />
               </th>
             ))}
             <th className="col-last" />
@@ -221,6 +224,7 @@ function DaedalusSimpleDesktopTable({
                     onClick={() =>
                       delegateFunction(
                         {
+                          // $FlowFixMe:
                           stakepoolName: pool.db_name,
                           stakepoolTotalStake: pool.total_stake,
                           isAlreadySaturated: pool.saturation >= 1,

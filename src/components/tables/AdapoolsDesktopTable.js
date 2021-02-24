@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { PoolDaedalusSimple } from '../../API/api';
+import type { Pool } from '../../API/api';
 import StakingPoolCard from '../StakingPoolCard';
 import PoolSizeCard from '../PoolSizeCard';
 import CostsCard from '../CostsCard';
@@ -36,7 +36,8 @@ const Table = styled.table`
       position: absolute;
       left: 0;
       right: 0;
-      box-shadow: inset 0 -1px 10px 0 rgba(255,255,255,0.5), inset 0 2px 4px 0 rgba(56,57,61,0.2), 0 1px 3px 0 rgba(255,255,255,0.5);
+      box-shadow: inset 0 -1px 10px 0 rgba(255, 255, 255, 0.5),
+        inset 0 2px 4px 0 rgba(56, 57, 61, 0.2), 0 1px 3px 0 rgba(255, 255, 255, 0.5);
     }
     th {
       &:first-child {
@@ -61,12 +62,12 @@ const Table = styled.table`
     }
     td {
       &:not(:first-child) {
-      padding-right: 25px;
+        padding-right: 25px;
         text-align: right;
       }
     }
   }
-  [class^="col"]{
+  [class^='col'] {
     width: 180px;
   }
   .col-0 {
@@ -77,25 +78,25 @@ const Table = styled.table`
   }
   .col-2 {
     width: 170px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 115px;
     }
   }
   .col-3 {
     width: 115px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 115px;
     }
   }
   .col-4 {
     width: 110px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 110px;
     }
   }
   .col-5 {
     width: 80px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 60px;
     }
   }
@@ -108,90 +109,91 @@ const Table = styled.table`
 `;
 
 type Props = {|
-  data: ?Array<PoolDaedalusSimple>,
+  data: ?Array<Pool>,
   delegateFunction: (DelegationProps, ?number) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
   totalAda: ?number,
 |};
 
-function AdapoolsDesktopTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
+function AdapoolsDesktopTable({
+  data,
+  delegateFunction,
+  status,
+  selectedIdPools,
+  totalAda,
+}: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
-  
+
   if (isResolved && data != null && data.length <= 0) {
     return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
   }
 
-  if(isLoading) {
+  if (isLoading) {
     return <h1 style={{ fontWeight: 400 }}>Loading..</h1>;
   }
 
-  if(isRejected) {
-    return (
-      <h1>Oops! something wrong happened. Try again!</h1>
-    )
+  if (isRejected) {
+    return <h1>Oops! something wrong happened. Try again!</h1>;
   }
 
   const tableTheads = [
     {
       id: 0,
       label: 'Staking Pool',
-      textInfo: 'Details registered in registry CF'
+      textInfo: 'Details registered in registry CF',
     },
     {
       id: 1,
       label: 'ROA 30d',
-      textInfo: 'Estimated ROA (Return of ADA, annualised) based on staking result from last 30 days'
+      textInfo:
+        'Estimated ROA (Return of ADA, annualised) based on staking result from last 30 days',
     },
     {
       id: 2,
       label: 'Share / Pool Size',
-      textInfo: 'Total share of all ada being staked in pool / Entire Supply'
+      textInfo: 'Total share of all ada being staked in pool / Entire Supply',
     },
     {
       id: 3,
       label: 'Costs',
-      textInfo: 'Tax ratio + Fix'
+      textInfo: 'Tax ratio + Fix',
     },
     {
       id: 4,
       label: 'Average Cost',
-      textInfo: 'Real average fees'
+      textInfo: 'Real average fees',
     },
     {
       id: 5,
       label: 'Pledge',
-      textInfo: 'Available Pledge'
+      textInfo: 'Available Pledge',
     },
     {
       id: 6,
       label: 'Blocks',
-      textInfo: 'Minted blocks in actual epoch + block trend; Background = today estimated performance'
+      textInfo:
+        'Minted blocks in actual epoch + block trend; Background = today estimated performance',
     },
-  ]
+  ];
   return (
     <TableContent>
       <Table>
         <thead>
           <tr role="row">
-            {
-              tableTheads.map(({ label, textInfo, id }, ) => 
-                <th key={`col-${id}`} scope="col" className={`col-${id}`}>
-                  <Tooltip
-                    label={label}
-                    textInfo={textInfo}
-                  />
-                </th>
-              )
-            }
+            {tableTheads.map(({ label, textInfo, id }) => (
+              <th key={`col-${id}`} scope="col" className={`col-${id}`}>
+                <Tooltip label={label} textInfo={textInfo} />
+              </th>
+            ))}
             <th className="col-last" />
           </tr>
         </thead>
         <tbody>
           {data != null &&
-            data.map(pool => (
+            data.map((pool) => (
               <tr role="row" key={pool.id}>
                 <td>
                   <StakingPoolCard
@@ -204,9 +206,7 @@ function AdapoolsDesktopTable({ data, delegateFunction, status, selectedIdPools,
                   />
                 </td>
                 <td>
-                  <CardRoa
-                    roa={pool.roa}
-                  />
+                  <CardRoa roa={pool.roa} />
                 </td>
                 <td>
                   <PoolSizeCard
@@ -215,30 +215,30 @@ function AdapoolsDesktopTable({ data, delegateFunction, status, selectedIdPools,
                   />
                 </td>
                 <td>
-                  <CostsCard
-                    value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
-                  />
+                  <CostsCard value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)} />
                 </td>
                 <td>
-                  <AverageCostCard
-                    percentage={roundTwoDecimal(pool.tax_computed)}
-                  />
+                  <AverageCostCard percentage={roundTwoDecimal(pool.tax_computed)} />
                 </td>
                 <td>
                   <PledgeCard value={pool.pledge} real={pool.pledge_real} />
                 </td>
                 <td>{pool.blocks_epoch}</td>
                 <td>
-                  <Button 
+                  <Button
                     disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
-                    onClick={() => (
-                      delegateFunction({
-                        stakepoolName: pool.db_name,
-                        stakepoolTotalStake: pool.total_stake,
-                        isAlreadySaturated: pool.saturation >= 1,
-                        id: pool.id },
-                      totalAda)
-                    )}
+                    onClick={() =>
+                      delegateFunction(
+                        {
+                          // $FlowFixMe:
+                          stakepoolName: pool.db_name,
+                          stakepoolTotalStake: pool.total_stake,
+                          isAlreadySaturated: pool.saturation >= 1,
+                          id: pool.id,
+                        },
+                        totalAda,
+                      )
+                    }
                   >
                     Delegate
                   </Button>

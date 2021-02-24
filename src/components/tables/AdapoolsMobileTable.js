@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { PoolDaedalusSimple } from '../../API/api';
+import type { Pool } from '../../API/api';
 
 import StakingPoolCard from '../StakingPoolCard';
 import PoolSizeCard from '../PoolSizeCard';
@@ -47,14 +47,20 @@ const WrapperContent = styled.div`
   }
 `;
 type Props = {|
-  data: ?Array<PoolDaedalusSimple>,
+  data: ?Array<Pool>,
   delegateFunction: (DelegationProps, ?number) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
   totalAda: ?number,
 |};
 
-function AdapoolsMobileTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
+function AdapoolsMobileTable({
+  data,
+  delegateFunction,
+  status,
+  selectedIdPools,
+  totalAda,
+}: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -63,20 +69,18 @@ function AdapoolsMobileTable({ data, delegateFunction, status, selectedIdPools, 
     return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
   }
 
-  if(isLoading) {
+  if (isLoading) {
     return <h1 style={{ fontWeight: 400 }}>Loading...</h1>;
   }
 
-  if(isRejected) {
-    return (
-      <h1>Oops! something wrong happened. Try again!</h1>
-    )
+  if (isRejected) {
+    return <h1>Oops! something wrong happened. Try again!</h1>;
   }
 
   return (
     <>
       {data &&
-        data.map(pool => (
+        data.map((pool) => (
           <CardMobile key={pool.id}>
             <StakingPoolCard
               id={pool.id}
@@ -86,10 +90,7 @@ function AdapoolsMobileTable({ data, delegateFunction, status, selectedIdPools, 
               links={pool.handles}
               fullname={pool.fullname}
             />
-            <CardRoa
-              roa={pool.roa}
-              description='Estimated ROA: '
-            />
+            <CardRoa roa={pool.roa} description="Estimated ROA: " />
 
             <WrapperContent style={{ display: 'flex' }}>
               <div className="item">
@@ -102,12 +103,8 @@ function AdapoolsMobileTable({ data, delegateFunction, status, selectedIdPools, 
               <div className="item">
                 <div className="label">Costs</div>
                 <div className="cost-wrapper">
-                  <AverageCostCard
-                    percentage={roundTwoDecimal(pool.tax_computed)}
-                  />
-                  <CostsCard
-                    value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
-                  />
+                  <AverageCostCard percentage={roundTwoDecimal(pool.tax_computed)} />
+                  <CostsCard value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)} />
                 </div>
               </div>
               <div className="item">
@@ -118,14 +115,18 @@ function AdapoolsMobileTable({ data, delegateFunction, status, selectedIdPools, 
             <div>
               <Button
                 disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
-                onClick={() => (
-                  delegateFunction({
-                    stakepoolName: pool.db_name,
-                    stakepoolTotalStake: pool.total_stake,
-                    isAlreadySaturated: pool.saturation >= 1,
-                    id: pool.id },
-                  totalAda)
-                )}
+                onClick={() =>
+                  delegateFunction(
+                    {
+                      // $FlowFixMe:
+                      stakepoolName: pool.db_name,
+                      stakepoolTotalStake: pool.total_stake,
+                      isAlreadySaturated: pool.saturation >= 1,
+                      id: pool.id,
+                    },
+                    totalAda,
+                  )
+                }
               >
                 Delegate
               </Button>

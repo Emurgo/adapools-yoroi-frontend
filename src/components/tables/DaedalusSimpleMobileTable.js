@@ -170,6 +170,7 @@ function DaedalusSimpleMobileTable({
                 onClick={() =>
                   delegateFunction(
                     {
+                      // $FlowFixMe:
                       stakepoolName: pool.db_name,
                       stakepoolTotalStake: pool.total_stake,
                       isAlreadySaturated: pool.saturation >= 1,
