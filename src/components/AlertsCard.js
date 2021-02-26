@@ -2,6 +2,10 @@
 import * as React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
+import stakeSaturatedIcon from '../assets/stakepool_saturated.svg';
+import stakeNewIcon from '../assets/stakepool_new.svg';
+import stakeRetiredIcon from '../assets/stakepool_retired.svg';
+import stakeChangingIcon from '../assets/stakepool_parameter-changing.svg';
 
 type Props = {|
   +isSaturated: boolean,
@@ -19,9 +23,9 @@ const Wrapper = styled.div`
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 4px;
-  i {
-    color: #8a92a3;
-    font-size: 14px;
+  img {
+    width: 18px;
+    height: 18px;
   }
   @media (max-width: 1125px) {
     margin-right: 24px;
@@ -34,7 +38,7 @@ const Label = styled.p`
   letter-spacing: 0;
   line-height: 22px;
   text-align: right;
-  margin-right: 8px;
+  margin-right: 6px;
 `;
 
 const AlertsCard = ({ isSaturated, isRetiring, isNew, isChanging }: Props): Node => {
@@ -44,25 +48,25 @@ const AlertsCard = ({ isSaturated, isRetiring, isNew, isChanging }: Props): Node
       {isSaturated ? (
         <Wrapper>
           <Label>Saturated</Label>
-          <i className="fa fa-snowflake-o" aria-hidden="true" />
+          <img src={stakeSaturatedIcon} alt="stakepool saturated" />
         </Wrapper>
       ) : null}
       {isRetiring ? (
         <Wrapper>
           <Label>Retiring</Label>
-          <i className="fa fa-snowflake-o" aria-hidden="true" />
+          <img src={stakeRetiredIcon} alt="stakepool retired" />
         </Wrapper>
       ) : null}
       {isNew ? (
         <Wrapper>
           <Label>New</Label>
-          <i className="fa fa-snowflake-o" aria-hidden="true" />
+          <img src={stakeNewIcon} alt="stakepool new" />
         </Wrapper>
       ) : null}
       {isChanging ? (
         <Wrapper>
           <Label>Parameters changing</Label>
-          <i className="fa fa-snowflake-o" aria-hidden="true" />
+          <img src={stakeChangingIcon} alt="stakepool parameters changing" />
         </Wrapper>
       ) : null}
       {isEmpty ? <p> - </p> : null}
