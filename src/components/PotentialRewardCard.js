@@ -21,7 +21,7 @@ const PercetangeReward = styled.p`
 `;
 
 type Props = {|
-  +value: number,
+  +value: string,
   +percentage: string,
 |};
 

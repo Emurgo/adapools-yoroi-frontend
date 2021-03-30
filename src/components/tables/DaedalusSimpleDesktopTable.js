@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import type { PoolDaedalusSimple } from '../../API/api';
 import StakingPoolCard from '../StakingPoolCard';
-import { roundTwoDecimal } from '../../utils/utils';
+import { roundInteger } from '../../utils/utils';
 import Button from '../common/Button';
 import Tooltip from '../common/Tooltip';
 import type { QueryState } from '../../utils/types';
@@ -110,6 +110,25 @@ type Props = {|
   selectedIdPools: ?Array<string>,
   totalAda: ?number,
 |};
+// TODO: fix
+export const mockProfileData = {
+  pool_id: '00000036d515e12e18cd3c88c74f09a67984c2c279a5296aa96efe89',
+  pool_pic: null,
+  db_ticker: 'ATADA',
+  db_name: 'ATADA Stakepool Austria',
+  handles: {
+    tw: 'ATADA_Stakepool',
+    tg: 'atada_stakepool_austria',
+    fb: 'ATADA.StakePool.Austria',
+    yt: '',
+    tc: '',
+    di: '',
+    gh: 'gitmachtl',
+    icon: 'https://stakepool.at/apple-icon-60x60.png',
+  },
+  fullname:
+    '<a href="https://twitter.com/ATADA_Stakepool" target="_blank" rel="nofollow"><i class="fa fa-twitter"></i></a> <a href="https://t.me/atada_stakepool_austria" target="_blank" rel="nofollow"><i class="fa fa-telegram"></i></a> <a href="https://fb.me/ATADA.StakePool.Austria" target="_blank" rel="nofollow"><i class="fa fa-facebook"></i></a> <a href="https://github.com/gitmachtl" target="_blank" rel="nofollow"><i class="fa fa-github-alt"></i></a> <a href="https://stakepool.at?utm_source=adapools.org" target="_blank" rel="nofollow"><i class="fa fa-link"></i></a> <a href="https://adapools.org/pool/00000036d515e12e18cd3c88c74f09a67984c2c279a5296aa96efe89">[ATADA] ATADA Stakepool Austria</a>',
+};
 
 function DaedalusSimpleDesktopTable({
   data,
@@ -166,7 +185,7 @@ function DaedalusSimpleDesktopTable({
       textInfo: null,
     },
   ];
-
+  const daysPerEpoch = 5;
   return (
     <TableContent>
       <Table>
@@ -183,37 +202,38 @@ function DaedalusSimpleDesktopTable({
         <tbody>
           {data != null &&
             data.map((pool, idx) => (
-              <tr role="row" key={pool.id}>
-                {/* TODO: fix ranking */}
+              <tr role="row" key={pool.pool_id}>
+                {/* TODO: fix ranking, percentages */}
                 <td>
                   <RankLabel>{idx + 1}</RankLabel>
                 </td>
                 <td>
+                  {/* TODO: Get Profile Info */}
                   <StakingPoolCard
-                    id={pool.id}
-                    avatar={pool.pool_pic}
-                    tickerName={pool.db_ticker}
-                    name={pool.db_name}
-                    links={pool.handles}
-                    fullname={pool.fullname}
+                    id={mockProfileData.pool_id}
+                    avatar={mockProfileData.pool_pic}
+                    tickerName={mockProfileData.db_ticker}
+                    name={mockProfileData.db_name}
+                    links={mockProfileData.handles}
+                    fullname={mockProfileData.fullname}
                   />
                 </td>
                 <td>
                   <PotentialRewardCard
-                    value={pool.potential_reward_epoch}
-                    percentage={roundTwoDecimal(pool.potential_reward_epoch_computed)}
+                    value={roundInteger(pool.non_myopic_member_rewards)}
+                    percentage="0.10"
                   />
                 </td>
                 <td>
                   <PotentialRewardCard
-                    value={pool.potential_reward_month}
-                    percentage={roundTwoDecimal(pool.potential_reward_month_computed)}
+                    value={roundInteger((pool.non_myopic_member_rewards * 30) / daysPerEpoch)}
+                    percentage="0.10"
                   />
                 </td>
                 <td>
                   <PotentialRewardCard
-                    value={pool.potential_reward_year}
-                    percentage={roundTwoDecimal(pool.potential_reward_year_computed)}
+                    value={roundInteger((pool.non_myopic_member_rewards * 365) / daysPerEpoch)}
+                    percentage="0.10"
                   />
                 </td>
                 <td>
@@ -226,20 +246,21 @@ function DaedalusSimpleDesktopTable({
                   />
                 </td>
                 <td>
+                  {/* $FlowFixMe: */}
                   <Button
-                    disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
-                    onClick={() =>
-                      delegateFunction(
-                        {
-                          // $FlowFixMe:
-                          stakepoolName: pool.db_name,
-                          stakepoolTotalStake: pool.total_stake,
-                          isAlreadySaturated: pool.saturation >= 1,
-                          id: pool.id,
-                        },
-                        totalAda,
-                      )
-                    }
+                    disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.pool_id) > -1}
+                    // onClick={() =>
+                    //   delegateFunction(
+                    // {
+                    //   // $FlowFixMe:
+                    //   stakepoolName: pool.db_name,
+                    //   stakepoolTotalStake: pool.total_stake,
+                    //   isAlreadySaturated: pool.saturation >= 1,
+                    //   id: pool.id,
+                    // },
+                    // totalAda,
+                    //   )
+                    // }
                   >
                     Delegate
                   </Button>

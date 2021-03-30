@@ -9,7 +9,11 @@ import { YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
 import { getPoolsByDaedalusSimple } from '../API/api';
-import type { ApiPoolsDaedalusSimpleResponse, PoolDaedalusSimple, SearchParams } from '../API/api';
+import type {
+  ApiPoolsDaedalusSimpleResponse,
+  PoolDaedalusSimple,
+  SearchParamsDaedalus,
+} from '../API/api';
 import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
@@ -57,8 +61,10 @@ export type DelegationProps = {|
 function DaedalusSimpleContainer(props: DaedalusSimpleTableProps): Node {
   const [rowData, setRowData] = React.useState<?Array<PoolDaedalusSimple>>(null);
   const [status, setStatus] = React.useState<QueryState>('idle');
-  const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
+  const [filterOptions, setFilterOptions] = React.useState<SearchParamsDaedalus>({
     search: '',
+    limit: 255,
+    offset: 0,
   });
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);
@@ -73,10 +79,10 @@ function DaedalusSimpleContainer(props: DaedalusSimpleTableProps): Node {
 
   useEffect(() => {
     setStatus('pending');
-    getPoolsByDaedalusSimple()
+    getPoolsByDaedalusSimple(filterOptions)
       .then((poolsData: ApiPoolsDaedalusSimpleResponse) => {
         setStatus('resolved');
-        setRowData(toPoolArray(poolsData.pools));
+        setRowData(poolsData);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -91,10 +97,10 @@ function DaedalusSimpleContainer(props: DaedalusSimpleTableProps): Node {
     };
     setFilterOptions(newSearch);
     setStatus('pending');
-    getPoolsByDaedalusSimple()
+    getPoolsByDaedalusSimple(filterOptions)
       .then((poolsData: ApiPoolsDaedalusSimpleResponse) => {
         setStatus('resolved');
-        setRowData(toPoolArray(poolsData.pools));
+        setRowData(poolsData);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -164,7 +170,7 @@ function DaedalusSimpleContainer(props: DaedalusSimpleTableProps): Node {
         <DaedalusSimpleDesktopTable
           status={status}
           delegateFunction={delegateFunction}
-          data={filterPools(rowData, totalAda)}
+          data={rowData}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
@@ -173,7 +179,7 @@ function DaedalusSimpleContainer(props: DaedalusSimpleTableProps): Node {
         <DaedalusSimpleMobileTable
           status={status}
           delegateFunction={delegateFunction}
-          data={filterPools(rowData, totalAda)}
+          data={rowData}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
