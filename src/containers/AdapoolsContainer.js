@@ -3,7 +3,6 @@
 import React, { useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
-import Layout from '../components/layout/Layout';
 import Search from '../components/Search';
 import Alert from '../components/Alert';
 import { YoroiCallback } from '../API/yoroi';
@@ -11,14 +10,14 @@ import { YoroiCallback } from '../API/yoroi';
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
 import { getPools, listPools } from '../API/api';
 import type { ApiPoolsResponse, Pool, SearchParams } from '../API/api';
-import DesktopTable from '../components/DesktopTable';
-import MobileTable from '../components/MobileTable';
+import AdapoolsDesktopTable from '../components/tables/AdapoolsDesktopTable';
+import AdapoolsMobileTable from '../components/tables/AdapoolsMobileTable';
 import SortSelect from '../components/SortSelect';
 import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
-import adapoolIcon from '../assets/adapool-logo-extend.svg'
+import ProviderSelect from '../components/ProviderSelect';
 
 // k = 500
 const SATURATION_LIMIT = 63600000000000;
@@ -50,21 +49,6 @@ const Header = styled.div`
 //   }
 // `;
 
-const CreditSection = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin: 24px 0 0;
-  color: #676970;
-  font-size: 14px;
-  img {
-    background: #012b51;
-    margin-left: 10px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    height: 27px;
-  }
-`;
 export type UrlParams = {|
     chromeId: ?string,
     mozId: ?string,
@@ -74,7 +58,7 @@ export type UrlParams = {|
     totalAda: ?number,
 |};
 
-export type HomeProps = {|
+export type AdapoolsTableProps = {|
   urlParams: UrlParams,
 |};
 
@@ -85,7 +69,7 @@ export type DelegationProps = {|
     id: string,
 |}
 
-function Home(props: HomeProps): Node {
+function AdapoolsContainer(props: AdapoolsTableProps): Node {
   const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
   const [status, setStatus] = React.useState<QueryState>('idle');
   const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
@@ -167,8 +151,7 @@ function Home(props: HomeProps): Node {
       setDelegationModalData({ ...delegation, totalAda })
       setConfirmDelegationModal(true)
       setOpenModal(true)
-    }
-    else {
+    } else {
       confirmedDelegateFunction(delegation.id)
     }
   };
@@ -194,31 +177,32 @@ function Home(props: HomeProps): Node {
       Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT
     ));
   }
-  
+
   const { urlParams: { selectedPoolIds, totalAda } } = props
   return (
-    <Layout>
+    <>
       <Alert title={alertText} />
       <Header>
         <Search filter={filterSearch} />
+        <ProviderSelect />
         <SortSelect filter={filterSelect} />
         {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
         {/*  Colors meaning */}
         {/* </ColorButton> */}
       </Header>
       <DesktopOnly>
-        <DesktopTable 
+        <AdapoolsDesktopTable
           status={status}
-          delegateFunction={delegateFunction} 
+          delegateFunction={delegateFunction}
           data={filterPools(rowData, totalAda)}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable 
+        <AdapoolsMobileTable
           status={status}
-          delegateFunction={delegateFunction} 
+          delegateFunction={delegateFunction}
           data={filterPools(rowData, totalAda)}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
@@ -237,13 +221,8 @@ function Home(props: HomeProps): Node {
           />
         </Modal>
       )}
-      <CreditSection>Powered by
-        <a href='https://adapools.org/' target='_blank' rel='noopener noreferrer'>
-          <img src={adapoolIcon} alt="adapool-logo" />
-        </a>
-      </CreditSection>
-    </Layout>
+    </>
   );
 }
 
-export default Home;
+export default AdapoolsContainer;

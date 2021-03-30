@@ -4,7 +4,7 @@ import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Button from './common/Button';
-import type { DelegationProps } from '../containers/Home';
+import type { DelegationProps } from '../containers/HomeContainer';
 
 const Wrapper = styled.div`
   .section {
@@ -33,7 +33,7 @@ const Wrapper = styled.div`
 `;
 
 type Props = {|
-    delegation: {...DelegationProps, totalAda: ?number},
+    delegation: {|...DelegationProps, totalAda: ?number|},
     onSuccess: (id: string) => void,
     close: () => void
 |}
@@ -57,6 +57,7 @@ function SaturatedPoolAlert({ delegation, onSuccess, close }: Props): Node {
           yourAdaNotEmpty &&
           <h3 className="description">{yourAda} ADA</h3>
         }
+        {/* $FlowFixMe:  */}
         <h3 className="description">Stakepool Size: {new Intl.NumberFormat().format(poolShare.toFixed(0))} ADA</h3>
       </div>
       <Button onClick={() => {onSuccess(delegation.id); close()}} disabled={false} className="upper-button">

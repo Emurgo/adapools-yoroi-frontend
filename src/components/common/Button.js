@@ -27,13 +27,18 @@ const BtnWrapper = styled.button`
 `;
 type Props = {|
   +children: Node,
+  +className?: string,
   +onClick: Function,
   +disabled: boolean,
 |};
 
 function Button(props: Props): React$Node {
-  const { children, onClick, disabled } = props;
-  return <BtnWrapper disabled={disabled} onClick={onClick} {...props}>{children}</BtnWrapper>;
+  const { children, onClick, className, disabled } = props;
+  return (
+    <BtnWrapper disabled={disabled} onClick={onClick} className={className} {...props}>
+      {children}
+    </BtnWrapper>
+  );
 }
 
 export default Button;
