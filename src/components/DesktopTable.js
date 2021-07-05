@@ -142,8 +142,8 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
     },
     {
       id: 1,
-      label: 'ROA 30d',
-      textInfo: 'Estimated ROA (Return of ADA, annualised) based on staking result from last 30 days'
+      label: 'ROA',
+      textInfo: 'Estimated ROA (Return of ADA, annualised) based on lifetime staking results'
     },
     {
       id: 2,
