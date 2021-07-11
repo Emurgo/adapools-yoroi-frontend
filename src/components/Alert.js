@@ -42,7 +42,7 @@ type Props = {|
 
 function Alert({ title }: Props): Node {
 
-  return (
+  return ( title && 
     <Banner>
       <AlertHeader>
         <AlertIcon><img src={attentionIcon} alt="" /></AlertIcon> <AlertText>ATTENTION:</AlertText>
