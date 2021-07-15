@@ -16,7 +16,7 @@ const Card = styled.div`
   }
   .tag {
     padding: 2px 8px;
-    background: #c9ede5;
+    font-size:0.9em;
     border-radius: 8px;
     color: #2b2c32;
     @media (max-width: 1125px) {
