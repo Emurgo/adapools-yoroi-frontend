@@ -31,28 +31,19 @@ type Props = {|
 function PledgeCard({ value, real }: Props): Node {
   
   // to fix according to ranges
-  let backgroundColor = null;
+  let backgroundColor = 'none';
   const realValue = Number(value) / 1000000; // divided in 1,000,000 to convert from Lovelace to ADA
 
-  switch(true){
-  case realValue >= 250000:
+  if (realValue >= 250000) {
     backgroundColor = '#BFC8FF';
-    break;
-  case realValue < 200000 && realValue >= 100000:
+  } else if (realValue >= 100000) {
     backgroundColor = '#D6DDF5';
-    break;
-  case realValue < 100000 && realValue >= 500000:
+  } else if (realValue >= 500000) {
     backgroundColor = '#FBF6B7';
-    break;
-  case realValue < 500000 && realValue >= 20000:
+  } else if (realValue >= 20000) {
     backgroundColor = '#FCE4BC';
-    break;
-  case realValue < 20000 && realValue >= 0:
+  } else if (realValue > 0) {
     backgroundColor = '#FFDCE5';
-    break;
-  default:
-    backgroundColor = 'none';
-    break;
   }
   
   return (
