@@ -173,7 +173,7 @@ function Home(props: HomeProps): Node {
     }
   };
 
-  const alertText = false;
+  const alertText = null;
   
   function filterPools(
     pools: ?Array<Pool>,
