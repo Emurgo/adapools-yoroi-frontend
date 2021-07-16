@@ -173,8 +173,8 @@ function Home(props: HomeProps): Node {
     }
   };
 
-  const alertText = 'The new saturation point for Stakepools will be 63.6 million ADA from December 6th. If the "Pool Size" parameter of your Stakepool is over this limit, delegate to a new stakepool to avoid less than expected rewards';
-
+  const alertText = null;
+  
   function filterPools(
     pools: ?Array<Pool>,
     totalAda: ?number,
