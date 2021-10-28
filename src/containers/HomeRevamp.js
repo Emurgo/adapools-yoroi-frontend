@@ -11,7 +11,6 @@ import { YoroiCallback } from '../API/yoroi';
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
 import { getPools, listPools } from '../API/api';
 import type { ApiPoolsResponse, Pool, SearchParams } from '../API/api';
-import DesktopTable from '../components/DesktopTable';
 import MobileTable from '../components/MobileTable';
 import SortSelect from '../components/SortSelect';
 import type { QueryState } from '../utils/types';
@@ -19,6 +18,8 @@ import type { QueryState } from '../utils/types';
 import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
 import adapoolIcon from '../assets/adapool-logo-extend.svg';
+import DesktopTableRevamp from '../components/DesktopTableRevamp';
+import SearchRevamp from '../components/SearchRevamp';
 
 // k = 500
 const SATURATION_LIMIT = 63600000000000;
@@ -34,6 +35,16 @@ const Header = styled.div`
       margin-bottom: 20px;
     }
   }
+`;
+const Title = styled.h1`
+  color: #38393d;
+  font-size: 18px;
+`;
+const HeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #f0f4f5;
 `;
 
 // const ColorButton = styled.button`
@@ -193,21 +204,27 @@ function Home(props: HomeProps): Node {
   const {
     urlParams: { selectedPoolIds, totalAda },
   } = props;
+
+  const filteredPools = filterPools(rowData, totalAda);
+
   return (
-    <Layout>
-      <Alert title={alertText} />
-      <Header>
-        <Search filter={filterSearch} />
-        <SortSelect filter={filterSelect} />
-        {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
-        {/*  Colors meaning */}
-        {/* </ColorButton> */}
-      </Header>
+    <Layout noGutters>
+      <HeaderRow>
+        <Title>Stake Pool ({status === 'resolved' ? filteredPools?.length : '...'})</Title>
+        <Alert title={alertText} />
+        <Header>
+          <SearchRevamp filter={filterSearch} />
+          <SortSelect filter={filterSelect} />
+          {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
+          {/*  Colors meaning */}
+          {/* </ColorButton> */}
+        </Header>
+      </HeaderRow>
       <DesktopOnly>
-        <DesktopTable
+        <DesktopTableRevamp
           status={status}
           delegateFunction={delegateFunction}
-          data={filterPools(rowData, totalAda)}
+          data={filteredPools}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
@@ -216,7 +233,7 @@ function Home(props: HomeProps): Node {
         <MobileTable
           status={status}
           delegateFunction={delegateFunction}
-          data={filterPools(rowData, totalAda)}
+          data={filteredPools}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />

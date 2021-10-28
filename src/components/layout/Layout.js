@@ -9,7 +9,7 @@ const Container = styled.div`
   margin: auto;
 `;
 const Wrapper = styled.div`
-  padding: 40px 30px;
+  padding: ${({ noGutters }) => (noGutters ? '20px 0' : '40px 30px')};
 `;
 const Background = styled.div`
   border-radius: 8px;
@@ -17,11 +17,11 @@ const Background = styled.div`
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
 `;
 
-function Layout({ children }: {| children?: ?Node |}): Node {
+function Layout({ children, noGutters }: {| children?: ?Node, noGutters?: boolean |}): Node {
   return (
     <Background>
       <Container>
-        <Wrapper>{children}</Wrapper>
+        <Wrapper noGutters={noGutters}>{children}</Wrapper>
       </Container>
     </Background>
   );
