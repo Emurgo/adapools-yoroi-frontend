@@ -16,9 +16,17 @@ const Card = styled.div`
   }
   .tag {
     padding: 2px 8px;
-    font-size:0.9em;
+    font-size: 0.9em;
     border-radius: 8px;
     color: #2b2c32;
+    @media (max-width: 1125px) {
+      margin-bottom: 9px;
+    }
+  }
+  .tagRevamp {
+    padding: 2px 8px;
+    font-size: 16px;
+    color: #242838;
     @media (max-width: 1125px) {
       margin-bottom: 9px;
     }
@@ -34,5 +42,13 @@ function AverageCostCard({ percentage }: Props): Node {
     </Card>
   );
 }
+function AverageCostCardRevamp({ percentage }: Props): Node {
+  return (
+    <Card>
+      <div className="tagRevamp">{percentage}%</div>
+    </Card>
+  );
+}
 
 export default AverageCostCard;
+export { AverageCostCardRevamp };

@@ -36,7 +36,7 @@ const ToolTip = styled.span`
     display: none;
     text-align: center;
     opacity:0;
-    transition:10s opacity;   
+    transition:10s opacity;
   }
   img{
     max-width: 100%;
@@ -52,7 +52,7 @@ const ToolTip = styled.span`
 
 type Props = {|
   label: string,
-  textInfo: string,
+  textInfo: ?string,
 |};
 
 function Tooltip({ label, textInfo }: Props): Node {
@@ -66,4 +66,29 @@ function Tooltip({ label, textInfo }: Props): Node {
   );
 }
 
+const WrapperToolTipRevamp = styled.div`
+  display: flex;
+  align-items: baseline;
+  flex-direction: column;
+  justify-content: flex-end;
+  .label {
+    padding-left: 3px;
+  }
+  @media (min-width:1125px) and (max-width: 1200px) {
+    justify-content: center;
+  }
+`
+
+function TooltipRevamp({ label, textInfo }: Props): Node {
+  return (
+    <WrapperToolTipRevamp>
+      <ToolTip data-text={textInfo}>
+        {textInfo != null && <img src={infoIcon} alt="" />}
+      </ToolTip>
+      <span className="label">{label}</span>
+    </WrapperToolTipRevamp>
+  );
+}
+
 export default Tooltip;
+export { TooltipRevamp }

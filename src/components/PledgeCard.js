@@ -29,7 +29,6 @@ type Props = {|
 |};
 
 function PledgeCard({ value, real }: Props): Node {
-  
   // to fix according to ranges
   let backgroundColor = 'none';
   const realValue = Number(value) / 1_000_000; // divided in 1,000,000 to convert from Lovelace to ADA
@@ -45,13 +44,32 @@ function PledgeCard({ value, real }: Props): Node {
   } else if (realValue > 0) {
     backgroundColor = '#FFDCE5';
   }
-  
+
   return (
     <Card background={backgroundColor}>
-      { real != null && (Number(real) >= Number(value)) && <i className="fas fa-check" /> }
+      {real != null && Number(real) >= Number(value) && <i className="fas fa-check" />}
       <span>{formatBigNumber(value.toString())}</span>
     </Card>
   );
 }
+const CardRevamp = styled.div`
+  display: inline-block;
+  font-size: 16px;
+  line-height: 22px;
+  color: #242838;
+  padding: 2px 8px;
+  text-align: left;
+  @media (max-width: 1125px) {
+    justify-content: center;
+  }
+`;
+function PledgeCardRevamp({ value }: Props): Node {
+  return (
+    <CardRevamp>
+      <span>{formatBigNumber(value.toString())}</span>
+    </CardRevamp>
+  );
+}
 
 export default PledgeCard;
+export { PledgeCardRevamp };

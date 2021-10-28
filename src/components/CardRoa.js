@@ -11,7 +11,7 @@ const RoaElement = styled.div`
   padding: 3px 0;
   border: 1px solid #dee2ea;
   border-radius: 8px;
-  color: #2B2C32;
+  color: #2b2c32;
   font-size: 14px;
 `;
 
@@ -28,7 +28,25 @@ function CardRoa({ roa, description }: Props): Node {
         {parseFloat(roa) === 0 ? 'unknown' : `${parseFloat(roa).toFixed(2)}% `}
       </RoaElement>
     </div>
-)
+  );
+}
+
+const RoaElementRevamp = styled.div`
+  height: 26px;
+  text-align: center;
+  padding: 3px 0;
+  color: #242838;
+  font-size: 16px;
+`;
+
+function CardRoaRevamp({ roa, description }: Props): Node {
+  return (
+    <RoaElementRevamp>
+      {description}
+      {parseFloat(roa) === 0 ? 'unknown' : `${parseFloat(roa).toFixed(2)}% `}
+    </RoaElementRevamp>
+  );
 }
 
 export default CardRoa;
+export { CardRoaRevamp };

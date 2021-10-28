@@ -21,6 +21,9 @@ const Card = styled.div`
     color: #242838;
     font-size: 14px;
   }
+  .valueRevamp {
+    font-size: 16px;
+  }
 `;
 type Props = {|
   value: string,
@@ -32,5 +35,13 @@ function CostsCard({ value }: Props): Node {
     </Card>
   );
 }
+function CostsCardRevamp({ value }: Props): Node {
+  return (
+    <Card>
+      <p className="valueRevamp">{value}</p>
+    </Card>
+  );
+}
 
 export default CostsCard;
+export { CostsCardRevamp }
