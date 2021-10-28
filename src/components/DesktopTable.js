@@ -119,7 +119,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
-  
+
   if (isResolved && data != null && data.length <= 0) {
     return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
   }
@@ -177,7 +177,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
         <thead>
           <tr role="row">
             {
-              tableTheads.map(({ label, textInfo, id }, ) => 
+              tableTheads.map(({ label, textInfo, id }, ) =>
                 <th key={`col-${id}`} scope="col" className={`col-${id}`}>
                   <Tooltip
                     label={label}
@@ -229,11 +229,11 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
                 </td>
                 <td>{pool.blocks_epoch}</td>
                 <td>
-                  <Button 
+                  <Button
                     disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
                     onClick={() => (
                       delegateFunction({
-                        stakepoolName: pool.db_name,
+                        stakepoolName: pool.db_name ?? '',
                         stakepoolTotalStake: pool.total_stake,
                         isAlreadySaturated: pool.saturation >= 1,
                         id: pool.id },

@@ -18,7 +18,7 @@ import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
-import adapoolIcon from '../assets/adapool-logo-extend.svg'
+import adapoolIcon from '../assets/adapool-logo-extend.svg';
 
 // k = 500
 const SATURATION_LIMIT = 63600000000000;
@@ -174,7 +174,7 @@ function Home(props: HomeProps): Node {
   };
 
   const alertText = null;
-  
+
   function filterPools(
     pools: ?Array<Pool>,
     totalAda: ?number,
@@ -194,7 +194,7 @@ function Home(props: HomeProps): Node {
       Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT
     ));
   }
-  
+
   const { urlParams: { selectedPoolIds, totalAda } } = props
   return (
     <Layout>
@@ -207,18 +207,18 @@ function Home(props: HomeProps): Node {
         {/* </ColorButton> */}
       </Header>
       <DesktopOnly>
-        <DesktopTable 
+        <DesktopTable
           status={status}
-          delegateFunction={delegateFunction} 
+          delegateFunction={delegateFunction}
           data={filterPools(rowData, totalAda)}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable 
+        <MobileTable
           status={status}
-          delegateFunction={delegateFunction} 
+          delegateFunction={delegateFunction}
           data={filterPools(rowData, totalAda)}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}

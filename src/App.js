@@ -8,7 +8,7 @@ import type { UrlParams } from './containers/Home';
 
 const parseIds = (array: ?string): Array<string> => {
   if (array == null) return [];
-  return JSON.parse(decodeURIComponent(array))
+  return JSON.parse(decodeURIComponent(array));
 };
 
 const extractParams = (locationSearch: string): UrlParams => {
@@ -19,13 +19,14 @@ const extractParams = (locationSearch: string): UrlParams => {
     source: params.get('source'),
     selectedPoolIds: parseIds(params.get('delegated')),
     lang: params.get('lang'),
+    // $FlowFixMe[incompatible-return]
     totalAda: params.get('totalAda'),
-  }
-}
+  };
+};
 
 function App(): Node {
   const { location } = window;
-  const homeParams = { urlParams: extractParams(location.search) }
+  const homeParams = { urlParams: extractParams(location.search) };
 
   return (
     <>

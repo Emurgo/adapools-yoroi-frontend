@@ -33,10 +33,10 @@ const Wrapper = styled.div`
 `;
 
 type Props = {|
-    delegation: {...DelegationProps, totalAda: ?number},
-    onSuccess: (id: string) => void,
-    close: () => void
-|}
+  delegation: {| ...DelegationProps, totalAda: ?number |},
+  onSuccess: (id: string) => void,
+  close: () => void,
+|};
 
 function SaturatedPoolAlert({ delegation, onSuccess, close }: Props): Node {
   const text = delegation.isAlreadySaturated ?
@@ -53,11 +53,10 @@ function SaturatedPoolAlert({ delegation, onSuccess, close }: Props): Node {
       <h3 className="title">Saturated Stakepool Warning</h3>
       <div className="section">
         <h3 className="description">{text}</h3>
-        {
-          yourAdaNotEmpty &&
-          <h3 className="description">{yourAda} ADA</h3>
-        }
-        <h3 className="description">Stakepool Size: {new Intl.NumberFormat().format(poolShare.toFixed(0))} ADA</h3>
+        {yourAdaNotEmpty && <h3 className="description">{yourAda} ADA</h3>}
+        <h3 className="description">
+          Stakepool Size: {new Intl.NumberFormat().format(Number(poolShare.toFixed(0)))} ADA
+        </h3>
       </div>
       <Button onClick={() => {onSuccess(delegation.id); close()}} disabled={false} className="upper-button">
         Delegate

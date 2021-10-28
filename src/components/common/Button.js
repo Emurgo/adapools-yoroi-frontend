@@ -29,11 +29,16 @@ type Props = {|
   +children: Node,
   +onClick: Function,
   +disabled: boolean,
+  +className?: string,
 |};
 
 function Button(props: Props): React$Node {
   const { children, onClick, disabled } = props;
-  return <BtnWrapper disabled={disabled} onClick={onClick} {...props}>{children}</BtnWrapper>;
+  return (
+    <BtnWrapper disabled={disabled} onClick={onClick} {...props}>
+      {children}
+    </BtnWrapper>
+  );
 }
 
 export default Button;
