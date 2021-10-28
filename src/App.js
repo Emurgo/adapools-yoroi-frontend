@@ -4,6 +4,7 @@ import React from 'react';
 import type { Node } from 'react';
 import GlobalStyle from './helpers/globalStyles';
 import Home from './containers/Home';
+import HomeRevamp from './containers/HomeRevamp';
 import type { UrlParams } from './containers/Home';
 
 const parseIds = (array: ?string): Array<string> => {
@@ -21,16 +22,23 @@ const extractParams = (locationSearch: string): UrlParams => {
     lang: params.get('lang'),
     // $FlowFixMe[incompatible-return]
     totalAda: params.get('totalAda'),
+    layout: params.get('layout'),
   };
 };
 
 function App(): Node {
   const { location } = window;
   const homeParams = { urlParams: extractParams(location.search) };
+  const layout = homeParams?.urlParams?.layout ?? 'CLASSIC';
+  const mapHomeComponentByLayout = {
+    CLASSIC: Home,
+    REVAMP: HomeRevamp,
+  };
+  const HomeComponent = mapHomeComponentByLayout[layout];
 
   return (
     <>
-      <Home {...homeParams} />
+      <HomeComponent {...homeParams} />
       <GlobalStyle />
     </>
   );

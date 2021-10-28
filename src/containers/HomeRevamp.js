@@ -66,13 +66,13 @@ const CreditSection = styled.div`
   }
 `;
 export type UrlParams = {|
-    chromeId: ?string,
-    mozId: ?string,
-    source: ?string,
-    selectedPoolIds: ?Array<string>,
-    lang: ?string,
-    totalAda: ?number,
-    layout: ?string,
+  chromeId: ?string,
+  mozId: ?string,
+  source: ?string,
+  selectedPoolIds: ?Array<string>,
+  lang: ?string,
+  totalAda: ?number,
+  layout: ?string,
 |};
 
 export type HomeProps = {|
@@ -80,11 +80,11 @@ export type HomeProps = {|
 |};
 
 export type DelegationProps = {|
-    stakepoolName: string,
-    stakepoolTotalStake: string,
-    isAlreadySaturated: boolean,
-    id: string,
-|}
+  stakepoolName: string,
+  stakepoolTotalStake: string,
+  isAlreadySaturated: boolean,
+  id: string,
+|};
 
 function Home(props: HomeProps): Node {
   const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
@@ -97,9 +97,9 @@ function Home(props: HomeProps): Node {
   const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);
   const [delegationModalData, setDelegationModalData] = React.useState<Object>({});
 
-  const toPoolArray: ?{| [string]: Pool |} => Array<Pool> = (pools) => {
+  const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
     if (pools == null) return [];
-    return Object.keys(pools).map(key => pools[key]);
+    return Object.keys(pools).map((key) => pools[key]);
   };
 
   useEffect(() => {
@@ -107,7 +107,7 @@ function Home(props: HomeProps): Node {
     listPools()
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved');
-        setRowData(toPoolArray(poolsData.pools))
+        setRowData(toPoolArray(poolsData.pools));
       })
       .catch((err) => {
         setStatus('rejected');
@@ -153,33 +153,29 @@ function Home(props: HomeProps): Node {
   const confirmedDelegateFunction = (id: string): void => {
     const { urlParams } = props;
 
-    YoroiCallback(([id]), {
+    YoroiCallback([id], {
       source: urlParams.source,
       chromeId: urlParams.chromeId,
       mozId: urlParams.mozId,
     });
-  }
+  };
 
   const delegateFunction = (delegation: DelegationProps, totalAda: ?number): void => {
     if (delegation == null) return;
     const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
 
     if (Number(delegation.stakepoolTotalStake) + lovelaceDelegation >= SATURATION_LIMIT) {
-      setDelegationModalData({ ...delegation, totalAda })
-      setConfirmDelegationModal(true)
-      setOpenModal(true)
-    }
-    else {
-      confirmedDelegateFunction(delegation.id)
+      setDelegationModalData({ ...delegation, totalAda });
+      setConfirmDelegationModal(true);
+      setOpenModal(true);
+    } else {
+      confirmedDelegateFunction(delegation.id);
     }
   };
 
   const alertText = null;
 
-  function filterPools(
-    pools: ?Array<Pool>,
-    totalAda: ?number,
-  ): ?Array<Pool> {
+  function filterPools(pools: ?Array<Pool>, totalAda: ?number): ?Array<Pool> {
     if (pools == null) return pools;
 
     // don't filter out saturated pools if the user explicitly searches
@@ -191,12 +187,12 @@ function Home(props: HomeProps): Node {
 
     if (lovelaceDelegation > SATURATION_LIMIT) return pools;
 
-    return pools.filter(item => (
-      Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT
-    ));
+    return pools.filter((item) => Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT);
   }
 
-  const { urlParams: { selectedPoolIds, totalAda } } = props
+  const {
+    urlParams: { selectedPoolIds, totalAda },
+  } = props;
   return (
     <Layout>
       <Alert title={alertText} />
@@ -229,17 +225,24 @@ function Home(props: HomeProps): Node {
         <Modal
           title=""
           isOpen={openModal && confirmDelegationModal}
-          onClose={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+          onClose={() => {
+            setOpenModal(false);
+            setConfirmDelegationModal(false);
+          }}
         >
           <SaturatedPoolAlert
             delegation={delegationModalData}
             onSuccess={confirmedDelegateFunction}
-            close={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+            close={() => {
+              setOpenModal(false);
+              setConfirmDelegationModal(false);
+            }}
           />
         </Modal>
       )}
-      <CreditSection>Powered by
-        <a href='https://adapools.org/' target='_blank' rel='noopener noreferrer'>
+      <CreditSection>
+        Powered by
+        <a href="https://adapools.org/" target="_blank" rel="noopener noreferrer">
           <img src={adapoolIcon} alt="adapool-logo" />
         </a>
       </CreditSection>
