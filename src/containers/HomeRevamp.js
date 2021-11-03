@@ -10,7 +10,6 @@ import { YoroiCallback } from '../API/yoroi';
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
 import { getPools, listPools } from '../API/api';
 import type { ApiPoolsResponse, Pool, SearchParams } from '../API/api';
-import MobileTable from '../components/MobileTable';
 import SortSelect from '../components/SortSelect';
 import type { QueryState } from '../utils/types';
 
@@ -19,6 +18,7 @@ import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
 import adapoolIcon from '../assets/adapool-logo-extend.svg';
 import DesktopTableRevamp from '../components/DesktopTableRevamp';
 import SearchRevamp from '../components/SearchRevamp';
+import MobileTableRevamp from '../components/MobileTableRevamp';
 
 // k = 500
 const SATURATION_LIMIT = 63600000000000;
@@ -38,12 +38,18 @@ const Header = styled.div`
 const Title = styled.h1`
   color: #38393d;
   font-size: 18px;
+  @media (max-width: 1125px) {
+    margin-bottom: 20px;
+  }
 `;
 const HeaderRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid #f0f4f5;
+  @media (max-width: 1125px) {
+    flex-direction: column;
+  }
 `;
 
 // const ColorButton = styled.button`
@@ -229,7 +235,7 @@ function Home(props: HomeProps): Node {
         />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable
+        <MobileTableRevamp
           status={status}
           delegateFunction={delegateFunction}
           data={filteredPools}

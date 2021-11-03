@@ -5,9 +5,7 @@ import styled from 'styled-components';
 
 const Card = styled.div`
   display: flex;
-  align-items: right;
-  float: right;
-  justify-content: space-between;
+  justify-content: flex-end;
   font-size: 14px;
   line-height: 22px;
   @media (max-width: 1125px) {
@@ -23,14 +21,6 @@ const Card = styled.div`
       margin-bottom: 9px;
     }
   }
-  .tagRevamp {
-    padding: 2px 8px;
-    font-size: 16px;
-    color: #242838;
-    @media (max-width: 1125px) {
-      margin-bottom: 9px;
-    }
-  }
 `;
 type Props = {|
   +percentage: string,
@@ -42,11 +32,30 @@ function AverageCostCard({ percentage }: Props): Node {
     </Card>
   );
 }
+const CardRevamp = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  line-height: 22px;
+  @media (max-width: 1125px) {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .tag {
+    font-size: 16px;
+    color: #242838;
+    @media (max-width: 1125px) {
+      margin-bottom: 9px;
+    }
+  }
+`;
+
 function AverageCostCardRevamp({ percentage }: Props): Node {
   return (
-    <Card>
-      <div className="tagRevamp">{percentage}%</div>
-    </Card>
+    <CardRevamp>
+      <div className="tag">{percentage}%</div>
+    </CardRevamp>
   );
 }
 

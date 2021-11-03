@@ -61,6 +61,7 @@ const CardRevamp = styled.div`
   text-align: left;
   @media (max-width: 1125px) {
     justify-content: center;
+    padding: 0;
   }
 `;
 function PledgeCardRevamp({ value }: Props): Node {

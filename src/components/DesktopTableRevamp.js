@@ -72,7 +72,7 @@ const Table = styled.table`
     width: 360px;
   }
   .col-1 {
-    width: 110px;
+    width: 100px;
   }
   .col-2 {
     width: 130px;
@@ -96,7 +96,7 @@ const Table = styled.table`
     }
   }
   .col-6 {
-    width: 100px;
+    width: 90px;
   }
   .col-7 {
     width: 70px;
