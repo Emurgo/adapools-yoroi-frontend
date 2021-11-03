@@ -75,10 +75,7 @@ const Table = styled.table`
     width: 110px;
   }
   .col-2 {
-    width: 110px;
-    @media (min-width: 1125px) and (max-width: 1200px) {
-      width: 115px;
-    }
+    width: 130px;
   }
   .col-3 {
     width: 100px;
@@ -153,7 +150,7 @@ function DesktopTableRevamp({
     },
     {
       id: 2,
-      label: 'Pool Size',
+      label: 'Pool Size (ADA)',
       textInfo: 'Entire Supply',
     },
     {
@@ -214,7 +211,7 @@ function DesktopTableRevamp({
                   <CardRoaRevamp roa={pool.roa} />
                 </td>
                 <td>
-                  <ValueRevamp>{formatBigNumber(pool.total_stake)} ADA</ValueRevamp>
+                  <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
                 </td>
                 <td>
                   <PoolSizeTagRevamp value={pool.saturation} />

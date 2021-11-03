@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
-import Search from '../components/Search';
 import Alert from '../components/Alert';
 import { YoroiCallback } from '../API/yoroi';
 
@@ -208,7 +207,7 @@ function Home(props: HomeProps): Node {
   const filteredPools = filterPools(rowData, totalAda);
 
   return (
-    <Layout noGutters>
+    <Layout>
       <HeaderRow>
         <Title>Stake Pool ({status === 'resolved' ? filteredPools?.length : '...'})</Title>
         <Alert title={alertText} />
