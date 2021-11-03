@@ -256,7 +256,7 @@ function DesktopTableRevamp({
 
 export default DesktopTableRevamp;
 
-const ValueRevamp = styled.div`
+export const ValueRevamp: any = styled.div`
   color: #242838;
   font-size: 16px;
 `;

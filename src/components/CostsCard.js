@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 const Card = styled.div`
   display: flex;
-  align-items: right;
   justify-content: space-between;
   font-size: 14px;
   line-height: 22px;
@@ -22,6 +21,7 @@ const Card = styled.div`
     font-size: 14px;
   }
   .valueRevamp {
+    color: #242838;
     font-size: 16px;
   }
 `;

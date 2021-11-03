@@ -13,6 +13,7 @@ import type { QueryState } from '../utils/types';
 import type { DelegationProps } from '../containers/Home';
 import StakingPoolCardRevamp from './StakingPoolCardRevamp';
 import { PoolSizeTagRevamp } from './PoolSizeTag';
+import { ValueRevamp } from './DesktopTableRevamp';
 
 const CardMobile = styled.div`
   display: flex;
@@ -97,7 +98,7 @@ function MobileTableRevamp({ data, delegateFunction, status, selectedIdPools, to
               </div>
               <div className="item">
                 <div className="label">Pool Size (ADA)</div>
-                <div>{formatBigNumber(pool.total_stake)}</div>
+                <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
               </div>
               <div className="item">
                 <div className="label">Share</div>
