@@ -5,7 +5,7 @@ import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
 import Alert from '../components/Alert';
-import { YoroiCallback } from '../API/yoroi';
+import { SendFirstAdapool, YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
 import { getPools, listPools } from '../API/api';
@@ -124,6 +124,8 @@ function Home(props: HomeProps): Node {
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved');
         setRowData(toPoolArray(poolsData.pools));
+        // used to show the first pool in revamp banner
+        SendFirstAdapool(toPoolArray(poolsData.pools)[0])
       })
       .catch((err) => {
         setStatus('rejected');

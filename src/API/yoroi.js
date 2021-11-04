@@ -51,3 +51,13 @@ export const YoroiCallback = (selectedPools: SelectedPools, yoroiCBProps: YoroiC
     break
   }
 }
+
+export const SendFirstAdapool = (firstPool: Object): void => {
+  const poolInfo = {
+    name: `[${firstPool.db_ticker}] ${firstPool.db_name}`,
+    roa: parseFloat(firstPool.roa) === 0 ? 'unknown' : `${parseFloat(firstPool.roa).toFixed(2)}% `,
+    socialLinks: firstPool.handles
+  };
+  const encodedFirstPool = encodeURI(JSON.stringify(poolInfo));
+  window.parent.postMessage(encodedFirstPool);
+}
