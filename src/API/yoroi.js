@@ -56,7 +56,8 @@ export const SendFirstAdapool = (firstPool: Object): void => {
   const poolInfo = {
     name: `[${firstPool.db_ticker}] ${firstPool.db_name}`,
     roa: parseFloat(firstPool.roa) === 0 ? 'unknown' : `${parseFloat(firstPool.roa).toFixed(2)}% `,
-    socialLinks: firstPool.handles
+    socialLinks: firstPool.handles,
+    avatar: firstPool.pool_pic ?? firstPool.id
   };
   const encodedFirstPool = encodeURI(JSON.stringify(poolInfo));
   window.parent.postMessage(encodedFirstPool);
