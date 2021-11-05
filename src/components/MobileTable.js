@@ -8,7 +8,7 @@ import PoolSizeCard from './PoolSizeCard';
 import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
 import CardRoa from './CardRoa';
-import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/utils';
+import { formatBigNumber, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
 import type { QueryState } from '../utils/types';
 
