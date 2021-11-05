@@ -5,10 +5,9 @@ import type { Pool } from '../API/api';
 import { CostsCardRevamp } from './CostsCard';
 import { PledgeCardRevamp } from './PledgeCard';
 import { CardRoaRevamp } from './CardRoa';
-import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/utils';
+import { formatBigNumber, formatCostLabel } from '../utils/utils';
 import { ButtonRevamp } from './common/Button';
 import { TooltipRevamp } from './common/Tooltip';
-import { AverageCostCardRevamp } from './AverageCostCard';
 import type { QueryState } from '../utils/types';
 import type { DelegationProps } from '../containers/Home';
 import StakingPoolCardRevamp from './StakingPoolCardRevamp';
@@ -165,16 +164,11 @@ function DesktopTableRevamp({
     },
     {
       id: 5,
-      label: 'Av. Cost',
-      textInfo: 'Real average fees',
-    },
-    {
-      id: 6,
       label: 'Pledge',
       textInfo: 'Available Pledge',
     },
     {
-      id: 7,
+      id: 6,
       label: 'Blocks',
       textInfo:
         'Minted blocks in actual epoch + block trend; Background = today estimated performance',
@@ -218,9 +212,6 @@ function DesktopTableRevamp({
                 </td>
                 <td>
                   <CostsCardRevamp value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)} />
-                </td>
-                <td>
-                  <AverageCostCardRevamp percentage={roundTwoDecimal(pool.tax_computed)} />
                 </td>
                 <td>
                   <PledgeCardRevamp value={pool.pledge} real={pool.pledge_real} />

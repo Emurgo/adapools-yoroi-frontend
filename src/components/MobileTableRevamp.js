@@ -6,9 +6,8 @@ import type { Pool } from '../API/api';
 import { CostsCardRevamp } from './CostsCard';
 import { PledgeCardRevamp } from './PledgeCard';
 import { CardRoaRevamp } from './CardRoa';
-import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/utils';
+import { formatBigNumber, formatCostLabel } from '../utils/utils';
 import { ButtonRevamp } from './common/Button';
-import { AverageCostCardRevamp } from './AverageCostCard';
 import type { QueryState } from '../utils/types';
 import type { DelegationProps } from '../containers/Home';
 import StakingPoolCardRevamp from './StakingPoolCardRevamp';
@@ -113,12 +112,6 @@ function MobileTableRevamp({ data, delegateFunction, status, selectedIdPools, to
                     value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
                   />
                 </div>
-              </div>
-              <div className="item">
-                <div className="label">Av. Cost</div>
-                <AverageCostCardRevamp
-                  percentage={roundTwoDecimal(pool.tax_computed)}
-                />
               </div>
               <div className="item">
                 <div className="label">Pledge</div>
