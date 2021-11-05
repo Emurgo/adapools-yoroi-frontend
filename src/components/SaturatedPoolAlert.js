@@ -33,10 +33,10 @@ const Wrapper = styled.div`
 `;
 
 type Props = {|
-  delegation: {| ...DelegationProps, totalAda: ?number |},
-  onSuccess: (id: string) => void,
-  close: () => void,
-|};
+    delegation: DelegationProps & {| totalAda: ?number |},
+    onSuccess: (id: string) => void,
+    close: () => void,
+|}
 
 function SaturatedPoolAlert({ delegation, onSuccess, close }: Props): Node {
   const text = delegation.isAlreadySaturated ?

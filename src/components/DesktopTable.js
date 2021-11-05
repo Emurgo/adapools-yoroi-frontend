@@ -7,10 +7,9 @@ import PoolSizeCard from './PoolSizeCard';
 import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
 import CardRoa from './CardRoa';
-import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/utils';
+import { formatBigNumber, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
 import Tooltip from './common/Tooltip';
-import AverageCostCard from './AverageCostCard';
 import type { QueryState } from '../utils/types';
 import type { DelegationProps } from '../containers/Home';
 
@@ -157,16 +156,11 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
     },
     {
       id: 4,
-      label: 'Average Cost',
-      textInfo: 'Real average fees'
-    },
-    {
-      id: 5,
       label: 'Pledge',
       textInfo: 'Available Pledge'
     },
     {
-      id: 6,
+      id: 5,
       label: 'Blocks',
       textInfo: 'Minted blocks in actual epoch + block trend; Background = today estimated performance'
     },
@@ -220,11 +214,6 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
                   />
                 </td>
                 <td>
-                  <AverageCostCard
-                    percentage={roundTwoDecimal(pool.tax_computed)}
-                  />
-                </td>
-                <td>
                   <PledgeCard value={pool.pledge} real={pool.pledge_real} />
                 </td>
                 <td>{pool.blocks_epoch}</td>
@@ -233,7 +222,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
                     disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
                     onClick={() => (
                       delegateFunction({
-                        stakepoolName: pool.db_name ?? '',
+                        stakepoolName: pool.db_name ?? pool.id,
                         stakepoolTotalStake: pool.total_stake,
                         isAlreadySaturated: pool.saturation >= 1,
                         id: pool.id },

@@ -21,7 +21,7 @@ const extractParams = (locationSearch: string): UrlParams => {
     selectedPoolIds: parseIds(params.get('delegated')),
     lang: params.get('lang'),
     // $FlowFixMe[incompatible-return]
-    totalAda: params.get('totalAda'),
+    totalAda: Number(params.get('totalAda')),
     layout: params.get('layout'),
   };
 };

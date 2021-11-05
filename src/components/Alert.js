@@ -41,7 +41,7 @@ type Props = {|
 |};
 
 function Alert({ title }: Props): Node {
-  return title ? (
+  return title != null ? (
     <Banner>
       <AlertHeader>
         <AlertIcon>
