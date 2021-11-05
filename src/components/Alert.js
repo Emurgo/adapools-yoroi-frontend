@@ -37,19 +37,19 @@ const AlertText = styled.div`
 `;
 
 type Props = {|
-  title: string,
+  title: ?string,
 |};
 
 function Alert({ title }: Props): Node {
 
-  return ( title && 
+  return ( title == null ? null : (
     <Banner>
       <AlertHeader>
         <AlertIcon><img src={attentionIcon} alt="" /></AlertIcon> <AlertText>ATTENTION:</AlertText>
       </AlertHeader>
       <p>{title}</p>
     </Banner>
-)
+  ));
 }
 
 export default Alert;

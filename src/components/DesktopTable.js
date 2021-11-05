@@ -233,7 +233,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
                     disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
                     onClick={() => (
                       delegateFunction({
-                        stakepoolName: pool.db_name,
+                        stakepoolName: pool.db_name ?? pool.id,
                         stakepoolTotalStake: pool.total_stake,
                         isAlreadySaturated: pool.saturation >= 1,
                         id: pool.id },

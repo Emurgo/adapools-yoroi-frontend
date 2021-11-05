@@ -11,6 +11,7 @@ import CardRoa from './CardRoa';
 import { formatBigNumber, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
 import type { QueryState } from '../utils/types';
+import type { DelegationProps } from '../containers/Home';
 
 const CardMobile = styled.div`
   display: flex;
@@ -46,7 +47,7 @@ const WrapperContent = styled.div`
 `;
 type Props = {|
   data: ?Array<Pool>,
-  delegateFunction: string => void,
+  delegateFunction: (DelegationProps, ?number) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
   totalAda: ?number,
@@ -115,7 +116,7 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
                 disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
                 onClick={() => (
                   delegateFunction({
-                    stakepoolName: pool.db_name,
+                    stakepoolName: pool.db_name ?? pool.id,
                     stakepoolTotalStake: pool.total_stake,
                     isAlreadySaturated: pool.saturation >= 1,
                     id: pool.id },
