@@ -8,9 +8,8 @@ import PoolSizeCard from './PoolSizeCard';
 import CostsCard from './CostsCard';
 import PledgeCard from './PledgeCard';
 import CardRoa from './CardRoa';
-import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/utils';
+import { formatBigNumber, formatCostLabel } from '../utils/utils';
 import Button from './common/Button';
-import AverageCostCard from './AverageCostCard';
 import type { QueryState } from '../utils/types';
 
 const CardMobile = styled.div`
@@ -101,9 +100,6 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
               <div className="item">
                 <div className="label">Costs</div>
                 <div className="cost-wrapper">
-                  <AverageCostCard
-                    percentage={roundTwoDecimal(pool.tax_computed)}
-                  />
                   <CostsCard
                     value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
                   />
