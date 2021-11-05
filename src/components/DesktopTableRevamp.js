@@ -36,7 +36,7 @@ const Table = styled.table`
       position: absolute;
       left: 0;
       right: 0;
-      top: 80px;
+      top: 50px;
       border-bottom: 2px solid #f0f4f5;
     }
     th {

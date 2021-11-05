@@ -4,7 +4,6 @@ import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import infoIcon from '../../assets/info-icon.svg';
-import questionIcon from '../../assets/question-mark.svg';
 
 const WrapperToolTip = styled.div`
   display: flex;
@@ -84,9 +83,8 @@ function TooltipRevamp({ label, textInfo }: Props): Node {
   return (
     <WrapperToolTipRevamp>
       <ToolTip data-text={textInfo}>
-        {textInfo != null && <img src={questionIcon} alt="" />}
+        {textInfo != null && <span className="label">{label}</span>}
       </ToolTip>
-      <span className="label">{label}</span>
     </WrapperToolTipRevamp>
   );
 }

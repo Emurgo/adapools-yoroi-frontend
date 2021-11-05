@@ -46,7 +46,7 @@ const MainCardPool = styled.div`
     flex: 1 1 60%;
     color: #6b7384;
     a {
-      margin-right: 10px;
+      margin-right: 20px;
       font-size: 20px;
     }
   }

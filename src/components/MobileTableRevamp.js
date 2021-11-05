@@ -7,7 +7,7 @@ import { CostsCardRevamp } from './CostsCard';
 import { PledgeCardRevamp } from './PledgeCard';
 import { CardRoaRevamp } from './CardRoa';
 import { roundTwoDecimal, formatBigNumber, formatCostLabel } from '../utils/utils';
-import Button from './common/Button';
+import { ButtonRevamp } from './common/Button';
 import { AverageCostCardRevamp } from './AverageCostCard';
 import type { QueryState } from '../utils/types';
 import type { DelegationProps } from '../containers/Home';
@@ -126,7 +126,7 @@ function MobileTableRevamp({ data, delegateFunction, status, selectedIdPools, to
               </div>
             </WrapperContent>
             <div>
-              <Button
+              <ButtonRevamp
                 disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
                 onClick={() => (
                   delegateFunction({
@@ -138,7 +138,7 @@ function MobileTableRevamp({ data, delegateFunction, status, selectedIdPools, to
                 )}
               >
                 Delegate
-              </Button>
+              </ButtonRevamp>
             </div>
           </CardMobile>
         ))}

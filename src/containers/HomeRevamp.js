@@ -217,7 +217,7 @@ function Home(props: HomeProps): Node {
   return (
     <Layout>
       <HeaderRow>
-        <Title>Stake Pool ({status === 'resolved' ? filteredPools?.length : '...'})</Title>
+        <Title>Stake Pools ({status === 'resolved' ? filteredPools?.length : '...'})</Title>
         <Alert title={alertText} />
         <Header>
           <SearchRevamp filter={filterSearch} />
