@@ -4,21 +4,21 @@ import React, { useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
-import Search from '../components/Search';
 import Alert from '../components/Alert';
-import { YoroiCallback } from '../API/yoroi';
+import { SendFirstAdapool, YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
 import { getPools, listPools } from '../API/api';
 import type { ApiPoolsResponse, Pool, SearchParams } from '../API/api';
-import DesktopTable from '../components/DesktopTable';
-import MobileTable from '../components/MobileTable';
 import SortSelect from '../components/SortSelect';
 import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
 import adapoolIcon from '../assets/adapool-logo-extend.svg';
+import DesktopTableRevamp from '../components/DesktopTableRevamp';
+import SearchRevamp from '../components/SearchRevamp';
+import MobileTableRevamp from '../components/MobileTableRevamp';
 
 // k = 500
 const SATURATION_LIMIT = 63600000000000;
@@ -33,6 +33,22 @@ const Header = styled.div`
     input {
       margin-bottom: 20px;
     }
+  }
+`;
+const Title = styled.h1`
+  color: #38393d;
+  font-size: 18px;
+  @media (max-width: 1125px) {
+    margin-bottom: 20px;
+  }
+`;
+const HeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #f0f4f5;
+  @media (max-width: 1125px) {
+    flex-direction: column;
   }
 `;
 
@@ -66,13 +82,13 @@ const CreditSection = styled.div`
   }
 `;
 export type UrlParams = {|
-    chromeId: ?string,
-    mozId: ?string,
-    source: ?string,
-    selectedPoolIds: ?Array<string>,
-    lang: ?string,
-    totalAda: ?number,
-    layout: ?string,
+  chromeId: ?string,
+  mozId: ?string,
+  source: ?string,
+  selectedPoolIds: ?Array<string>,
+  lang: ?string,
+  totalAda: ?number,
+  layout: ?string,
 |};
 
 export type HomeProps = {|
@@ -80,11 +96,11 @@ export type HomeProps = {|
 |};
 
 export type DelegationProps = {|
-    stakepoolName: string,
-    stakepoolTotalStake: string,
-    isAlreadySaturated: boolean,
-    id: string,
-|}
+  stakepoolName: string,
+  stakepoolTotalStake: string,
+  isAlreadySaturated: boolean,
+  id: string,
+|};
 
 function Home(props: HomeProps): Node {
   const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
@@ -97,9 +113,9 @@ function Home(props: HomeProps): Node {
   const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);
   const [delegationModalData, setDelegationModalData] = React.useState<Object>({});
 
-  const toPoolArray: ?{| [string]: Pool |} => Array<Pool> = (pools) => {
+  const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
     if (pools == null) return [];
-    return Object.keys(pools).map(key => pools[key]);
+    return Object.keys(pools).map((key) => pools[key]);
   };
 
   useEffect(() => {
@@ -107,7 +123,9 @@ function Home(props: HomeProps): Node {
     listPools()
       .then((poolsData: ApiPoolsResponse) => {
         setStatus('resolved');
-        setRowData(toPoolArray(poolsData.pools))
+        setRowData(toPoolArray(poolsData.pools));
+        // used to show the first pool in revamp banner
+        SendFirstAdapool(toPoolArray(poolsData.pools)[0])
       })
       .catch((err) => {
         setStatus('rejected');
@@ -153,33 +171,29 @@ function Home(props: HomeProps): Node {
   const confirmedDelegateFunction = (id: string): void => {
     const { urlParams } = props;
 
-    YoroiCallback(([id]), {
+    YoroiCallback([id], {
       source: urlParams.source,
       chromeId: urlParams.chromeId,
       mozId: urlParams.mozId,
     });
-  }
+  };
 
   const delegateFunction = (delegation: DelegationProps, totalAda: ?number): void => {
     if (delegation == null) return;
     const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
 
     if (Number(delegation.stakepoolTotalStake) + lovelaceDelegation >= SATURATION_LIMIT) {
-      setDelegationModalData({ ...delegation, totalAda })
-      setConfirmDelegationModal(true)
-      setOpenModal(true)
-    }
-    else {
-      confirmedDelegateFunction(delegation.id)
+      setDelegationModalData({ ...delegation, totalAda });
+      setConfirmDelegationModal(true);
+      setOpenModal(true);
+    } else {
+      confirmedDelegateFunction(delegation.id);
     }
   };
 
   const alertText = null;
 
-  function filterPools(
-    pools: ?Array<Pool>,
-    totalAda: ?number,
-  ): ?Array<Pool> {
+  function filterPools(pools: ?Array<Pool>, totalAda: ?number): ?Array<Pool> {
     if (pools == null) return pools;
 
     // don't filter out saturated pools if the user explicitly searches
@@ -191,36 +205,42 @@ function Home(props: HomeProps): Node {
 
     if (lovelaceDelegation > SATURATION_LIMIT) return pools;
 
-    return pools.filter(item => (
-      Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT
-    ));
+    return pools.filter((item) => Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT);
   }
 
-  const { urlParams: { selectedPoolIds, totalAda } } = props
+  const {
+    urlParams: { selectedPoolIds, totalAda },
+  } = props;
+
+  const filteredPools = filterPools(rowData, totalAda);
+
   return (
     <Layout>
-      <Alert title={alertText} />
-      <Header>
-        <Search filter={filterSearch} />
-        <SortSelect filter={filterSelect} />
-        {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
-        {/*  Colors meaning */}
-        {/* </ColorButton> */}
-      </Header>
+      <HeaderRow>
+        <Title>Stake Pools ({status === 'resolved' ? filteredPools?.length : '...'})</Title>
+        <Alert title={alertText} />
+        <Header>
+          <SearchRevamp filter={filterSearch} />
+          <SortSelect filter={filterSelect} />
+          {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
+          {/*  Colors meaning */}
+          {/* </ColorButton> */}
+        </Header>
+      </HeaderRow>
       <DesktopOnly>
-        <DesktopTable
+        <DesktopTableRevamp
           status={status}
           delegateFunction={delegateFunction}
-          data={filterPools(rowData, totalAda)}
+          data={filteredPools}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable
+        <MobileTableRevamp
           status={status}
           delegateFunction={delegateFunction}
-          data={filterPools(rowData, totalAda)}
+          data={filteredPools}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
@@ -229,17 +249,24 @@ function Home(props: HomeProps): Node {
         <Modal
           title=""
           isOpen={openModal && confirmDelegationModal}
-          onClose={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+          onClose={() => {
+            setOpenModal(false);
+            setConfirmDelegationModal(false);
+          }}
         >
           <SaturatedPoolAlert
             delegation={delegationModalData}
             onSuccess={confirmedDelegateFunction}
-            close={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+            close={() => {
+              setOpenModal(false);
+              setConfirmDelegationModal(false);
+            }}
           />
         </Modal>
       )}
-      <CreditSection>Powered by
-        <a href='https://adapools.org/' target='_blank' rel='noopener noreferrer'>
+      <CreditSection>
+        Powered by
+        <a href="https://adapools.org/" target="_blank" rel="noopener noreferrer">
           <img src={adapoolIcon} alt="adapool-logo" />
         </a>
       </CreditSection>

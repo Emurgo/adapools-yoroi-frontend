@@ -4,11 +4,12 @@ import React from 'react';
 import type { Node } from 'react';
 import GlobalStyle from './helpers/globalStyles';
 import Home from './containers/Home';
+import HomeRevamp from './containers/HomeRevamp';
 import type { UrlParams } from './containers/Home';
 
 const parseIds = (array: ?string): Array<string> => {
   if (array == null) return [];
-  return JSON.parse(decodeURIComponent(array))
+  return JSON.parse(decodeURIComponent(array));
 };
 
 const extractParams = (locationSearch: string): UrlParams => {
@@ -19,17 +20,25 @@ const extractParams = (locationSearch: string): UrlParams => {
     source: params.get('source'),
     selectedPoolIds: parseIds(params.get('delegated')),
     lang: params.get('lang'),
+    // $FlowFixMe[incompatible-return]
     totalAda: Number(params.get('totalAda')),
-  }
-}
+    layout: params.get('layout'),
+  };
+};
 
 function App(): Node {
   const { location } = window;
-  const homeParams = { urlParams: extractParams(location.search) }
+  const homeParams = { urlParams: extractParams(location.search) };
+  const layout = homeParams?.urlParams?.layout ?? 'CLASSIC';
+  const mapHomeComponentByLayout = {
+    CLASSIC: Home,
+    REVAMP: HomeRevamp,
+  };
+  const HomeComponent = mapHomeComponentByLayout[layout];
 
   return (
     <>
-      <Home {...homeParams} />
+      <HomeComponent {...homeParams} />
       <GlobalStyle />
     </>
   );

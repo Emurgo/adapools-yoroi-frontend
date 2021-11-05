@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 const Card = styled.div`
   display: flex;
-  align-items: right;
   justify-content: space-between;
   font-size: 14px;
   line-height: 22px;
@@ -21,6 +20,10 @@ const Card = styled.div`
     color: #242838;
     font-size: 14px;
   }
+  .valueRevamp {
+    color: #242838;
+    font-size: 16px;
+  }
 `;
 type Props = {|
   value: string,
@@ -32,5 +35,13 @@ function CostsCard({ value }: Props): Node {
     </Card>
   );
 }
+function CostsCardRevamp({ value }: Props): Node {
+  return (
+    <Card>
+      <p className="valueRevamp">{value}</p>
+    </Card>
+  );
+}
 
 export default CostsCard;
+export { CostsCardRevamp }
