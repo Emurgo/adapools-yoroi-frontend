@@ -156,7 +156,6 @@ export async function listBiasedPools(seed: string): Promise<Pool[]> {
     if (unbiasedPools.length === 0) return biasedPools;
 
     const topPool = biasedPools.shift();
-    const allPools = [topPool].concat(unbiasedPools);
 
     /*
       we want to list the Emurgo pools in high-ish positions.
@@ -175,14 +174,6 @@ export async function listBiasedPools(seed: string): Promise<Pool[]> {
     // needs to be at least this distance from the top
     const minimumDistanceFromTop = 10;
 
-    for (let i = 0; i < biasedPools.length; i += 1) {
-      const biasedPool = biasedPools[i];
-      const minPossiblePosition = minimumDistanceFromTop + (spreadSize * (i + 1));
-      const maxPossiblePosition = minPossiblePosition + spreadSize
-      const randomPosition = getRandomInt(minPossiblePosition, maxPossiblePosition);
-      allPools.splice(randomPosition, 0, biasedPool);
-    }
-
     for (let i = 0; i < biasPoolIds.length; i += 1) {
       const poolId = biasPoolIds[i];
       const poolToRemove = unbiasedPools.find(p => p.id === poolId);
@@ -192,6 +183,16 @@ export async function listBiasedPools(seed: string): Promise<Pool[]> {
           unbiasedPools.splice(poolToRemoveIdx, 1);
         }
       }
+    }
+
+    const allPools = [topPool].concat(unbiasedPools);
+
+    for (let i = 0; i < biasedPools.length; i += 1) {
+      const biasedPool = biasedPools[i];
+      const minPossiblePosition = minimumDistanceFromTop + (spreadSize * (i + 1));
+      const maxPossiblePosition = minPossiblePosition + spreadSize
+      const randomPosition = getRandomInt(minPossiblePosition, maxPossiblePosition);
+      allPools.splice(randomPosition, 0, biasedPool);
     }
 
     return allPools;
