@@ -8,7 +8,7 @@ import Alert from '../components/Alert';
 import { SendFirstAdapool, YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
-import { getPools, listPools } from '../API/api';
+import { getPools, listBiasedPools } from '../API/api';
 import type { ApiPoolsResponse, Pool, SearchParams } from '../API/api';
 import SortSelect from '../components/SortSelect';
 import type { QueryState } from '../utils/types';
@@ -89,6 +89,7 @@ export type UrlParams = {|
   lang: ?string,
   totalAda: ?number,
   layout: ?string,
+  bias: ?string,
 |};
 
 export type HomeProps = {|
@@ -118,14 +119,17 @@ function Home(props: HomeProps): Node {
     return Object.keys(pools).map((key) => pools[key]);
   };
 
+  const { urlParams } = props;
+  const seed = urlParams?.bias ?? 'bias';
+
   useEffect(() => {
     setStatus('pending');
-    listPools()
-      .then((poolsData: ApiPoolsResponse) => {
+    listBiasedPools(seed)
+      .then((pools: Pool[]) => {
         setStatus('resolved');
-        setRowData(toPoolArray(poolsData.pools));
+        setRowData(pools);
         // used to show the first pool in revamp banner
-        SendFirstAdapool(toPoolArray(poolsData.pools)[0])
+        SendFirstAdapool(pools[0])
       })
       .catch((err) => {
         setStatus('rejected');
@@ -169,8 +173,6 @@ function Home(props: HomeProps): Node {
   };
 
   const confirmedDelegateFunction = (id: string): void => {
-    const { urlParams } = props;
-
     YoroiCallback([id], {
       source: urlParams.source,
       chromeId: urlParams.chromeId,

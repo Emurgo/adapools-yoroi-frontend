@@ -73,6 +73,7 @@ export type UrlParams = {|
     lang: ?string,
     totalAda: ?number,
     layout: ?string,
+    bias: ?string
 |};
 
 export type HomeProps = {|
