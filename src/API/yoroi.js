@@ -61,5 +61,5 @@ export const SendFirstAdapool = (firstPool: Object): void => {
     avatar: firstPool.pool_pic
   };
   const encodedFirstPool = encodeURI(JSON.stringify(poolInfo));
-  window.parent.postMessage(encodedFirstPool);
+  window.parent.postMessage(encodedFirstPool, '*');
 }
