@@ -162,6 +162,10 @@ export async function listBiasedPools(seed: string, searchParams: SearchParams):
   const unbiasedPoolsResponse = await getPools(searchParams);
   const unbiasedPools = toPoolArray(unbiasedPoolsResponse.pools);
 
+  if (searchParams.search || searchParams.sort === Sorting.TICKER) {
+    return unbiasedPools;
+  }
+
   const [p1, p2, p3] = unbiasedPools;
   const lowerSeed = tail(p1?.id ?? '') + tail(p2?.id ?? '') + tail(p3?.id ?? '');
 

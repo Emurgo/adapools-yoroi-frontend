@@ -8,8 +8,8 @@ import Alert from '../components/Alert';
 import { SendFirstAdapool, YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
-import { getPools, listBiasedPools } from '../API/api';
-import type { ApiPoolsResponse, Pool, SearchParams } from '../API/api';
+import { listBiasedPools } from '../API/api';
+import type { Pool, SearchParams } from '../API/api';
 import SortSelect from '../components/SortSelect';
 import type { QueryState } from '../utils/types';
 
@@ -114,17 +114,12 @@ function Home(props: HomeProps): Node {
   const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);
   const [delegationModalData, setDelegationModalData] = React.useState<Object>({});
 
-  const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
-    if (pools == null) return [];
-    return Object.keys(pools).map((key) => pools[key]);
-  };
-
   const { urlParams } = props;
   const seed = urlParams?.bias ?? 'bias';
 
   useEffect(() => {
     setStatus('pending');
-    listBiasedPools(seed)
+    listBiasedPools(seed, {})
       .then((pools: Pool[]) => {
         setStatus('resolved');
         setRowData(pools);
@@ -144,10 +139,10 @@ function Home(props: HomeProps): Node {
     };
     setFilterOptions(newSearch);
     setStatus('pending');
-    getPools(newSearch)
-      .then((poolsData: ApiPoolsResponse) => {
+    listBiasedPools(seed, newSearch)
+      .then((pools: Pool[]) => {
         setStatus('resolved');
-        setRowData(toPoolArray(poolsData.pools));
+        setRowData(pools);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -161,10 +156,10 @@ function Home(props: HomeProps): Node {
     };
     setFilterOptions(newSearch);
     setStatus('pending');
-    getPools(newSearch)
-      .then((poolsData: ApiPoolsResponse) => {
+    listBiasedPools(seed, newSearch)
+      .then((pools: Pool[]) => {
         setStatus('resolved');
-        setRowData(toPoolArray(poolsData.pools));
+        setRowData(pools);
       })
       .catch((err) => {
         setStatus('rejected');
