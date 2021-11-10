@@ -16,6 +16,14 @@ const biasPoolIds = [
 ];
 const biasPoolsSearchQuery = biasPoolIds.join('|');
 
+const brackets = [
+  { startIndex: 6, positionGap: 4 },
+  { startIndex: 13, positionGap: 7 },
+  { startIndex: 23, positionGap: 7 },
+  { startIndex: 33, positionGap: 17 },
+  { startIndex: 53, positionGap: 27 }
+];
+
 export type HistBPE = {|
   +val: string,
   +time: string,
@@ -90,6 +98,11 @@ export type ApiPoolsResponse = {|
   pools?: {| [string]: Pool |},
 |};
 
+const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
+  if (pools == null) return [];
+  return Object.keys(pools).map((key) => pools[key]);
+}
+
 export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
   const requestBody = {
     ...{ search: '', sort: Sorting.SCORE, limit: 250 },
@@ -119,12 +132,7 @@ export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
     });
 }
 
-const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
-  if (pools == null) return [];
-  return Object.keys(pools).map((key) => pools[key]);
-}
-
-function rndSign(seed: string) {
+const rndSign = (seed: string) => {
   const rnd = seedrandom(seed);
   return () => {
     return Math.sign(rnd() * 2 - 1);
@@ -138,15 +146,24 @@ const sortBiasedPools = (pools: Pool[], seed: string) => {
     .sort(rndSign(rev));
 }
 
-function getRandomInt(min: number, max: number) {
+function getRandomInt(seed: string, min: number, max: number) {
+  const rnd = seedrandom(seed);
   const intMin = Math.ceil(min);
   const intmax = Math.floor(max);
-  return Math.floor(Math.random() * (intmax - intMin + 1)) + intMin;
+  return Math.floor(rnd() * (intmax - intMin + 1)) + intMin;
 }
 
-export async function listBiasedPools(seed: string): Promise<Pool[]> {
-  const unbiasedPoolsResponse = await getPools(({}: any));
+const tail = (input: string) => {
+  if (!input) return '';
+  return input.slice(Math.trunc(input.length / 2), input.length);
+}
+
+export async function listBiasedPools(seed: string, searchParams: SearchParams): Promise<Pool[]> {
+  const unbiasedPoolsResponse = await getPools(searchParams);
   const unbiasedPools = toPoolArray(unbiasedPoolsResponse.pools);
+
+  const [p1, p2, p3] = unbiasedPools;
+  const lowerSeed = tail(p1?.id ?? '') + tail(p2?.id ?? '') + tail(p3?.id ?? '');
 
   try {
     const biasedPoolsResponse = await getPools(({ search: biasPoolsSearchQuery }));
@@ -157,23 +174,7 @@ export async function listBiasedPools(seed: string): Promise<Pool[]> {
 
     const topPool = biasedPools.shift();
 
-    /*
-      we want to list the Emurgo pools in high-ish positions.
-      for that, we define a spread size which is used to define a range of
-      possible positions for each pool to be inserted into the final set (allPools).
-
-      with a `spreadBias` of `3`, it means the Emurgo pools will be all roughly in the top 33%
-      of listed pools, but all separated by the value of spreadSize.
-
-      notice that spreadSize is based on the length of unbiasedPools as well, so the more
-      unbiased pools we have, the higher the spread will be.
-    */
-    const spreadBias = 3;
-    const spreadSize = Math.trunc(Math.trunc(unbiasedPools.length / spreadBias) / biasedPools.length);
-    // since we already list an Emurgo pool in the top, we say that the next Emurgo pool
-    // needs to be at least this distance from the top
-    const minimumDistanceFromTop = 10;
-
+    // removes the Emurgo pools from the original list, as we are reinserting it later
     for (let i = 0; i < biasPoolIds.length; i += 1) {
       const poolId = biasPoolIds[i];
       const poolToRemove = unbiasedPools.find(p => p.id === poolId);
@@ -187,12 +188,11 @@ export async function listBiasedPools(seed: string): Promise<Pool[]> {
 
     const allPools = [topPool].concat(unbiasedPools);
 
-    for (let i = 0; i < biasedPools.length; i += 1) {
-      const biasedPool = biasedPools[i];
-      const minPossiblePosition = minimumDistanceFromTop + (spreadSize * (i + 1));
-      const maxPossiblePosition = minPossiblePosition + spreadSize
-      const randomPosition = getRandomInt(minPossiblePosition, maxPossiblePosition);
-      allPools.splice(randomPosition, 0, biasedPool);
+    for (let i = 0; i < brackets.length; i += 1) {
+      const bracket = brackets[i];
+      const targetIndex = getRandomInt(lowerSeed, 0, bracket.positionGap) + bracket.startIndex;
+      const biasedPool = biasedPools.shift();
+      allPools.splice(targetIndex, 0, biasedPool);
     }
 
     return allPools;
