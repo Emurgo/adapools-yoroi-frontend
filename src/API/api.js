@@ -181,12 +181,9 @@ export async function listBiasedPools(seed: string, searchParams: SearchParams):
     // removes the Emurgo pools from the original list, as we are reinserting it later
     for (let i = 0; i < biasPoolIds.length; i += 1) {
       const poolId = biasPoolIds[i];
-      const poolToRemove = unbiasedPools.find(p => p.id === poolId);
-      if (poolToRemove) {
-        const poolToRemoveIdx = unbiasedPools.indexOf(poolToRemove);
-        if (poolToRemoveIdx > -1) {
-          unbiasedPools.splice(poolToRemoveIdx, 1);
-        }
+      const poolToRemoveIdx = unbiasedPools.findIndex(p => p.id === poolId);
+      if (poolToRemoveIdx >= 0) {
+        unbiasedPools.splice(poolToRemoveIdx, 1);
       }
     }
 
