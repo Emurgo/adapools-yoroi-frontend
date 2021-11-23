@@ -202,7 +202,9 @@ function Home(props: HomeProps): Node {
 
     if (lovelaceDelegation > SATURATION_LIMIT) return pools;
 
-    return pools.filter((item) => Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT);
+    return pools.filter((item) => {
+      return item != null && (Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT);
+    });
   }
 
   const {
