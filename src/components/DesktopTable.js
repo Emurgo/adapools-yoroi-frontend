@@ -185,7 +185,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
         </thead>
         <tbody>
           {data != null &&
-            data.map(pool => (
+            data.filter(x => x != null).map(pool => (
               <tr role="row" key={pool.id}>
                 <td>
                   <StakingPoolCard

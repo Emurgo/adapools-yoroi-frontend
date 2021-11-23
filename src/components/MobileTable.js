@@ -75,7 +75,7 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
   return (
     <>
       {data &&
-        data.map(pool => (
+        data.filter(x => x != null).map(pool => (
           <CardMobile key={pool.id}>
             <StakingPoolCard
               id={pool.id}

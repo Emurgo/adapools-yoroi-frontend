@@ -23,6 +23,7 @@ const extractParams = (locationSearch: string): UrlParams => {
     // $FlowFixMe[incompatible-return]
     totalAda: Number(params.get('totalAda')),
     layout: params.get('layout'),
+    bias: params.get('bias'),
   };
 };
 

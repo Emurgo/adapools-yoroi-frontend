@@ -79,7 +79,7 @@ function MobileTableRevamp({ data, delegateFunction, status, selectedIdPools, to
   return (
     <>
       {data &&
-        data.map(pool => (
+        data.filter(x => x != null).map(pool => (
           <CardMobile key={pool.id}>
             <StakingPoolCardRevamp
               id={pool.id}

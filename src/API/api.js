@@ -1,9 +1,28 @@
 // @flow
 
 import axios from 'axios';
+import seedrandom from 'seedrandom';
 import { BACKEND_URL } from '../manifestEnvs';
 
 const backendUrl: string = BACKEND_URL;
+
+const biasPoolIds = [
+  'df1750df9b2df285fcfb50f4740657a18ee3af42727d410c37b86207',
+  'af22f95915a19cd57adb14c558dcc4a175f60c6193dc23b8bd2d8beb',
+  '04357793d81097a7d2c15ec6cd6067a58cdd2fb21aaf07e56c306ecf',
+  'c34a7f59c556633dc88ec25c9743c5ebca3705e179a54db5638941cb',
+  'c5293f2ba88ac474787358b9c2f4fae7b3c4408f79cdf89a12c9ece4',
+  '8145274aa1713d4569e0d946af510b4d2b80640d87c1a0e4e0517954',
+];
+const biasPoolsSearchQuery = biasPoolIds.join('|');
+
+const brackets = [
+  { startIndex: 6, positionGap: 4 },
+  { startIndex: 13, positionGap: 7 },
+  { startIndex: 23, positionGap: 7 },
+  { startIndex: 33, positionGap: 17 },
+  { startIndex: 53, positionGap: 27 }
+];
 
 export type HistBPE = {|
   +val: string,
@@ -79,6 +98,11 @@ export type ApiPoolsResponse = {|
   pools?: {| [string]: Pool |},
 |};
 
+const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
+  if (pools == null) return [];
+  return Object.keys(pools).map((key) => pools[key]).filter(x => x != null);
+}
+
 export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
   const requestBody = {
     ...{ search: '', sort: Sorting.SCORE, limit: 250 },
@@ -106,6 +130,77 @@ export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
         pools: {}
       }
     });
+}
+
+const rndSign = (seed: string) => {
+  const rnd = seedrandom(seed);
+  return () => {
+    return Math.sign(rnd() * 2 - 1);
+  }
+}
+
+const sortBiasedPools = (pools: Pool[], seed: string) => {
+  const rev = seed.split('').reverse().join('');
+  return [...pools]
+    .sort(rndSign(seed))
+    .sort(rndSign(rev));
+}
+
+function getRandomInt(seed: string, min: number, max: number) {
+  const rnd = seedrandom(seed);
+  const intMin = Math.ceil(min);
+  const intmax = Math.floor(max);
+  return Math.floor(rnd() * (intmax - intMin + 1)) + intMin;
+}
+
+const tail = (input: string) => {
+  if (!input) return '';
+  return input.slice(Math.trunc(input.length / 2), input.length);
+}
+
+export async function listBiasedPools(seed: string, searchParams: SearchParams): Promise<Pool[]> {
+  const unbiasedPoolsResponse = await getPools(searchParams);
+  const unbiasedPools = toPoolArray(unbiasedPoolsResponse.pools);
+
+  if (searchParams.search || searchParams.sort === Sorting.TICKER) {
+    return unbiasedPools;
+  }
+
+  const [p1, p2, p3] = unbiasedPools;
+  const lowerSeed = tail(p1?.id ?? '') + tail(p2?.id ?? '') + tail(p3?.id ?? '');
+
+  try {
+    const biasedPoolsResponse = await getPools(({ search: biasPoolsSearchQuery }));
+    if (!biasedPoolsResponse) return unbiasedPools;
+    const biasedPools = sortBiasedPools(toPoolArray(biasedPoolsResponse.pools), seed);
+    if (!biasedPools || biasedPools.length === 0) return unbiasedPools;
+    if (unbiasedPools.length === 0) return biasedPools;
+
+    const topPool = biasedPools.shift();
+
+    // removes the Emurgo pools from the original list, as we are reinserting it later
+    for (let i = 0; i < biasPoolIds.length; i += 1) {
+      const poolId = biasPoolIds[i];
+      const poolToRemoveIdx = unbiasedPools.findIndex(p => p.id === poolId);
+      if (poolToRemoveIdx >= 0) {
+        unbiasedPools.splice(poolToRemoveIdx, 1);
+      }
+    }
+
+    const allPools = [topPool].concat(unbiasedPools);
+
+    for (let i = 0; i < brackets.length; i += 1) {
+      const bracket = brackets[i];
+      const targetIndex = getRandomInt(lowerSeed, 0, bracket.positionGap) + bracket.startIndex;
+      const biasedPool = biasedPools.shift();
+      allPools.splice(targetIndex, 0, biasedPool);
+    }
+
+    return allPools;
+  } catch (err) {
+    return unbiasedPools;
+  }
+  
 }
 
 export function listPools(): Promise<ApiPoolsResponse> {
