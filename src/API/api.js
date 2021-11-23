@@ -100,7 +100,7 @@ export type ApiPoolsResponse = {|
 
 const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
   if (pools == null) return [];
-  return Object.keys(pools).map((key) => pools[key]);
+  return Object.keys(pools).map((key) => pools[key]).filter(x => x != null);
 }
 
 export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
