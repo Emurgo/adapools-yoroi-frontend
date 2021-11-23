@@ -205,6 +205,7 @@ function Home(props: HomeProps): Node {
 
     if (lovelaceDelegation > SATURATION_LIMIT) return pools;
 
+    console.log('>>>> pools: ', pools);
     return pools.filter((item) => Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT);
   }
 
