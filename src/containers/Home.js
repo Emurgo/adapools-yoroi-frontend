@@ -9,8 +9,8 @@ import Alert from '../components/Alert';
 import { YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
-import { getPools, listBiasedPools, listPools } from '../API/api';
-import type { ApiPoolsResponse, Pool, SearchParams } from '../API/api';
+import { listBiasedPools } from '../API/api';
+import type { Pool, SearchParams } from '../API/api';
 import DesktopTable from '../components/DesktopTable';
 import MobileTable from '../components/MobileTable';
 import SortSelect from '../components/SortSelect';
