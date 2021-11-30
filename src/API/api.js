@@ -14,7 +14,7 @@ const BIAS_POOL_IDS = [
   'c5293f2ba88ac474787358b9c2f4fae7b3c4408f79cdf89a12c9ece4',
   '8145274aa1713d4569e0d946af510b4d2b80640d87c1a0e4e0517954',
 ];
-const biasPoolsSearchQuery = BIAS_POOL_IDS.join('|');
+const BIAS_POOLS_SEARCH_QUERY = BIAS_POOL_IDS.join('|');
 
 const brackets = [
   { startIndex: 6, positionGap: 4 },
@@ -169,10 +169,14 @@ export async function listBiasedPools(externalSeed: string, searchParams: Search
   const internalSeed = tail(p1?.id) + tail(p2?.id) + tail(p3?.id);
 
   try {
-    const biasedPoolsResponse = await getPools(({ search: biasPoolsSearchQuery }));
+    const biasedPoolsResponse = await getPools(({ search: BIAS_POOLS_SEARCH_QUERY }));
     if (!biasedPoolsResponse) return unbiasedPools;
-    const biasedPools = toPoolArray(biasedPoolsResponse.pools);
-    if (!biasedPools || biasedPools.length === 0) return unbiasedPools;
+    const biasedPools = toPoolArray(biasedPoolsResponse.pools)
+      .filter(x => x.id && BIAS_POOL_IDS.indexOf(x.id) >= 0)
+      .sort((a, b) => {
+        return BIAS_POOL_IDS.indexOf(a.id) - BIAS_POOL_IDS.indexOf(b.id);
+      });
+    if (biasedPools.length === 0) return unbiasedPools;
     const biasedPoolsOrderByExternalSeed = sortBiasedPools(biasedPools, externalSeed);
 
     const topPool = biasedPoolsOrderByExternalSeed[0];
