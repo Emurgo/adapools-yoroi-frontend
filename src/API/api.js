@@ -6,7 +6,7 @@ import { BACKEND_URL } from '../manifestEnvs';
 
 const backendUrl: string = BACKEND_URL;
 
-const biasPoolIds = [
+const BIAS_POOL_IDS = [
   'df1750df9b2df285fcfb50f4740657a18ee3af42727d410c37b86207',
   'af22f95915a19cd57adb14c558dcc4a175f60c6193dc23b8bd2d8beb',
   '04357793d81097a7d2c15ec6cd6067a58cdd2fb21aaf07e56c306ecf',
@@ -14,7 +14,7 @@ const biasPoolIds = [
   'c5293f2ba88ac474787358b9c2f4fae7b3c4408f79cdf89a12c9ece4',
   '8145274aa1713d4569e0d946af510b4d2b80640d87c1a0e4e0517954',
 ];
-const biasPoolsSearchQuery = biasPoolIds.join('|');
+const BIAS_POOLS_SEARCH_QUERY = BIAS_POOL_IDS.join('|');
 
 const brackets = [
   { startIndex: 6, positionGap: 4 },
@@ -153,12 +153,11 @@ function getRandomInt(seed: string, min: number, max: number) {
   return Math.floor(rnd() * (intmax - intMin + 1)) + intMin;
 }
 
-const tail = (input: string) => {
-  if (!input) return '';
-  return input.slice(Math.trunc(input.length / 2), input.length);
+const tail = (input: string): string => {
+  return input?.slice(-10) ?? '';
 }
 
-export async function listBiasedPools(seed: string, searchParams: SearchParams): Promise<Pool[]> {
+export async function listBiasedPools(externalSeed: string, searchParams: SearchParams): Promise<Pool[]> {
   const unbiasedPoolsResponse = await getPools(searchParams);
   const unbiasedPools = toPoolArray(unbiasedPoolsResponse.pools);
 
@@ -167,20 +166,30 @@ export async function listBiasedPools(seed: string, searchParams: SearchParams):
   }
 
   const [p1, p2, p3] = unbiasedPools;
-  const lowerSeed = tail(p1?.id ?? '') + tail(p2?.id ?? '') + tail(p3?.id ?? '');
+  const internalSeed = tail(p1?.id) + tail(p2?.id) + tail(p3?.id);
 
   try {
-    const biasedPoolsResponse = await getPools(({ search: biasPoolsSearchQuery }));
+    const biasedPoolsResponse = await getPools(({ search: BIAS_POOLS_SEARCH_QUERY }));
     if (!biasedPoolsResponse) return unbiasedPools;
-    const biasedPools = sortBiasedPools(toPoolArray(biasedPoolsResponse.pools), seed);
-    if (!biasedPools || biasedPools.length === 0) return unbiasedPools;
-    if (unbiasedPools.length === 0) return biasedPools;
+    const biasedPools = toPoolArray(biasedPoolsResponse.pools)
+      .filter(x => x.id && BIAS_POOL_IDS.indexOf(x.id) >= 0)
+      .sort((a, b) => {
+        return BIAS_POOL_IDS.indexOf(a.id) - BIAS_POOL_IDS.indexOf(b.id);
+      });
+    if (biasedPools.length === 0) return unbiasedPools;
+    const biasedPoolsOrderByExternalSeed = sortBiasedPools(biasedPools, externalSeed);
 
-    const topPool = biasedPools.shift();
+    const topPool = biasedPoolsOrderByExternalSeed[0];
+
+    const biasedLowerPools = biasedPools.filter(p => p !== topPool);
+    const biasedLowerPoolsOrderedByInternalSeed = sortBiasedPools(biasedLowerPools, internalSeed);
+
+    if (unbiasedPools.length === 0)
+      return [topPool].concat(biasedLowerPoolsOrderedByInternalSeed);
 
     // removes the Emurgo pools from the original list, as we are reinserting it later
-    for (let i = 0; i < biasPoolIds.length; i += 1) {
-      const poolId = biasPoolIds[i];
+    for (let i = 0; i < BIAS_POOL_IDS.length; i += 1) {
+      const poolId = BIAS_POOL_IDS[i];
       const poolToRemoveIdx = unbiasedPools.findIndex(p => p.id === poolId);
       if (poolToRemoveIdx >= 0) {
         unbiasedPools.splice(poolToRemoveIdx, 1);
@@ -191,8 +200,8 @@ export async function listBiasedPools(seed: string, searchParams: SearchParams):
 
     for (let i = 0; i < brackets.length; i += 1) {
       const bracket = brackets[i];
-      const targetIndex = getRandomInt(lowerSeed, 0, bracket.positionGap) + bracket.startIndex;
-      const biasedPool = biasedPools.shift();
+      const targetIndex = getRandomInt(internalSeed, 0, bracket.positionGap) + bracket.startIndex;
+      const biasedPool = biasedLowerPoolsOrderedByInternalSeed.shift();
       allPools.splice(targetIndex, 0, biasedPool);
     }
 
