@@ -173,7 +173,7 @@ export async function listBiasedPools(externalSeed: string, searchParams: Search
     if (!biasedPoolsResponse) return unbiasedPools;
     const biasedPools = toPoolArray(biasedPoolsResponse.pools);
     if (!biasedPools || biasedPools.length === 0) return unbiasedPools;
-    const biasedPoolsOrderByExternalSeed = sortBiasedPools(toPoolArray(biasedPoolsResponse.pools), externalSeed);
+    const biasedPoolsOrderByExternalSeed = sortBiasedPools(biasedPools, externalSeed);
 
     const topPool = biasedPoolsOrderByExternalSeed[0];
 
