@@ -181,7 +181,7 @@ export async function listBiasedPools(externalSeed: string, searchParams: Search
     const biasedLowerPoolsOrderedByInternalSeed = sortBiasedPools(biasedLowerPools, internalSeed);
 
     if (unbiasedPools.length === 0)
-      return [topPool].concat(biasedPoolsOrderByExternalSeed);
+      return [topPool].concat(biasedLowerPoolsOrderedByInternalSeed);
 
     // removes the Emurgo pools from the original list, as we are reinserting it later
     for (let i = 0; i < BIAS_POOL_IDS.length; i += 1) {
