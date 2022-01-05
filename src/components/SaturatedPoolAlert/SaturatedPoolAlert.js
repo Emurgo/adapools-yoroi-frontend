@@ -3,8 +3,8 @@
 import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
-import Button from './common/Button';
-import type { DelegationProps } from '../containers/Home';
+import ButtonClassic from '../common/Button/ButtonClassic';
+import type { DelegationProps } from '../../containers/HomeClassic';
 
 const Wrapper = styled.div`
   .section {
@@ -14,38 +14,38 @@ const Wrapper = styled.div`
     font-size: 18px;
     line-height: 22px;
     font-weight: bold;
-    color: #FF1351;
+    color: #ff1351;
   }
   .description {
     margin-top: 20px;
-    color: #2B2C32;
+    color: #2b2c32;
     font-size: 14px;
     line-height: 22px;
   }
-  .upper-button {
-  }
   .bottom-button {
     margin-top: 20px;
-    background-color: #FF1351;
+    background-color: #ff1351;
     border: 2px solid #ff1351;
     color: #fff;
   }
 `;
 
 type Props = {|
-    delegation: DelegationProps & {| totalAda: ?number |},
-    onSuccess: (id: string) => void,
-    close: () => void,
-|}
+  delegation: DelegationProps & {| totalAda: ?number |},
+  onSuccess: (id: string) => void,
+  close: () => void,
+|};
 
 function SaturatedPoolAlert({ delegation, onSuccess, close }: Props): Node {
-  const text = delegation.isAlreadySaturated ?
-    `${delegation.stakepoolName} is already saturated. If you continue, you will get less than the expected rewards.`
-    :
-    `${delegation.stakepoolName} will be saturated after your delegation. If you continue, you will get less than the expected rewards.`
+  const text = delegation.isAlreadySaturated
+    ? `${delegation.stakepoolName} is already saturated. If you continue, you will get less than the expected rewards.`
+    : `${delegation.stakepoolName} will be saturated after your delegation. If you continue, you will get less than the expected rewards.`;
 
   const poolShare = Number(delegation.stakepoolTotalStake) / 1000000; // divided in 1,000,000 to convert from Lovelace to ADA
-  const yourAda = delegation.totalAda == null ? '' : `Your ADA: ${new Intl.NumberFormat().format(delegation.totalAda)}`;
+  const yourAda =
+    delegation.totalAda == null
+      ? ''
+      : `Your ADA: ${new Intl.NumberFormat().format(delegation.totalAda)}`;
   const yourAdaNotEmpty = yourAda !== '';
 
   return (
@@ -58,12 +58,19 @@ function SaturatedPoolAlert({ delegation, onSuccess, close }: Props): Node {
           Stakepool Size: {new Intl.NumberFormat().format(Number(poolShare.toFixed(0)))} ADA
         </h3>
       </div>
-      <Button onClick={() => {onSuccess(delegation.id); close()}} disabled={false} className="upper-button">
+      <ButtonClassic
+        onClick={() => {
+          onSuccess(delegation.id);
+          close();
+        }}
+        disabled={false}
+        className="upper-button"
+      >
         Delegate
-      </Button>
-      <Button disabled={false} onClick={() => close()} className="bottom-button">
+      </ButtonClassic>
+      <ButtonClassic disabled={false} onClick={() => close()} className="bottom-button">
         Cancel
-      </Button>
+      </ButtonClassic>
     </Wrapper>
   );
 }

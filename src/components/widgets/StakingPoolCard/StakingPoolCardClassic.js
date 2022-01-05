@@ -4,7 +4,7 @@ import type { Node } from 'react';
 import styled from 'styled-components';
 import { toSvg } from 'jdenticon';
 import SVG from 'react-inlinesvg';
-import { DesktopOnly } from './layout/Breakpoints';
+import { DesktopOnly } from '../../common/Breakpoints';
 
 const MainCardPool = styled.div`
   display: flex;
@@ -68,7 +68,7 @@ type Props = {|
   |},
 |};
 
-function StakingPoolCard({ id, avatar, tickerName, name, links, fullname }: Props): Node {
+function StakingPoolCardClassic({ id, avatar, tickerName, name, links, fullname }: Props): Node {
   function truncateString(string: string): string {
     if (string.length <= 8) {
       return string;
@@ -152,4 +152,4 @@ function StakingPoolCard({ id, avatar, tickerName, name, links, fullname }: Prop
   );
 }
 
-export default StakingPoolCard;
+export default StakingPoolCardClassic;

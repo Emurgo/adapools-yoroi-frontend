@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { SortingEnum } from '../API/api';
-import arrowDownIcon from '../assets/arrow-select-down.svg'
+import type { SortingEnum } from '../../API/api';
+import arrowDownIcon from '../../assets/arrow-select-down.svg';
 
 const WrapperSelectInput = styled.div`
   display: flex;
@@ -60,7 +60,7 @@ const selectData = [
   // },
 ];
 
-function SortSelect({ filter }: Props): React$Node {
+function SortSelectClassic({ filter }: Props): React$Node {
   const [selectValue, setSelectValue] = React.useState<SortingEnum>('score');
 
   const handleChange = (e) => {
@@ -90,4 +90,4 @@ function SortSelect({ filter }: Props): React$Node {
   );
 }
 
-export default SortSelect;
+export default SortSelectClassic;

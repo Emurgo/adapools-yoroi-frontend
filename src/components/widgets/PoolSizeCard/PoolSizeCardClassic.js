@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import type { Node } from 'react';
-import PoolSizeTag from './PoolSizeTag';
+import PoolSizeTagClassic from '../PoolSizeTag/PoolSizeTagClassic';
 
 const Card = styled.div`
   display: flex;
@@ -31,13 +31,13 @@ type Props = {|
   value: string,
 |};
 
-function PoolSizeCard({ percentage, value }: Props): Node {
+function PoolSizeCardClassic({ percentage, value }: Props): Node {
   return (
     <Card>
-      <PoolSizeTag value={percentage} />
+      <PoolSizeTagClassic value={percentage} />
       <p className="value">{value} ₳</p>
     </Card>
   );
 }
 
-export default PoolSizeCard;
+export default PoolSizeCardClassic;

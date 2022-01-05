@@ -20,7 +20,7 @@ type Props = {|
   description?: string,
 |};
 
-function CardRoa({ roa, description }: Props): Node {
+function CardRoaClassic({ roa, description }: Props): Node {
   return (
     <div>
       <RoaElement>
@@ -31,25 +31,4 @@ function CardRoa({ roa, description }: Props): Node {
   );
 }
 
-const RoaElementRevamp = styled.div`
-  height: 26px;
-  text-align: center;
-  padding: 3px 0;
-  color: #242838;
-  font-size: 16px;
-  @media (max-width: 1125px) {
-    text-align: left;
-  }
-`;
-
-function CardRoaRevamp({ roa, description }: Props): Node {
-  return (
-    <RoaElementRevamp>
-      {description}
-      {parseFloat(roa) === 0 ? 'unknown' : `${parseFloat(roa).toFixed(2)}% `}
-    </RoaElementRevamp>
-  );
-}
-
-export default CardRoa;
-export { CardRoaRevamp };
+export default CardRoaClassic;

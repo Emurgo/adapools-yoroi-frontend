@@ -4,7 +4,7 @@
 import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
-import attentionIcon from '../assets/attention.svg';
+import attentionIcon from '../../assets/attention.svg';
 
 const Banner = styled.div`
   padding: 24px;

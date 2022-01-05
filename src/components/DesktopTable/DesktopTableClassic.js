@@ -1,17 +1,17 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { Pool } from '../API/api';
-import StakingPoolCard from './StakingPoolCard';
-import PoolSizeCard from './PoolSizeCard';
-import CostsCard from './CostsCard';
-import PledgeCard from './PledgeCard';
-import CardRoa from './CardRoa';
-import { formatBigNumber, formatCostLabel } from '../utils/utils';
-import Button from './common/Button';
-import Tooltip from './common/Tooltip';
-import type { QueryState } from '../utils/types';
-import type { DelegationProps } from '../containers/Home';
+import type { Pool } from '../../API/api';
+import StakingPoolCardClassic from '../widgets/StakingPoolCard/StakingPoolCardClassic';
+import PoolSizeCardClassic from '../widgets/PoolSizeCard/PoolSizeCardClassic';
+import CostsCardClassic from '../widgets/CostsCard/CostsCardClassic';
+import PledgeCardClassic from '../widgets/PledgeCard/PledgeCardClassic';
+import CardRoaClassic from '../widgets/CardRoa/CardRoaClassic';
+import { formatBigNumber, formatCostLabel } from '../../utils/utils';
+import Button from '../common/Button/ButtonClassic';
+import TooltipClassic from '../common/Tooltip/TooltipClassic';
+import type { QueryState } from '../../utils/types';
+import type { DelegationProps } from '../../containers/HomeClassic';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -173,7 +173,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
             {
               tableTheads.map(({ label, textInfo, id }, ) =>
                 <th key={`col-${id}`} scope="col" className={`col-${id}`}>
-                  <Tooltip
+                  <TooltipClassic
                     label={label}
                     textInfo={textInfo}
                   />
@@ -188,7 +188,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
             data.filter(x => x != null).map(pool => (
               <tr role="row" key={pool.id}>
                 <td>
-                  <StakingPoolCard
+                  <StakingPoolCardClassic
                     id={pool.id}
                     avatar={pool.pool_pic}
                     tickerName={pool.db_ticker}
@@ -198,23 +198,23 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
                   />
                 </td>
                 <td>
-                  <CardRoa
+                  <CardRoaClassic
                     roa={pool.roa}
                   />
                 </td>
                 <td>
-                  <PoolSizeCard
+                  <PoolSizeCardClassic
                     percentage={pool.saturation}
                     value={formatBigNumber(pool.total_stake)}
                   />
                 </td>
                 <td>
-                  <CostsCard
+                  <CostsCardClassic
                     value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
                   />
                 </td>
                 <td>
-                  <PledgeCard value={pool.pledge} real={pool.pledge_real} />
+                  <PledgeCardClassic value={pool.pledge} real={pool.pledge_real} />
                 </td>
                 <td>{pool.blocks_epoch}</td>
                 <td>

@@ -1,17 +1,17 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { Pool } from '../API/api';
-import { CostsCardRevamp } from './CostsCard';
-import { PledgeCardRevamp } from './PledgeCard';
-import { CardRoaRevamp } from './CardRoa';
-import { formatBigNumber, formatCostLabel } from '../utils/utils';
-import { ButtonRevamp } from './common/Button';
-import { TooltipRevamp } from './common/Tooltip';
-import type { QueryState } from '../utils/types';
-import type { DelegationProps } from '../containers/Home';
-import StakingPoolCardRevamp from './StakingPoolCardRevamp';
-import { PoolSizeTagRevamp } from './PoolSizeTag';
+import type { Pool } from '../../API/api';
+import CostsCardRevamp from '../widgets/CostsCard/CostsCardRevamp';
+import PledgeCardRevamp from '../widgets/PledgeCard/PledgeCardRevamp';
+import CardRoaRevamp from '../widgets/CardRoa/CardRoaRevamp';
+import { formatBigNumber, formatCostLabel } from '../../utils/utils';
+import ButtonRevamp from '../common/Button/ButtonRevamp';
+import TooltipRevamp from '../common/Tooltip/TooltipRevamp';
+import type { QueryState } from '../../utils/types';
+import type { DelegationProps } from '../../containers/HomeClassic';
+import StakingPoolCardRevamp from '../widgets/StakingPoolCard/StakingPoolCardRevamp';
+import PoolSizeTagRevamp from '../widgets/PoolSizeTag/PoolSizeTagRevamp';
 
 const TableContent = styled.div`
   display: inline-flex;

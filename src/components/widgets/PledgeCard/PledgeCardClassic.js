@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import type { Node } from 'react';
-import { formatBigNumber } from '../utils/utils';
+import { formatBigNumber } from '../../../utils/utils';
 
 const Card = styled.div`
   display: inline-block;
@@ -28,7 +28,7 @@ type Props = {|
   real?: string | number,
 |};
 
-function PledgeCard({ value, real }: Props): Node {
+function PledgeCardClassic({ value, real }: Props): Node {
   // to fix according to ranges
   let backgroundColor = 'none';
   const realValue = Number(value) / 1_000_000; // divided in 1,000,000 to convert from Lovelace to ADA
@@ -52,25 +52,5 @@ function PledgeCard({ value, real }: Props): Node {
     </Card>
   );
 }
-const CardRevamp = styled.div`
-  display: inline-block;
-  font-size: 16px;
-  line-height: 22px;
-  color: #242838;
-  padding: 2px 8px;
-  text-align: left;
-  @media (max-width: 1125px) {
-    justify-content: center;
-    padding: 0;
-  }
-`;
-function PledgeCardRevamp({ value }: Props): Node {
-  return (
-    <CardRevamp>
-      <span>{formatBigNumber(value.toString())}</span>
-    </CardRevamp>
-  );
-}
 
-export default PledgeCard;
-export { PledgeCardRevamp };
+export default PledgeCardClassic;

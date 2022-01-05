@@ -1,24 +1,25 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import type { Pool } from '../API/api';
+import type { Pool } from '../../API/api';
 
-import StakingPoolCard from './StakingPoolCard';
-import PoolSizeCard from './PoolSizeCard';
-import CostsCard from './CostsCard';
-import PledgeCard from './PledgeCard';
-import CardRoa from './CardRoa';
-import { formatBigNumber, formatCostLabel } from '../utils/utils';
-import Button from './common/Button';
-import type { QueryState } from '../utils/types';
-import type { DelegationProps } from '../containers/Home';
+import CostsCardRevamp from '../widgets/CostsCard/CostsCardRevamp';
+import PledgeCardRevamp from '../widgets/PledgeCard/PledgeCardRevamp';
+import CardRoaRevamp from '../widgets/CardRoa/CardRoaRevamp';
+import { formatBigNumber, formatCostLabel } from '../../utils/utils';
+import ButtonRevamp from '../common/Button/ButtonRevamp';
+import type { QueryState } from '../../utils/types';
+import type { DelegationProps } from '../../containers/HomeClassic';
+import StakingPoolCardRevamp from '../widgets/StakingPoolCard/StakingPoolCardRevamp';
+import PoolSizeTagRevamp from '../widgets/PoolSizeTag/PoolSizeTagRevamp';
+import { ValueRevamp } from '../DesktopTable/DesktopTableRevamp';
 
 const CardMobile = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 8px;
   background-color: #ffffff;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);w
   margin-bottom: 24px;
   padding: 11px 16px;
 `;
@@ -39,6 +40,9 @@ const WrapperContent = styled.div`
   }
   .item {
     flex: 1;
+    @media (max-width: 1125px) {
+      align-items: flex-start;
+    }
   }
   .cost-wrapper {
     display: flex;
@@ -53,7 +57,7 @@ type Props = {|
   totalAda: ?number,
 |};
 
-function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
+function MobileTableRevamp({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -77,7 +81,7 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
       {data &&
         data.filter(x => x != null).map(pool => (
           <CardMobile key={pool.id}>
-            <StakingPoolCard
+            <StakingPoolCardRevamp
               id={pool.id}
               avatar={pool.pool_pic}
               tickerName={pool.db_ticker}
@@ -85,38 +89,41 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
               links={pool.handles}
               fullname={pool.fullname}
             />
-            <CardRoa
-              roa={pool.roa}
-              description='Estimated ROA: '
-            />
 
             <WrapperContent style={{ display: 'flex' }}>
               <div className="item">
-                <div className="label">Pool Size</div>
-                <PoolSizeCard
-                  percentage={pool.saturation}
-                  value={formatBigNumber(pool.total_stake)}
-                />
+                <div className="label">ROA 30d</div>
+                <CardRoaRevamp roa={pool.roa} />
               </div>
+              <div className="item">
+                <div className="label">Pool Size (ADA)</div>
+                <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
+              </div>
+              <div className="item">
+                <div className="label">Share</div>
+                <PoolSizeTagRevamp value={pool.saturation} />
+              </div>
+            </WrapperContent>
+            <WrapperContent style={{ display: 'flex' }}>
               <div className="item">
                 <div className="label">Costs</div>
                 <div className="cost-wrapper">
-                  <CostsCard
+                  <CostsCardRevamp
                     value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
                   />
                 </div>
               </div>
               <div className="item">
                 <div className="label">Pledge</div>
-                <PledgeCard value={pool.pledge} real={pool.pledge_real} />
+                <PledgeCardRevamp value={pool.pledge} real={pool.pledge_real} />
               </div>
             </WrapperContent>
             <div>
-              <Button
+              <ButtonRevamp
                 disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
                 onClick={() => (
                   delegateFunction({
-                    stakepoolName: pool.db_name ?? pool.id,
+                    stakepoolName: pool.db_name ?? '',
                     stakepoolTotalStake: pool.total_stake,
                     isAlreadySaturated: pool.saturation >= 1,
                     id: pool.id },
@@ -124,7 +131,7 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
                 )}
               >
                 Delegate
-              </Button>
+              </ButtonRevamp>
             </div>
           </CardMobile>
         ))}
@@ -132,4 +139,4 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
   );
 }
 
-export default MobileTable;
+export default MobileTableRevamp;

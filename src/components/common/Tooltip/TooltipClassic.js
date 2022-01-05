@@ -3,7 +3,7 @@
 import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
-import infoIcon from '../../assets/info-icon.svg';
+import infoIcon from '../../../assets/info-icon.svg';
 
 const WrapperToolTip = styled.div`
   display: flex;
@@ -12,10 +12,10 @@ const WrapperToolTip = styled.div`
   .label {
     padding-left: 3px;
   }
-  @media (min-width:1125px) and (max-width: 1200px) {
+  @media (min-width: 1125px) and (max-width: 1200px) {
     justify-content: center;
   }
-`
+`;
 const ToolTip = styled.span`
   position: relative;
   cursor: pointer;
@@ -35,17 +35,17 @@ const ToolTip = styled.span`
     background: #000;
     display: none;
     text-align: center;
-    opacity:0;
-    transition:10s opacity;
+    opacity: 0;
+    transition: 10s opacity;
   }
-  img{
+  img {
     max-width: 100%;
     width: 18px;
     height: 18px;
   }
   &:hover:before {
     display: block;
-    opacity:1;
+    opacity: 1;
     color: white;
   }
 `;
@@ -55,39 +55,13 @@ type Props = {|
   textInfo: ?string,
 |};
 
-function Tooltip({ label, textInfo }: Props): Node {
+function TooltipClassic({ label, textInfo }: Props): Node {
   return (
     <WrapperToolTip>
-      <ToolTip data-text={textInfo}>
-        {textInfo != null && <img src={infoIcon} alt="" />}
-      </ToolTip>
+      <ToolTip data-text={textInfo}>{textInfo != null && <img src={infoIcon} alt="" />}</ToolTip>
       <span className="label">{label}</span>
     </WrapperToolTip>
   );
 }
 
-const WrapperToolTipRevamp = styled.div`
-  display: flex;
-  align-items: baseline;
-  flex-direction: column;
-  justify-content: flex-end;
-  .label {
-    padding-left: 3px;
-  }
-  @media (min-width:1125px) and (max-width: 1200px) {
-    justify-content: center;
-  }
-`
-
-function TooltipRevamp({ label, textInfo }: Props): Node {
-  return (
-    <WrapperToolTipRevamp>
-      <ToolTip data-text={textInfo}>
-        {textInfo != null && <span className="label">{label}</span>}
-      </ToolTip>
-    </WrapperToolTipRevamp>
-  );
-}
-
-export default Tooltip;
-export { TooltipRevamp }
+export default TooltipClassic;

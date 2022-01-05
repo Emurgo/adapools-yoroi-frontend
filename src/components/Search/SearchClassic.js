@@ -49,7 +49,7 @@ type Props = {|
   filter: Function,
 |};
 
-const Search = ({ filter }: Props): Node => {
+const SearchClassic = ({ filter }: Props): Node => {
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearchInputChanges = (e) => {
@@ -77,4 +77,4 @@ const Search = ({ filter }: Props): Node => {
   );
 };
 
-export default Search;
+export default SearchClassic;

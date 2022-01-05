@@ -4,24 +4,22 @@ import React, { useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
-import Search from '../components/Search';
-import Alert from '../components/Alert';
+import Search from '../components/Search/SearchClassic';
+import Alert from '../components/common/Alert';
 import { YoroiCallback } from '../API/yoroi';
 
-import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
+import { DesktopOnly, MobileOnly } from '../components/common/Breakpoints';
 import { listBiasedPools } from '../API/api';
 import type { Pool, SearchParams } from '../API/api';
-import DesktopTable from '../components/DesktopTable';
-import MobileTable from '../components/MobileTable';
-import SortSelect from '../components/SortSelect';
+import DesktopTableClassic from '../components/DesktopTable/DesktopTableClassic';
+import MobileTableClassic from '../components/MobileTable/MobileTableClassic';
+import SortSelect from '../components/SortSelect/SortSelectClassic';
 import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
-import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
+import SaturatedPoolAlert from '../components/SaturatedPoolAlert/SaturatedPoolAlert';
 import adapoolIcon from '../assets/adapool-logo-extend.svg';
-
-// k = 500
-const SATURATION_LIMIT = 63600000000000;
+import { SATURATION_LIMIT } from '../utils/constants';
 
 const Header = styled.div`
   display: flex;
@@ -35,20 +33,6 @@ const Header = styled.div`
     }
   }
 `;
-
-// const ColorButton = styled.button`
-//   border: none;
-//   background: none;
-//   color: #2B2C32;
-//   font-size: 14px;
-//   line-height: 22px;
-//   text-decoration: underline;
-//   margin-left: auto;
-//   cursor: pointer;
-//   @media (max-width: 1125px){
-//     margin-top: 30px;
-//   }
-// `;
 
 const CreditSection = styled.div`
   display: flex;
@@ -200,12 +184,9 @@ function Home(props: HomeProps): Node {
       <Header>
         <Search filter={filterSearch} />
         <SortSelect filter={filterSelect} />
-        {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
-        {/*  Colors meaning */}
-        {/* </ColorButton> */}
       </Header>
       <DesktopOnly>
-        <DesktopTable
+        <DesktopTableClassic
           status={status}
           delegateFunction={delegateFunction}
           data={filterPools(rowData, totalAda)}
@@ -214,7 +195,7 @@ function Home(props: HomeProps): Node {
         />
       </DesktopOnly>
       <MobileOnly>
-        <MobileTable
+        <MobileTableClassic
           status={status}
           delegateFunction={delegateFunction}
           data={filterPools(rowData, totalAda)}

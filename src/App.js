@@ -3,9 +3,9 @@
 import React from 'react';
 import type { Node } from 'react';
 import GlobalStyle from './helpers/globalStyles';
-import Home from './containers/Home';
+import HomeClassic from './containers/HomeClassic';
 import HomeRevamp from './containers/HomeRevamp';
-import type { UrlParams } from './containers/Home';
+import type { UrlParams } from './containers/HomeClassic';
 
 const parseIds = (array: ?string): Array<string> => {
   if (array == null) return [];
@@ -32,7 +32,7 @@ function App(): Node {
   const homeParams = { urlParams: extractParams(location.search) };
   const layout = homeParams?.urlParams?.layout ?? 'CLASSIC';
   const mapHomeComponentByLayout = {
-    CLASSIC: Home,
+    CLASSIC: HomeClassic,
     REVAMP: HomeRevamp,
   };
   const HomeComponent = mapHomeComponentByLayout[layout];

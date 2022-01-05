@@ -12,7 +12,7 @@ const Card = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
-  @media (min-width:1125px) and (max-width: 1200px) {
+  @media (min-width: 1125px) and (max-width: 1200px) {
     flex-direction: column-reverse;
     align-items: center;
   }
@@ -28,20 +28,11 @@ const Card = styled.div`
 type Props = {|
   value: string,
 |};
-function CostsCard({ value }: Props): Node {
+function CostsCardClassic({ value }: Props): Node {
   return (
     <Card>
       <p className="value">({value})</p>
     </Card>
   );
 }
-function CostsCardRevamp({ value }: Props): Node {
-  return (
-    <Card>
-      <p className="valueRevamp">{value}</p>
-    </Card>
-  );
-}
-
-export default CostsCard;
-export { CostsCardRevamp }
+export default CostsCardClassic;

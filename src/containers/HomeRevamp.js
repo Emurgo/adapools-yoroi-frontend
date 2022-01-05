@@ -4,24 +4,22 @@ import React, { useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
-import Alert from '../components/Alert';
+import Alert from '../components/common/Alert';
 import { SendFirstAdapool, YoroiCallback } from '../API/yoroi';
 
-import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
+import { DesktopOnly, MobileOnly } from '../components/common/Breakpoints';
 import { listBiasedPools } from '../API/api';
 import type { Pool, SearchParams } from '../API/api';
-import SortSelect from '../components/SortSelect';
+import SortSelect from '../components/SortSelect/SortSelectClassic';
 import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
-import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
+import SaturatedPoolAlert from '../components/SaturatedPoolAlert/SaturatedPoolAlert';
 import adapoolIcon from '../assets/adapool-logo-extend.svg';
-import DesktopTableRevamp from '../components/DesktopTableRevamp';
-import SearchRevamp from '../components/SearchRevamp';
-import MobileTableRevamp from '../components/MobileTableRevamp';
-
-// k = 500
-const SATURATION_LIMIT = 63600000000000;
+import DesktopTableRevamp from '../components/DesktopTable/DesktopTableRevamp';
+import SearchRevamp from '../components/Search/SearchRevamp';
+import MobileTableRevamp from '../components/MobileTable/MobileTableRevamp';
+import { SATURATION_LIMIT } from '../utils/constants';
 
 const Header = styled.div`
   display: flex;
@@ -51,20 +49,6 @@ const HeaderRow = styled.div`
     flex-direction: column;
   }
 `;
-
-// const ColorButton = styled.button`
-//   border: none;
-//   background: none;
-//   color: #2B2C32;
-//   font-size: 14px;
-//   line-height: 22px;
-//   text-decoration: underline;
-//   margin-left: auto;
-//   cursor: pointer;
-//   @media (max-width: 1125px){
-//     margin-top: 30px;
-//   }
-// `;
 
 const CreditSection = styled.div`
   display: flex;
@@ -124,7 +108,7 @@ function Home(props: HomeProps): Node {
         setStatus('resolved');
         setRowData(pools);
         // used to show the first pool in revamp banner
-        SendFirstAdapool(pools[0])
+        SendFirstAdapool(pools[0]);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -203,7 +187,7 @@ function Home(props: HomeProps): Node {
     if (lovelaceDelegation > SATURATION_LIMIT) return pools;
 
     return pools.filter((item) => {
-      return item != null && (Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT);
+      return item != null && Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT;
     });
   }
 
@@ -221,9 +205,6 @@ function Home(props: HomeProps): Node {
         <Header>
           <SearchRevamp filter={filterSearch} />
           <SortSelect filter={filterSelect} />
-          {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
-          {/*  Colors meaning */}
-          {/* </ColorButton> */}
         </Header>
       </HeaderRow>
       <DesktopOnly>
