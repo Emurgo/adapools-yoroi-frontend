@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { Node } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import GlobalStyle from './helpers/globalStyles';
 import HomeClassic from './containers/HomeClassic';
 import HomeRevamp from './containers/HomeRevamp';
@@ -27,6 +28,8 @@ const extractParams = (locationSearch: string): UrlParams => {
   };
 };
 
+const queryClient = new QueryClient();
+
 function App(): Node {
   const { location } = window;
   const homeParams = { urlParams: extractParams(location.search) };
@@ -38,10 +41,10 @@ function App(): Node {
   const HomeComponent = mapHomeComponentByLayout[layout];
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <HomeComponent {...homeParams} />
       <GlobalStyle />
-    </>
+    </QueryClientProvider>
   );
 }
 
