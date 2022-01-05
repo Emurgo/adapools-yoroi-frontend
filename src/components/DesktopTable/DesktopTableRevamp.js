@@ -12,6 +12,7 @@ import type { QueryState } from '../../utils/types';
 import type { DelegationProps } from '../../containers/HomeClassic';
 import StakingPoolCardRevamp from '../widgets/StakingPoolCard/StakingPoolCardRevamp';
 import PoolSizeTagRevamp from '../widgets/PoolSizeTag/PoolSizeTagRevamp';
+import Loader from '../common/Loader';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -129,7 +130,7 @@ function DesktopTableRevamp({
   }
 
   if (isLoading) {
-    return <h1 style={{ fontWeight: 400 }}>Loading..</h1>;
+    return <Loader />;
   }
 
   if (isRejected) {

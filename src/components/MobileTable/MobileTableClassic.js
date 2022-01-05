@@ -12,6 +12,7 @@ import { formatBigNumber, formatCostLabel } from '../../utils/utils';
 import Button from '../common/Button/ButtonClassic';
 import type { QueryState } from '../../utils/types';
 import type { DelegationProps } from '../../containers/HomeClassic';
+import Loader from '../common/Loader';
 
 const CardMobile = styled.div`
   display: flex;
@@ -63,7 +64,7 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
   }
 
   if(isLoading) {
-    return <h1 style={{ fontWeight: 400 }}>Loading...</h1>;
+    return <Loader />;
   }
 
   if(isRejected) {

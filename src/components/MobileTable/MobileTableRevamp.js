@@ -13,6 +13,7 @@ import type { DelegationProps } from '../../containers/HomeClassic';
 import StakingPoolCardRevamp from '../widgets/StakingPoolCard/StakingPoolCardRevamp';
 import PoolSizeTagRevamp from '../widgets/PoolSizeTag/PoolSizeTagRevamp';
 import { ValueRevamp } from '../DesktopTable/DesktopTableRevamp';
+import Loader from '../common/Loader';
 
 const CardMobile = styled.div`
   display: flex;
@@ -67,7 +68,7 @@ function MobileTableRevamp({ data, delegateFunction, status, selectedIdPools, to
   }
 
   if(isLoading) {
-    return <h1 style={{ fontWeight: 400 }}>Loading...</h1>;
+    return <Loader />;
   }
 
   if(isRejected) {

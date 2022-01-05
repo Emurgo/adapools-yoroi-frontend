@@ -12,6 +12,7 @@ import Button from '../common/Button/ButtonClassic';
 import TooltipClassic from '../common/Tooltip/TooltipClassic';
 import type { QueryState } from '../../utils/types';
 import type { DelegationProps } from '../../containers/HomeClassic';
+import Loader from '../common/Loader';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -124,7 +125,7 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
   }
 
   if(isLoading) {
-    return <h1 style={{ fontWeight: 400 }}>Loading..</h1>;
+    return <Loader />;
   }
 
   if(isRejected) {
