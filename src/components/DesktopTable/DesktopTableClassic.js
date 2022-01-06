@@ -61,12 +61,12 @@ const Table = styled.table`
     }
     td {
       &:not(:first-child) {
-      padding-right: 25px;
+        padding-right: 25px;
         text-align: right;
       }
     }
   }
-  [class^="col"]{
+  [class^='col'] {
     width: 180px;
   }
   .col-0 {
@@ -77,25 +77,25 @@ const Table = styled.table`
   }
   .col-2 {
     width: 170px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 115px;
     }
   }
   .col-3 {
     width: 115px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 115px;
     }
   }
   .col-4 {
     width: 110px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 110px;
     }
   }
   .col-5 {
     width: 80px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       width: 60px;
     }
   }
@@ -115,23 +115,25 @@ type Props = {|
   totalAda: ?number,
 |};
 
-function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
-  const isLoading = status === 'pending' || status === 'idle';
-  const isRejected = status === 'rejected';
-  const isResolved = status === 'resolved';
+function DesktopTable({
+  status,
+  data,
+  delegateFunction,
+  selectedIdPools,
+  totalAda,
+}: Props): React$Node {
 
-  if (isResolved && data != null && data.length <= 0) {
-    return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
-  }
-
-  if(isLoading) {
+  const { isLoading, isError, isSuccess } = status;
+  if (isLoading) {
     return <Loader />;
   }
 
-  if(isRejected) {
-    return (
-      <h1>Oops! something wrong happened. Try again!</h1>
-    )
+  if (isSuccess && data != null && data.length <= 0) {
+    return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
+  }
+
+  if (isError) {
+    return <h1>Oops! something wrong happened. Try again!</h1>;
   }
 
   const tableTheads = [
@@ -185,56 +187,61 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
           </tr>
         </thead>
         <tbody>
-          {data != null &&
-            data.filter(x => x != null).map(pool => (
-              <tr role="row" key={pool.id}>
-                <td>
-                  <StakingPoolCardClassic
-                    id={pool.id}
-                    avatar={pool.pool_pic}
-                    tickerName={pool.db_ticker}
-                    name={pool.db_name}
-                    links={pool.handles}
-                    fullname={pool.fullname}
-                  />
-                </td>
-                <td>
-                  <CardRoaClassic
-                    roa={pool.roa}
-                  />
-                </td>
-                <td>
-                  <PoolSizeCardClassic
-                    percentage={pool.saturation}
-                    value={formatBigNumber(pool.total_stake)}
-                  />
-                </td>
-                <td>
-                  <CostsCardClassic
-                    value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
-                  />
-                </td>
-                <td>
-                  <PledgeCardClassic value={pool.pledge} real={pool.pledge_real} />
-                </td>
-                <td>{pool.blocks_epoch}</td>
-                <td>
-                  <Button
-                    disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
-                    onClick={() => (
-                      delegateFunction({
-                        stakepoolName: pool.db_name ?? pool.id,
-                        stakepoolTotalStake: pool.total_stake,
-                        isAlreadySaturated: pool.saturation >= 1,
-                        id: pool.id },
-                      totalAda)
-                    )}
-                  >
-                    Delegate
-                  </Button>
-                </td>
-              </tr>
-            ))}
+          {isSuccess &&
+            data != null &&
+            data.length &&
+            data
+              .filter((x) => x != null)
+              .map((pool) => (
+                <tr role="row" key={pool.id}>
+                  <td>
+                    <StakingPoolCardClassic
+                      id={pool.id}
+                      avatar={pool.pool_pic}
+                      tickerName={pool.db_ticker}
+                      name={pool.db_name}
+                      links={pool.handles}
+                      fullname={pool.fullname}
+                    />
+                  </td>
+                  <td>
+                    <CardRoaClassic roa={pool.roa} />
+                  </td>
+                  <td>
+                    <PoolSizeCardClassic
+                      percentage={pool.saturation}
+                      value={formatBigNumber(pool.total_stake)}
+                    />
+                  </td>
+                  <td>
+                    <CostsCardClassic
+                      value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
+                    />
+                  </td>
+                  <td>
+                    <PledgeCardClassic value={pool.pledge} real={pool.pledge_real} />
+                  </td>
+                  <td>{pool.blocks_epoch}</td>
+                  <td>
+                    <Button
+                      disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
+                      onClick={() =>
+                        delegateFunction(
+                          {
+                            stakepoolName: pool.db_name ?? pool.id,
+                            stakepoolTotalStake: pool.total_stake,
+                            isAlreadySaturated: pool.saturation >= 1,
+                            id: pool.id,
+                          },
+                          totalAda,
+                        )
+                      }
+                    >
+                      Delegate
+                    </Button>
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </Table>
     </TableContent>

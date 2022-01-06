@@ -1,3 +1,7 @@
 // @flow
 
-export type QueryState = 'idle' | 'pending' | 'resolved' | 'rejected';
+export type QueryState = {|
+  isLoading: boolean,
+  isError: boolean,
+  isSuccess: boolean,
+|};

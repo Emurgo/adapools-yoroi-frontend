@@ -1,6 +1,5 @@
 // @flow
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
@@ -9,17 +8,16 @@ import Alert from '../components/common/Alert';
 import { YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/common/Breakpoints';
-import { listBiasedPools } from '../API/api';
 import type { Pool, SearchParams } from '../API/api';
 import DesktopTableClassic from '../components/DesktopTable/DesktopTableClassic';
 import MobileTableClassic from '../components/MobileTable/MobileTableClassic';
 import SortSelect from '../components/SortSelect/SortSelectClassic';
-import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert/SaturatedPoolAlert';
 import adapoolIcon from '../assets/adapool-logo-extend.svg';
 import { SATURATION_LIMIT } from '../utils/constants';
+import { useListBiasedPools } from '../hooks/query/useListBiasedPools';
 
 const Header = styled.div`
   display: flex;
@@ -72,8 +70,6 @@ export type DelegationProps = {|
 |}
 
 function Home(props: HomeProps): Node {
-  const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
-  const [status, setStatus] = React.useState<QueryState>('idle');
   const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
     search: '',
     sort: 'score',
@@ -84,19 +80,7 @@ function Home(props: HomeProps): Node {
 
   const { urlParams } = props;
   const seed = urlParams?.bias ?? 'bias';
-
-  useEffect(() => {
-    setStatus('pending');
-    listBiasedPools(seed, {})
-      .then((pools: Pool[]) => {
-        setStatus('resolved');
-        setRowData(pools);
-      })
-      .catch((err) => {
-        setStatus('rejected');
-        console.error(err);
-      });
-  }, []);
+  const { isLoading, isSuccess, isError, poolList } = useListBiasedPools(seed, filterOptions);
 
   const filterSelect = (value) => {
     const newSearch = {
@@ -104,16 +88,6 @@ function Home(props: HomeProps): Node {
       sort: value,
     };
     setFilterOptions(newSearch);
-    setStatus('pending');
-    listBiasedPools(seed, newSearch)
-      .then((pools: Pool[]) => {
-        setStatus('resolved');
-        setRowData(pools);
-      })
-      .catch((err) => {
-        setStatus('rejected');
-        console.error(err);
-      });
   };
   const filterSearch = (value) => {
     const newSearch = {
@@ -121,46 +95,32 @@ function Home(props: HomeProps): Node {
       search: value,
     };
     setFilterOptions(newSearch);
-    setStatus('pending');
-    listBiasedPools(seed, newSearch)
-      .then((pools: Pool[]) => {
-        setStatus('resolved');
-        setRowData(pools);
-      })
-      .catch((err) => {
-        setStatus('rejected');
-        console.error(err);
-      });
   };
 
   const confirmedDelegateFunction = (id: string): void => {
-    YoroiCallback(([id]), {
+    YoroiCallback([id], {
       source: urlParams.source,
       chromeId: urlParams.chromeId,
       mozId: urlParams.mozId,
     });
-  }
+  };
 
   const delegateFunction = (delegation: DelegationProps, totalAda: ?number): void => {
     if (delegation == null) return;
     const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
 
     if (Number(delegation.stakepoolTotalStake) + lovelaceDelegation >= SATURATION_LIMIT) {
-      setDelegationModalData({ ...delegation, totalAda })
-      setConfirmDelegationModal(true)
-      setOpenModal(true)
-    }
-    else {
-      confirmedDelegateFunction(delegation.id)
+      setDelegationModalData({ ...delegation, totalAda });
+      setConfirmDelegationModal(true);
+      setOpenModal(true);
+    } else {
+      confirmedDelegateFunction(delegation.id);
     }
   };
 
   const alertText = null;
 
-  function filterPools(
-    pools: ?Array<Pool>,
-    totalAda: ?number,
-  ): ?Array<Pool> {
+  function filterPools(pools: ?Array<Pool>, totalAda: ?number): ?Array<Pool> {
     if (pools == null) return pools;
 
     // don't filter out saturated pools if the user explicitly searches
@@ -172,12 +132,15 @@ function Home(props: HomeProps): Node {
 
     if (lovelaceDelegation > SATURATION_LIMIT) return pools;
 
-    return pools.filter(item => {
-      return item != null && (Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT);
+    return pools.filter((item) => {
+      return item != null && Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT;
     });
   }
 
-  const { urlParams: { selectedPoolIds, totalAda } } = props
+  const {
+    urlParams: { selectedPoolIds, totalAda },
+  } = props;
+
   return (
     <Layout>
       <Alert title={alertText} />
@@ -187,18 +150,18 @@ function Home(props: HomeProps): Node {
       </Header>
       <DesktopOnly>
         <DesktopTableClassic
-          status={status}
+          status={{ isLoading, isSuccess, isError }}
           delegateFunction={delegateFunction}
-          data={filterPools(rowData, totalAda)}
+          data={filterPools(poolList, totalAda)}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
       </DesktopOnly>
       <MobileOnly>
         <MobileTableClassic
-          status={status}
+          status={{ isLoading, isSuccess, isError }}
           delegateFunction={delegateFunction}
-          data={filterPools(rowData, totalAda)}
+          data={filterPools(poolList, totalAda)}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
@@ -207,17 +170,24 @@ function Home(props: HomeProps): Node {
         <Modal
           title=""
           isOpen={openModal && confirmDelegationModal}
-          onClose={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+          onClose={() => {
+            setOpenModal(false);
+            setConfirmDelegationModal(false);
+          }}
         >
           <SaturatedPoolAlert
             delegation={delegationModalData}
             onSuccess={confirmedDelegateFunction}
-            close={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+            close={() => {
+              setOpenModal(false);
+              setConfirmDelegationModal(false);
+            }}
           />
         </Modal>
       )}
-      <CreditSection>Powered by
-        <a href='https://adapools.org/' target='_blank' rel='noopener noreferrer'>
+      <CreditSection>
+        Powered by
+        <a href="https://adapools.org/" target="_blank" rel="noopener noreferrer">
           <img src={adapoolIcon} alt="adapool-logo" />
         </a>
       </CreditSection>
