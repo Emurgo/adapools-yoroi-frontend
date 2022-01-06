@@ -58,84 +58,90 @@ type Props = {|
   totalAda: ?number,
 |};
 
-function MobileTableRevamp({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
-  const isLoading = status === 'pending' || status === 'idle';
-  const isRejected = status === 'rejected';
-  const isResolved = status === 'resolved';
-
-  if (isResolved && data != null && data.length <= 0) {
-    return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
-  }
-
-  if(isLoading) {
+function MobileTableRevamp({
+  data,
+  delegateFunction,
+  status,
+  selectedIdPools,
+  totalAda,
+}: Props): React$Node {
+  const { isLoading, isError, isSuccess } = status;
+  if (isLoading) {
     return <Loader />;
   }
-
-  if(isRejected) {
-    return (
-      <h1>Oops! something wrong happened. Try again!</h1>
-    )
+  if (isError) {
+    return <h1>Oops! something wrong happened. Try again!</h1>;
+  }
+  if (isSuccess && data != null && data.length <= 0) {
+    return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
   }
 
   return (
     <>
-      {data &&
-        data.filter(x => x != null).map(pool => (
-          <CardMobile key={pool.id}>
-            <StakingPoolCardRevamp
-              id={pool.id}
-              avatar={pool.pool_pic}
-              tickerName={pool.db_ticker}
-              name={pool.db_name}
-              links={pool.handles}
-              fullname={pool.fullname}
-            />
+      {isSuccess &&
+        data &&
+        data.length &&
+        data
+          .filter((x) => x != null)
+          .map((pool) => (
+            <CardMobile key={pool.id}>
+              <StakingPoolCardRevamp
+                id={pool.id}
+                avatar={pool.pool_pic}
+                tickerName={pool.db_ticker}
+                name={pool.db_name}
+                links={pool.handles}
+                fullname={pool.fullname}
+              />
 
-            <WrapperContent style={{ display: 'flex' }}>
-              <div className="item">
-                <div className="label">ROA 30d</div>
-                <CardRoaRevamp roa={pool.roa} />
-              </div>
-              <div className="item">
-                <div className="label">Pool Size (ADA)</div>
-                <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
-              </div>
-              <div className="item">
-                <div className="label">Share</div>
-                <PoolSizeTagRevamp value={pool.saturation} />
-              </div>
-            </WrapperContent>
-            <WrapperContent style={{ display: 'flex' }}>
-              <div className="item">
-                <div className="label">Costs</div>
-                <div className="cost-wrapper">
-                  <CostsCardRevamp
-                    value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
-                  />
+              <WrapperContent style={{ display: 'flex' }}>
+                <div className="item">
+                  <div className="label">ROA 30d</div>
+                  <CardRoaRevamp roa={pool.roa} />
                 </div>
+                <div className="item">
+                  <div className="label">Pool Size (ADA)</div>
+                  <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
+                </div>
+                <div className="item">
+                  <div className="label">Share</div>
+                  <PoolSizeTagRevamp value={pool.saturation} />
+                </div>
+              </WrapperContent>
+              <WrapperContent style={{ display: 'flex' }}>
+                <div className="item">
+                  <div className="label">Costs</div>
+                  <div className="cost-wrapper">
+                    <CostsCardRevamp
+                      value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
+                    />
+                  </div>
+                </div>
+                <div className="item">
+                  <div className="label">Pledge</div>
+                  <PledgeCardRevamp value={pool.pledge} real={pool.pledge_real} />
+                </div>
+              </WrapperContent>
+              <div>
+                <ButtonRevamp
+                  disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
+                  onClick={() =>
+                    delegateFunction(
+                      {
+                        stakepoolName: pool.db_name ?? '',
+                        stakepoolTotalStake: pool.total_stake,
+                        isAlreadySaturated: pool.saturation >= 1,
+                        id: pool.id,
+                      },
+                      totalAda,
+                    )
+                  }
+                >
+                  Delegate
+                </ButtonRevamp>
               </div>
-              <div className="item">
-                <div className="label">Pledge</div>
-                <PledgeCardRevamp value={pool.pledge} real={pool.pledge_real} />
-              </div>
-            </WrapperContent>
-            <div>
-              <ButtonRevamp
-                disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
-                onClick={() => (
-                  delegateFunction({
-                    stakepoolName: pool.db_name ?? '',
-                    stakepoolTotalStake: pool.total_stake,
-                    isAlreadySaturated: pool.saturation >= 1,
-                    id: pool.id },
-                  totalAda)
-                )}
-              >
-                Delegate
-              </ButtonRevamp>
-            </div>
-          </CardMobile>
-        ))}
+            </CardMobile>
+          ))}
     </>
   );
 }

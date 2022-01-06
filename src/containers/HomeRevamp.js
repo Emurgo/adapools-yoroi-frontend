@@ -1,17 +1,15 @@
 // @flow
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
 import Alert from '../components/common/Alert';
-import { SendFirstAdapool, YoroiCallback } from '../API/yoroi';
+import { YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/common/Breakpoints';
-import { listBiasedPools } from '../API/api';
 import type { Pool, SearchParams } from '../API/api';
 import SortSelect from '../components/SortSelect/SortSelectClassic';
-import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert/SaturatedPoolAlert';
@@ -20,6 +18,7 @@ import DesktopTableRevamp from '../components/DesktopTable/DesktopTableRevamp';
 import SearchRevamp from '../components/Search/SearchRevamp';
 import MobileTableRevamp from '../components/MobileTable/MobileTableRevamp';
 import { SATURATION_LIMIT } from '../utils/constants';
+import { useListBiasedPoolsRevamp } from '../hooks/query/useListBiasedPools';
 
 const Header = styled.div`
   display: flex;
@@ -88,8 +87,6 @@ export type DelegationProps = {|
 |};
 
 function Home(props: HomeProps): Node {
-  const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
-  const [status, setStatus] = React.useState<QueryState>('idle');
   const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
     search: '',
     sort: 'score',
@@ -100,21 +97,7 @@ function Home(props: HomeProps): Node {
 
   const { urlParams } = props;
   const seed = urlParams?.bias ?? 'bias';
-
-  useEffect(() => {
-    setStatus('pending');
-    listBiasedPools(seed, {})
-      .then((pools: Pool[]) => {
-        setStatus('resolved');
-        setRowData(pools);
-        // used to show the first pool in revamp banner
-        SendFirstAdapool(pools[0]);
-      })
-      .catch((err) => {
-        setStatus('rejected');
-        console.error(err);
-      });
-  }, []);
+  const { isLoading, isSuccess, isError, poolList } = useListBiasedPoolsRevamp(seed, filterOptions);
 
   const filterSelect = (value) => {
     const newSearch = {
@@ -122,16 +105,6 @@ function Home(props: HomeProps): Node {
       sort: value,
     };
     setFilterOptions(newSearch);
-    setStatus('pending');
-    listBiasedPools(seed, newSearch)
-      .then((pools: Pool[]) => {
-        setStatus('resolved');
-        setRowData(pools);
-      })
-      .catch((err) => {
-        setStatus('rejected');
-        console.error(err);
-      });
   };
   const filterSearch = (value) => {
     const newSearch = {
@@ -139,16 +112,6 @@ function Home(props: HomeProps): Node {
       search: value,
     };
     setFilterOptions(newSearch);
-    setStatus('pending');
-    listBiasedPools(seed, newSearch)
-      .then((pools: Pool[]) => {
-        setStatus('resolved');
-        setRowData(pools);
-      })
-      .catch((err) => {
-        setStatus('rejected');
-        console.error(err);
-      });
   };
 
   const confirmedDelegateFunction = (id: string): void => {
@@ -195,12 +158,12 @@ function Home(props: HomeProps): Node {
     urlParams: { selectedPoolIds, totalAda },
   } = props;
 
-  const filteredPools = filterPools(rowData, totalAda);
+  const filteredPools = filterPools(poolList, totalAda);
 
   return (
     <Layout>
       <HeaderRow>
-        <Title>Stake Pools ({status === 'resolved' ? filteredPools?.length : '...'})</Title>
+        <Title>Stake Pools ({isSuccess ? filteredPools?.length : '...'})</Title>
         <Alert title={alertText} />
         <Header>
           <SearchRevamp filter={filterSearch} />
@@ -209,7 +172,7 @@ function Home(props: HomeProps): Node {
       </HeaderRow>
       <DesktopOnly>
         <DesktopTableRevamp
-          status={status}
+          status={{ isLoading, isSuccess, isError }}
           delegateFunction={delegateFunction}
           data={filteredPools}
           selectedIdPools={selectedPoolIds}
@@ -218,7 +181,7 @@ function Home(props: HomeProps): Node {
       </DesktopOnly>
       <MobileOnly>
         <MobileTableRevamp
-          status={status}
+          status={{ isLoading, isSuccess, isError }}
           delegateFunction={delegateFunction}
           data={filteredPools}
           selectedIdPools={selectedPoolIds}
