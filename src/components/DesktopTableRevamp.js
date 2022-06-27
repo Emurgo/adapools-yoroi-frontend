@@ -90,9 +90,6 @@ const Table = styled.table`
   }
   .col-5 {
     width: 90px;
-    @media (min-width: 1125px) and (max-width: 1200px) {
-      width: 60px;
-    }
   }
   .col-6 {
     width: 90px;
@@ -189,56 +186,60 @@ function DesktopTableRevamp({
         </thead>
         <tbody>
           {data != null &&
-            data.filter(x => x != null).map((pool) => (
-              <tr role="row" key={pool.id}>
-                <td>
-                  <StakingPoolCardRevamp
-                    id={pool.id}
-                    avatar={pool.pool_pic}
-                    tickerName={pool.db_ticker}
-                    name={pool.db_name}
-                    links={pool.handles}
-                    fullname={pool.fullname}
-                  />
-                </td>
-                <td>
-                  <CardRoaRevamp roa={pool.roa} />
-                </td>
-                <td>
-                  <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
-                </td>
-                <td>
-                  <PoolSizeTagRevamp value={pool.saturation} />
-                </td>
-                <td>
-                  <CostsCardRevamp value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)} />
-                </td>
-                <td>
-                  <PledgeCardRevamp value={pool.pledge} real={pool.pledge_real} />
-                </td>
-                <td>
-                  <ValueRevamp>{pool.blocks_epoch}</ValueRevamp>
-                </td>
-                <td>
-                  <ButtonRevamp
-                    disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
-                    onClick={() =>
-                      delegateFunction(
-                        {
-                          stakepoolName: pool.db_name ?? '',
-                          stakepoolTotalStake: pool.total_stake,
-                          isAlreadySaturated: pool.saturation >= 1,
-                          id: pool.id,
-                        },
-                        totalAda,
-                      )
-                    }
-                  >
-                    Delegate
-                  </ButtonRevamp>
-                </td>
-              </tr>
-            ))}
+            data
+              .filter((x) => x != null)
+              .map((pool) => (
+                <tr role="row" key={pool.id}>
+                  <td>
+                    <StakingPoolCardRevamp
+                      id={pool.id}
+                      avatar={pool.pool_pic}
+                      tickerName={pool.db_ticker}
+                      name={pool.db_name}
+                      links={pool.handles}
+                      fullname={pool.fullname}
+                    />
+                  </td>
+                  <td>
+                    <CardRoaRevamp roa={pool.roa} />
+                  </td>
+                  <td>
+                    <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
+                  </td>
+                  <td>
+                    <PoolSizeTagRevamp value={pool.saturation} />
+                  </td>
+                  <td>
+                    <CostsCardRevamp
+                      value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
+                    />
+                  </td>
+                  <td>
+                    <PledgeCardRevamp value={pool.pledge} real={pool.pledge_real} />
+                  </td>
+                  <td>
+                    <ValueRevamp>{pool.blocks_epoch}</ValueRevamp>
+                  </td>
+                  <td>
+                    <ButtonRevamp
+                      disabled={selectedIdPools != null && selectedIdPools.indexOf(pool.id) > -1}
+                      onClick={() =>
+                        delegateFunction(
+                          {
+                            stakepoolName: pool.db_name ?? '',
+                            stakepoolTotalStake: pool.total_stake,
+                            isAlreadySaturated: pool.saturation >= 1,
+                            id: pool.id,
+                          },
+                          totalAda,
+                        )
+                      }
+                    >
+                      Delegate
+                    </ButtonRevamp>
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </Table>
     </TableContent>
