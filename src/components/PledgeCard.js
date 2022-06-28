@@ -57,7 +57,7 @@ const CardRevamp = styled.div`
   font-size: 16px;
   line-height: 22px;
   color: #242838;
-  padding: 2px 8px;
+  padding: 2px 0;
   text-align: left;
   @media (max-width: 1125px) {
     justify-content: center;
