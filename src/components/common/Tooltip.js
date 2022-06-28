@@ -12,10 +12,10 @@ const WrapperToolTip = styled.div`
   .label {
     padding-left: 3px;
   }
-  @media (min-width:1125px) and (max-width: 1200px) {
+  @media (min-width: 1125px) and (max-width: 1200px) {
     justify-content: center;
   }
-`
+`;
 const ToolTip = styled.span`
   position: relative;
   cursor: pointer;
@@ -35,17 +35,17 @@ const ToolTip = styled.span`
     background: #000;
     display: none;
     text-align: center;
-    opacity:0;
-    transition:10s opacity;
+    opacity: 0;
+    transition: 10s opacity;
   }
-  img{
+  img {
     max-width: 100%;
     width: 18px;
     height: 18px;
   }
   &:hover:before {
     display: block;
-    opacity:1;
+    opacity: 1;
     color: white;
   }
 `;
@@ -58,9 +58,7 @@ type Props = {|
 function Tooltip({ label, textInfo }: Props): Node {
   return (
     <WrapperToolTip>
-      <ToolTip data-text={textInfo}>
-        {textInfo != null && <img src={infoIcon} alt="" />}
-      </ToolTip>
+      <ToolTip data-text={textInfo}>{textInfo != null && <img src={infoIcon} alt="" />}</ToolTip>
       <span className="label">{label}</span>
     </WrapperToolTip>
   );
@@ -71,13 +69,11 @@ const WrapperToolTipRevamp = styled.div`
   align-items: baseline;
   flex-direction: column;
   justify-content: flex-end;
-  .label {
-    padding-left: 3px;
-  }
-  @media (min-width:1125px) and (max-width: 1200px) {
+
+  @media (min-width: 1125px) and (max-width: 1200px) {
     justify-content: center;
   }
-`
+`;
 
 function TooltipRevamp({ label, textInfo }: Props): Node {
   return (
@@ -90,4 +86,4 @@ function TooltipRevamp({ label, textInfo }: Props): Node {
 }
 
 export default Tooltip;
-export { TooltipRevamp }
+export { TooltipRevamp };

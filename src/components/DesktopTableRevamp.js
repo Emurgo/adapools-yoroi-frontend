@@ -39,12 +39,7 @@ const Table = styled.table`
       border-bottom: 2px solid #f0f4f5;
     }
     th {
-      &:first-child {
-        text-align: left;
-      }
-      &:not(:first-child) {
-        text-align: right;
-      }
+      text-align: left;
       color: #6b7384;
       font-size: 14px;
       letter-spacing: 0;
@@ -78,15 +73,9 @@ const Table = styled.table`
   }
   .col-3 {
     width: 100px;
-    @media (min-width: 1125px) and (max-width: 1200px) {
-      width: 100px;
-    }
   }
   .col-4 {
-    width: 110px;
-    @media (min-width: 1125px) and (max-width: 1200px) {
-      width: 110px;
-    }
+    width: 120px;
   }
   .col-5 {
     width: 90px;

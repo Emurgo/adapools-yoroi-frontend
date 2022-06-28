@@ -88,7 +88,7 @@ function PoolSizeTag({ value }: Props): Node {
 }
 
 const TagRevamp = styled.div`
-  padding: 2px 8px;
+  padding: 2px 0;
   background: ${(props) => props.background};
   border-radius: 8px;
   color: #2b2c32;

@@ -33,13 +33,10 @@ function CardRoa({ roa, description }: Props): Node {
 
 const RoaElementRevamp = styled.div`
   height: 26px;
-  text-align: center;
   padding: 3px 0;
   color: #242838;
   font-size: 16px;
-  @media (max-width: 1125px) {
-    text-align: left;
-  }
+  text-align: left;
 `;
 
 function CardRoaRevamp({ roa, description }: Props): Node {

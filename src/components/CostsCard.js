@@ -12,7 +12,7 @@ const Card = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
-  @media (min-width:1125px) and (max-width: 1200px) {
+  @media (min-width: 1125px) and (max-width: 1200px) {
     flex-direction: column-reverse;
     align-items: center;
   }
@@ -44,4 +44,4 @@ function CostsCardRevamp({ value }: Props): Node {
 }
 
 export default CostsCard;
-export { CostsCardRevamp }
+export { CostsCardRevamp };
