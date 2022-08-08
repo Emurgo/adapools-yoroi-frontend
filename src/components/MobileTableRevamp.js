@@ -96,7 +96,7 @@ function MobileTableRevamp({ data, delegateFunction, status, selectedIdPools, to
                 <CardRoaRevamp roa={pool.roa} />
               </div>
               <div className="item">
-                <div className="label">Pool Size (ADA)</div>
+                <div className="label">Pool size</div>
                 <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
               </div>
               <div className="item">
