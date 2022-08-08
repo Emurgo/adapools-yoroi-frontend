@@ -135,7 +135,7 @@ function DesktopTableRevamp({
     },
     {
       id: 2,
-      label: 'Pool Size (ADA)',
+      label: 'Pool size',
       textInfo: 'Entire Supply',
     },
     {
