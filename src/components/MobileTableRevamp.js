@@ -83,6 +83,7 @@ function MobileTableRevamp({ data, delegateFunction, status, selectedIdPools, to
           <CardMobile key={pool.id}>
             <StakingPoolCardRevamp
               id={pool.id}
+              bech={pool.id_bech}
               avatar={pool.pool_pic}
               tickerName={pool.db_ticker}
               name={pool.db_name}

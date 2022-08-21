@@ -165,7 +165,6 @@ function DesktopTable({ data, delegateFunction, status, selectedIdPools, totalAd
       textInfo: 'Minted blocks in actual epoch + block trend; Background = today estimated performance'
     },
   ]
-  console.log('>>>> ', data);
   return (
     <TableContent>
       <Table>

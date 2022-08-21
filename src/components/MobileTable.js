@@ -79,6 +79,7 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
           <CardMobile key={pool.id}>
             <StakingPoolCard
               id={pool.id}
+              bech={pool.id_bech}
               avatar={pool.pool_pic}
               tickerName={pool.db_ticker}
               name={pool.db_name}
