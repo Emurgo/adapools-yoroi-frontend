@@ -1,6 +1,6 @@
 # AdaPools Yoroi Frontend
 
-This project wraps [AdaPools](https://adapools.org/) in a UI for usage in Yoroi.
+This project wraps [Cexplorer](https://cexplorer.io/) in a UI for usage in Yoroi.
 
 ## Available Scripts
 

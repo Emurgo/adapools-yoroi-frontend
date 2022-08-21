@@ -86,7 +86,7 @@ function StakingPoolCard({ id, bech, avatar, tickerName, name, links, fullname }
   const github = links && links.gh;
   const websiteUrl = fullname == null
     ? undefined
-    : fullname.match(/(https?:\/\/[^\s]+"?utm_source=adapools.org)/g);
+    : fullname.match(/(https?:\/\/[^\s]+"?utm_source=cexplorer.io)/g);
 
   return (
     <MainCardPool>

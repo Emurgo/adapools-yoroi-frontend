@@ -94,7 +94,7 @@ function StakingPoolCardRevamp({ id, bech, avatar, tickerName, name, links, full
   const discord = links && links.di;
   const github = links && links.gh;
   const websiteUrl =
-    fullname == null ? undefined : fullname.match(/(https?:\/\/[^\s]+"?utm_source=adapools.org)/g);
+    fullname == null ? undefined : fullname.match(/(https?:\/\/[^\s]+"?utm_source=cexplorer.io)/g);
 
   return (
     <MainCardPool>
