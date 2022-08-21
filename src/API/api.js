@@ -116,7 +116,10 @@ export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
   }
 
   return axios(`${backendUrl}`, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Access-Control-Allow-Origin': '*',
+    },
     method: 'post',
     data: encodeForm(requestBody),
   })

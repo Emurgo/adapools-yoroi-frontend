@@ -64,6 +64,7 @@ type Props = {|
   avatar: ?string,
   fullname: ?string,
   id: string,
+  bech: string,
   tickerName: ?string,
   name: ?string,
   links: {|
@@ -84,7 +85,7 @@ function truncateString(string: string, maxLength: number): string {
   }
   return `${string.substring(0, maxLength)}...`;
 }
-function StakingPoolCardRevamp({ id, avatar, tickerName, name, links, fullname }: Props): Node {
+function StakingPoolCardRevamp({ id, bech, avatar, tickerName, name, links, fullname }: Props): Node {
   const twitter = links && links.tw;
   const telegram = links && links.tg;
   const facebook = links && links.fb;
@@ -102,7 +103,7 @@ function StakingPoolCardRevamp({ id, avatar, tickerName, name, links, fullname }
       </div>
       <div className="card-info">
         <a
-          href={`https://adapools.org/pool/${id}`}
+          href={`https://cexplorer.io/pool/${bech}`}
           className="name"
           target="_blank"
           rel="noreferrer noopener"

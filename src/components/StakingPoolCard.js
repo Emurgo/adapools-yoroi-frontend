@@ -54,6 +54,7 @@ type Props = {|
   avatar: ?string,
   fullname: ?string,
   id: string,
+  bech: string,
   tickerName: ?string,
   name: ?string,
   links: {|
@@ -68,7 +69,7 @@ type Props = {|
   |},
 |};
 
-function StakingPoolCard({ id, avatar, tickerName, name, links, fullname }: Props): Node {
+function StakingPoolCard({ id, bech, avatar, tickerName, name, links, fullname }: Props): Node {
   function truncateString(string: string): string {
     if (string.length <= 8) {
       return string;
@@ -94,7 +95,7 @@ function StakingPoolCard({ id, avatar, tickerName, name, links, fullname }: Prop
       </div>
       <div className="card-info">
         <a
-          href={`https://adapools.org/pool/${id}`}
+          href={`https://cexplorer.io/pool/${bech}`}
           className="name"
           target="_blank"
           rel="noreferrer noopener"
