@@ -43,6 +43,7 @@ export type SocialMediaHandles = {|
 
 export type Pool = {|
   +id: string, // hash
+  +id_bech: string, // hash
   +db_ticker: ?string, // may not have a ticker
   +db_name: ?string, // may not have a name
   +pool_pic: ?string, // may not have a pic
