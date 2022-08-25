@@ -15,7 +15,8 @@ import type { QueryState } from '../utils/types';
 
 import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
-import adapoolIcon from '../assets/adapool-logo-extend.svg';
+import cexplorerIconMini from '../assets/cexplorer-logo-mini.svg';
+import cexplorerIcon from '../assets/cexplorer-logo-extend.svg';
 import DesktopTableRevamp from '../components/DesktopTableRevamp';
 import SearchRevamp from '../components/SearchRevamp';
 import MobileTableRevamp from '../components/MobileTableRevamp';
@@ -73,12 +74,20 @@ const CreditSection = styled.div`
   margin: 24px 0 0;
   color: #676970;
   font-size: 14px;
-  img {
-    background: #012b51;
+  #logo-mini {
+    background: #ffffff;
     margin-left: 10px;
-    padding: 2px 6px;
+    margin-bottom: 6px;
+    padding: 0px 6px;
     border-radius: 4px;
-    height: 27px;
+    height: 20px;
+  }
+  #logo {
+    background: #ffffff;
+    margin-left: -2px;
+    margin-top: 6px;
+    border-radius: 4px;
+    height: 32px;
   }
 `;
 export type UrlParams = {|
@@ -265,8 +274,9 @@ function Home(props: HomeProps): Node {
       )}
       <CreditSection>
         Powered by
-        <a href="https://adapools.org/" target="_blank" rel="noopener noreferrer">
-          <img src={adapoolIcon} alt="adapool-logo" />
+        <a href="https://cexplorer.io/" target="_blank" rel="noopener noreferrer">
+          <img src={cexplorerIconMini} id="logo-mini" alt="cexplorer-logo" />
+          <img src={cexplorerIcon} id="logo" alt="cexplorer-logo" />
         </a>
       </CreditSection>
     </Layout>

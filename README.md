@@ -1,6 +1,6 @@
-# AdaPools Yoroi Frontend
+# Cexplorer Yoroi Frontend
 
-This project wraps [AdaPools](https://adapools.org/) in a UI for usage in Yoroi.
+This project wraps [Cexplorer](https://cexplorer.io/) in a UI for usage in Yoroi.
 
 ## Available Scripts
 
@@ -28,11 +28,11 @@ Array<{|
 |}>
 ```
 
-## Why not embed AdaPools directly instead of a wrapper
+## Why not embed Cexplorer directly instead of a wrapper
 
 - Allows us to match the look-and-feel of Yoroi
-- Allows us to make any code change without waiting on AdaPools developers
-- Reduces the amount of user information shared with AdaPools
+- Allows us to make any code change without waiting on Cexplorer developers
+- Reduces the amount of user information shared with Cexplorer
 
 ## How do we keep this secure?
 
