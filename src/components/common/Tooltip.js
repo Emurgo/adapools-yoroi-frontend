@@ -21,7 +21,7 @@ const ToolTip = styled.span`
   position: relative;
   cursor: pointer;
   flex-shrink: 0;
-  padding-top: 5px;
+  margin-bottom: 3px;
   &:before {
     content: attr(data-text);
     position: absolute;
@@ -52,7 +52,7 @@ const ToolTip = styled.span`
 `;
 
 type Props = {|
-  label: string,
+  label?: string,
   textInfo: ?string,
 |};
 
@@ -71,6 +71,10 @@ const WrapperToolTipRevamp = styled.div`
   flex-direction: column;
   justify-content: flex-end;
 
+  .label {
+    padding-left: 1px;
+  }
+
   @media (min-width: 1125px) and (max-width: 1200px) {
     justify-content: center;
   }
@@ -80,8 +84,8 @@ function TooltipRevamp({ label, textInfo }: Props): Node {
   return (
     <WrapperToolTipRevamp>
       <ToolTip data-text={textInfo} style={{ display: 'flex', gap: '2px' }}>
-        {textInfo != null && <span className="label">{label}</span>}
         {textInfo && <img src={questionMarkIcon} alt="" />}
+        {textInfo && label && <span className="label">{label}</span>}
       </ToolTip>
     </WrapperToolTipRevamp>
   );

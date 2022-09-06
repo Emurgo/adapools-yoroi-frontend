@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout/Layout';
@@ -8,7 +8,7 @@ import Alert from '../components/Alert';
 import { SendFirstAdapool, YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
-import { listBiasedPools } from '../API/api';
+import { listBiasedPools, Sorting, SortingDirections } from '../API/api';
 import type { Pool, SearchParams } from '../API/api';
 import SortSelect from '../components/SortSelect';
 import type { QueryState } from '../utils/types';
@@ -20,6 +20,7 @@ import cexplorerIcon from '../assets/cexplorer-logo-extend.svg';
 import DesktopTableRevamp from '../components/DesktopTableRevamp';
 import SearchRevamp from '../components/SearchRevamp';
 import MobileTableRevamp from '../components/MobileTableRevamp';
+import { formatCostLabel } from '../utils/utils';
 
 // k = 500
 const SATURATION_LIMIT = 63600000000000;
@@ -27,7 +28,7 @@ const SATURATION_LIMIT = 63600000000000;
 const Header = styled.div`
   display: flex;
   align-items: flex-end;
-  margin-bottom: 36px;
+  margin-bottom: 16px;
   @media (max-width: 1125px) {
     flex-direction: column;
     align-items: center;
@@ -112,12 +113,40 @@ export type DelegationProps = {|
   id: string,
 |};
 
+// Ref for sorting strings: https://stackoverflow.com/a/51169/7714589
+const SORTING_FUNCTIONS = {
+  [`${Sorting.TICKER}_ASC`]: (a: Pool, b: Pool) => a.db_ticker?.localeCompare(String(b.db_ticker)),
+  [`${Sorting.TICKER}_DESC`]: (a: Pool, b: Pool) => b.db_ticker?.localeCompare(String(a.db_ticker)),
+  [`${Sorting.ROA}_ASC`]: (a: Pool, b: Pool) => a.roa - b.roa,
+  [`${Sorting.ROA}_DESC`]: (a: Pool, b: Pool) => b.roa - a.roa,
+  [`${Sorting.POOL_SIZE}_ASC`]: (a: Pool, b: Pool) => a.total_size - b.total_size,
+  [`${Sorting.POOL_SIZE}_DESC`]: (a: Pool, b: Pool) => b.total_size - a.total_size,
+  [`${Sorting.SHARE}_ASC`]: (a: Pool, b: Pool) => a.saturation - b.saturation,
+  [`${Sorting.SHARE}_DESC`]: (a: Pool, b: Pool) => b.saturation - a.saturation,
+  [`${Sorting.PLEDGE}_ASC`]: (a: Pool, b: Pool) => a.pledge - b.pledge,
+  [`${Sorting.PLEDGE}_DESC`]: (a: Pool, b: Pool) => b.pledge - a.pledge,
+  [`${Sorting.BLOCKS}_ASC`]: (a: Pool, b: Pool) => a.blocks_epoch - b.blocks_epoch,
+  [`${Sorting.BLOCKS}_DESC`]: (a: Pool, b: Pool) => b.blocks_epoch - a.blocks_epoch,
+  [`${Sorting.COSTS}_ASC`]: (a: Pool, b: Pool) =>
+    formatCostLabel(Number(a.tax_ratio), a.tax_fix).localeCompare(
+      formatCostLabel(Number(b.tax_ratio), b.tax_fix),
+    ),
+  [`${Sorting.COSTS}_DESC`]: (a: Pool, b: Pool) =>
+    formatCostLabel(Number(b.tax_ratio), b.tax_fix).localeCompare(
+      formatCostLabel(Number(a.tax_ratio), a.tax_fix),
+    ),
+};
+
+const defaultActiveSort = { sort: Sorting.TICKER, sortDirection: '' };
+
 function Home(props: HomeProps): Node {
   const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
+  const [rowDataSorted, setRowDataSorted] = React.useState<?Array<Pool>>(null);
   const [status, setStatus] = React.useState<QueryState>('idle');
   const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
     search: '',
-    sort: 'score',
+    sort: Sorting.SCORE,
+    sortDirection: SortingDirections.ASC,
   });
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);
@@ -125,6 +154,7 @@ function Home(props: HomeProps): Node {
 
   const { urlParams } = props;
   const seed = urlParams?.bias ?? 'bias';
+  const [activeSort, setActiveSort] = useState(defaultActiveSort);
 
   useEffect(() => {
     setStatus('pending');
@@ -133,7 +163,7 @@ function Home(props: HomeProps): Node {
         setStatus('resolved');
         setRowData(pools);
         // used to show the first pool in revamp banner
-        SendFirstAdapool(pools[0])
+        SendFirstAdapool(pools[0]);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -141,23 +171,6 @@ function Home(props: HomeProps): Node {
       });
   }, []);
 
-  const filterSelect = (value) => {
-    const newSearch = {
-      ...filterOptions,
-      sort: value,
-    };
-    setFilterOptions(newSearch);
-    setStatus('pending');
-    listBiasedPools(seed, newSearch)
-      .then((pools: Pool[]) => {
-        setStatus('resolved');
-        setRowData(pools);
-      })
-      .catch((err) => {
-        setStatus('rejected');
-        console.error(err);
-      });
-  };
   const filterSearch = (value) => {
     const newSearch = {
       ...filterOptions,
@@ -169,6 +182,8 @@ function Home(props: HomeProps): Node {
       .then((pools: Pool[]) => {
         setStatus('resolved');
         setRowData(pools);
+        setRowDataSorted(pools);
+        setActiveSort(defaultActiveSort);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -212,15 +227,57 @@ function Home(props: HomeProps): Node {
     if (lovelaceDelegation > SATURATION_LIMIT) return pools;
 
     return pools.filter((item) => {
-      return item != null && (Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT);
+      return item != null && Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT;
     });
   }
+
+  const sortData = (sorting: Object) => {
+    const defaultRowData = [].concat(rowData);
+    if (sorting.sortDirection) {
+      const SORTING_KEY = `${sorting.sort}_${sorting.sortDirection}`;
+      const sortingFunc = SORTING_FUNCTIONS[SORTING_KEY];
+      const sortedRowData = sortingFunc
+        ? (rowDataSorted || defaultRowData)?.sort(sortingFunc)
+        : defaultRowData;
+
+      setRowDataSorted(sortedRowData);
+      return;
+    }
+
+    setRowDataSorted(defaultRowData);
+  };
+
+  const handleSort = (key: string) => {
+    let newActiveSort = { sort: key, sortDirection: 'ASC' };
+
+    if (key !== activeSort.sort) {
+      setActiveSort(newActiveSort);
+    } else {
+      let sortDirection = 'ASC';
+      if (activeSort.sortDirection && activeSort.sortDirection === 'ASC') {
+        sortDirection = 'DESC';
+      } else if (activeSort.sortDirection && activeSort.sortDirection === 'DESC') {
+        sortDirection = '';
+      }
+      newActiveSort = { sort: key, sortDirection };
+      setActiveSort(newActiveSort);
+    }
+
+    sortData(newActiveSort);
+  };
+
+  // the filtering happens on search and
+  // we sort based on the actual results
+  const filterSelect = (value) => {
+    setActiveSort({ sort: value, sortDirection: 'ASC' });
+    sortData({ sort: value, sortDirection: 'ASC' });
+  };
 
   const {
     urlParams: { selectedPoolIds, totalAda },
   } = props;
 
-  const filteredPools = filterPools(rowData, totalAda);
+  const filteredPools = filterPools(rowDataSorted || rowData, totalAda);
 
   return (
     <Layout>
@@ -229,7 +286,9 @@ function Home(props: HomeProps): Node {
         <Alert title={alertText} />
         <Header>
           <SearchRevamp filter={filterSearch} />
-          <SortSelect filter={filterSelect} />
+          <MobileOnly>
+            <SortSelect filter={filterSelect} />
+          </MobileOnly>
           {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
           {/*  Colors meaning */}
           {/* </ColorButton> */}
@@ -242,6 +301,8 @@ function Home(props: HomeProps): Node {
           data={filteredPools}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
+          handleSort={handleSort}
+          activeSort={activeSort}
         />
       </DesktopOnly>
       <MobileOnly>
