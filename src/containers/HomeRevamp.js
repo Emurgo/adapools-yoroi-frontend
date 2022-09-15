@@ -240,14 +240,12 @@ function Home(props: HomeProps): Node {
   }
 
   const sortData = (sorting: Object) => {
-    const defaultRowData = [].concat(rowData);
+    const defaultRowData = [].concat(rowData ?? []);
     if (sorting.sortDirection) {
       const SORTING_KEY = `${sorting.sort}_${sorting.sortDirection}`;
       const sortingFunc = SORTING_FUNCTIONS[SORTING_KEY];
-      const newSortedRowData = sortingFunc
-        ? (rowDataSorted || defaultRowData)?.sort(sortingFunc)
-        : defaultRowData;
-
+      const newRowDataSorted = [].concat(rowDataSorted != null ? rowDataSorted : rowData ?? []);
+      const newSortedRowData = sortingFunc ? newRowDataSorted?.sort(sortingFunc) : defaultRowData;
       setRowDataSorted(newSortedRowData);
       return;
     }

@@ -43,9 +43,15 @@ const SelectInput = styled.select`
 
 type Props = {|
   filter: Function,
+  isRevamp?: Boolean,
 |};
 
 export const sortingSelectData = [
+  { label: 'Score', value: Sorting.SCORE }, // default option on load
+  { label: 'Ticker and name', value: Sorting.TICKER },
+];
+
+export const sortingSelectDataRevamp = [
   { label: 'Score', value: Sorting.SCORE }, // default option on load
   { label: 'Ticker and name', value: Sorting.TICKER },
   { label: 'ROA', value: Sorting.ROA },
@@ -56,7 +62,7 @@ export const sortingSelectData = [
   { label: 'Blocks', value: Sorting.BLOCKS },
 ];
 
-function SortSelect({ filter }: Props): React$Node {
+function SortSelect({ filter, isRevamp = true }: Props): React$Node {
   const [selectValue, setSelectValue] = React.useState<SortingEnum>('score');
 
   const handleChange = (e) => {
@@ -68,7 +74,7 @@ function SortSelect({ filter }: Props): React$Node {
     <WrapperSelectInput>
       <label htmlFor="sort">Sort by:</label>
       <SelectInput name="" id="sort" value={selectValue} onChange={handleChange}>
-        {sortingSelectData.map(({ value, label }) => (
+        {(isRevamp ? sortingSelectDataRevamp : sortingSelectData).map(({ value, label }) => (
           <option key={value} value={value}>
             {label}
           </option>

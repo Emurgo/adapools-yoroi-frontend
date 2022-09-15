@@ -48,8 +48,10 @@ const Table = styled.table`
       letter-spacing: 0;
       font-weight: 400;
       padding: 12px 20px 16px 0;
-      &:first-child > div:first-child {
-        align-items: baseline;
+      &:first-child {
+        & > div:first-child {
+          padding-top: 18px;
+        }
       }
     }
   }

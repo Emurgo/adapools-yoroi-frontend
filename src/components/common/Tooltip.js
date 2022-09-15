@@ -9,12 +9,12 @@ import questionMarkIcon from '../../assets/question-mark.svg';
 const WrapperToolTip = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: right;
   .label {
     padding-left: 3px;
   }
   @media (min-width: 1125px) and (max-width: 1200px) {
-    justify-content: center;
+    justify-content: right;
   }
 `;
 const ToolTip = styled.span`
@@ -43,6 +43,7 @@ const ToolTip = styled.span`
     max-width: 100%;
     width: 18px;
     height: 18px;
+    vertical-align: middle;
   }
   &:hover:before {
     display: block;
