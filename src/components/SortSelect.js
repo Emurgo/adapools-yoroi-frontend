@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import { Sorting, SortingEnum } from '../API/api';
+import { Sorting } from '../API/api';
+import type { SortingEnum } from '../API/api';
 import arrowDownIcon from '../assets/arrow-select-down.svg';
 
 const WrapperSelectInput = styled.div`
@@ -43,7 +44,7 @@ const SelectInput = styled.select`
 
 type Props = {|
   filter: Function,
-  isRevamp?: Boolean,
+  isRevamp?: boolean,
 |};
 
 export const sortingSelectData = [

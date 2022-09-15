@@ -1,15 +1,16 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
-import { Pool, Sorting } from '../API/api';
+import type { Pool } from '../API/api';
+import type { QueryState } from '../utils/types';
+import type { DelegationProps } from '../containers/Home';
+import { Sorting } from '../API/api';
 import { CostsCardRevamp } from './CostsCard';
 import { PledgeCardRevamp } from './PledgeCard';
 import { CardRoaRevamp } from './CardRoa';
 import { formatBigNumber, formatCostLabel } from '../utils/utils';
 import { ButtonRevamp } from './common/Button';
 import { TooltipRevamp } from './common/Tooltip';
-import type { QueryState } from '../utils/types';
-import type { DelegationProps } from '../containers/Home';
 import StakingPoolCardRevamp from './StakingPoolCardRevamp';
 import { PoolSizeTagRevamp } from './PoolSizeTag';
 import Label from './common/Label';
