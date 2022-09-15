@@ -115,23 +115,31 @@ export type DelegationProps = {|
 
 // Ref for sorting strings: https://stackoverflow.com/a/51169/7714589
 const SORTING_FUNCTIONS = {
-  [`${Sorting.TICKER}_ASC`]: (a: Pool, b: Pool) => a.db_ticker?.localeCompare(String(b.db_ticker)),
-  [`${Sorting.TICKER}_DESC`]: (a: Pool, b: Pool) => b.db_ticker?.localeCompare(String(a.db_ticker)),
-  [`${Sorting.ROA}_ASC`]: (a: Pool, b: Pool) => a.roa - b.roa,
-  [`${Sorting.ROA}_DESC`]: (a: Pool, b: Pool) => b.roa - a.roa,
-  [`${Sorting.POOL_SIZE}_ASC`]: (a: Pool, b: Pool) => a.total_size - b.total_size,
-  [`${Sorting.POOL_SIZE}_DESC`]: (a: Pool, b: Pool) => b.total_size - a.total_size,
-  [`${Sorting.SHARE}_ASC`]: (a: Pool, b: Pool) => a.saturation - b.saturation,
-  [`${Sorting.SHARE}_DESC`]: (a: Pool, b: Pool) => b.saturation - a.saturation,
-  [`${Sorting.PLEDGE}_ASC`]: (a: Pool, b: Pool) => a.pledge - b.pledge,
-  [`${Sorting.PLEDGE}_DESC`]: (a: Pool, b: Pool) => b.pledge - a.pledge,
-  [`${Sorting.BLOCKS}_ASC`]: (a: Pool, b: Pool) => a.blocks_epoch - b.blocks_epoch,
-  [`${Sorting.BLOCKS}_DESC`]: (a: Pool, b: Pool) => b.blocks_epoch - a.blocks_epoch,
-  [`${Sorting.COSTS}_ASC`]: (a: Pool, b: Pool) =>
+  [`${Sorting.TICKER}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
+    a.db_ticker?.localeCompare(String(b.db_ticker)),
+  [`${Sorting.TICKER}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
+    b.db_ticker?.localeCompare(String(a.db_ticker)),
+  [`${Sorting.ROA}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => Number(a.roa) - Number(b.roa),
+  [`${Sorting.ROA}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => Number(b.roa) - Number(a.roa),
+  [`${Sorting.POOL_SIZE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
+    a.total_size - b.total_size,
+  [`${Sorting.POOL_SIZE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
+    b.total_size - a.total_size,
+  [`${Sorting.SHARE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => a.saturation - b.saturation,
+  [`${Sorting.SHARE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => b.saturation - a.saturation,
+  [`${Sorting.PLEDGE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
+    Number(a.pledge) - Number(b.pledge),
+  [`${Sorting.PLEDGE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
+    Number(b.pledge) - Number(a.pledge),
+  [`${Sorting.BLOCKS}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
+    Number(a.blocks_epoch) - Number(b.blocks_epoch),
+  [`${Sorting.BLOCKS}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
+    Number(b.blocks_epoch) - Number(a.blocks_epoch),
+  [`${Sorting.COSTS}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
     formatCostLabel(Number(a.tax_ratio), a.tax_fix).localeCompare(
       formatCostLabel(Number(b.tax_ratio), b.tax_fix),
     ),
-  [`${Sorting.COSTS}_DESC`]: (a: Pool, b: Pool) =>
+  [`${Sorting.COSTS}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
     formatCostLabel(Number(b.tax_ratio), b.tax_fix).localeCompare(
       formatCostLabel(Number(a.tax_ratio), a.tax_fix),
     ),
@@ -236,11 +244,11 @@ function Home(props: HomeProps): Node {
     if (sorting.sortDirection) {
       const SORTING_KEY = `${sorting.sort}_${sorting.sortDirection}`;
       const sortingFunc = SORTING_FUNCTIONS[SORTING_KEY];
-      const sortedRowData = sortingFunc
+      const newSortedRowData = sortingFunc
         ? (rowDataSorted || defaultRowData)?.sort(sortingFunc)
         : defaultRowData;
 
-      setRowDataSorted(sortedRowData);
+      setRowDataSorted(newSortedRowData);
       return;
     }
 
@@ -248,15 +256,15 @@ function Home(props: HomeProps): Node {
   };
 
   const handleSort = (key: string) => {
-    let newActiveSort = { sort: key, sortDirection: 'ASC' };
+    let newActiveSort = { sort: key, sortDirection: SortingDirections.ASC };
 
     if (key !== activeSort.sort) {
       setActiveSort(newActiveSort);
     } else {
-      let sortDirection = 'ASC';
-      if (activeSort.sortDirection && activeSort.sortDirection === 'ASC') {
-        sortDirection = 'DESC';
-      } else if (activeSort.sortDirection && activeSort.sortDirection === 'DESC') {
+      let sortDirection = SortingDirections.ASC;
+      if (activeSort.sortDirection && activeSort.sortDirection === SortingDirections.ASC) {
+        sortDirection = SortingDirections.DESC;
+      } else if (activeSort.sortDirection && activeSort.sortDirection === SortingDirections.DESC) {
         sortDirection = '';
       }
       newActiveSort = { sort: key, sortDirection };
@@ -269,8 +277,8 @@ function Home(props: HomeProps): Node {
   // the filtering happens on search and
   // we sort based on the actual results
   const filterSelect = (value) => {
-    setActiveSort({ sort: value, sortDirection: 'ASC' });
-    sortData({ sort: value, sortDirection: 'ASC' });
+    setActiveSort({ sort: value, sortDirection: SortingDirections.ASC });
+    sortData({ sort: value, sortDirection: SortingDirections.ASC });
   };
 
   const {

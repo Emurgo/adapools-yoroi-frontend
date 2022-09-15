@@ -3,6 +3,7 @@ import React from 'react';
 import type { Node } from 'react';
 import sortingArrowDown from '../../assets/arrow-sorting-up.svg';
 import sortingArrowDownDark from '../../assets/arrow-sorting-up-dark.svg';
+import { SortingDirections } from '../../API/api';
 
 type Props = {|
   label: string,
@@ -44,14 +45,22 @@ export default function Label({ label, sortValue, sort, activeSort }: Props): No
           }}
         >
           <img
-            src={isActiveCol && sortDirection === 'DESC' ? sortingArrowDownDark : sortingArrowDown}
+            src={
+              isActiveCol && sortDirection === SortingDirections.DESC
+                ? sortingArrowDownDark
+                : sortingArrowDown
+            }
             alt="sorting"
           />
           <img
             style={{
               transform: 'matrix(1, 0, 0, -1, 0, 0)',
             }}
-            src={isActiveCol && sortDirection === 'ASC' ? sortingArrowDownDark : sortingArrowDown}
+            src={
+              isActiveCol && sortDirection === SortingDirections.ASC
+                ? sortingArrowDownDark
+                : sortingArrowDown
+            }
             alt="sorting"
           />
         </span>
