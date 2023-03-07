@@ -84,9 +84,8 @@ function StakingPoolCard({ id, bech, avatar, tickerName, name, links, fullname }
   const twitch = links && links.tc;
   const discord = links && links.di;
   const github = links && links.gh;
-  const websiteUrl = fullname == null
-    ? undefined
-    : fullname.match(/(https?:\/\/[^\s]+"?utm_source=cexplorer.io)/g);
+  const websiteUrl =
+    fullname == null ? undefined : fullname.match(/(https?:\/\/[^\s]+"?utm_source=cexplorer.io)/g);
 
   return (
     <MainCardPool>
@@ -101,7 +100,7 @@ function StakingPoolCard({ id, bech, avatar, tickerName, name, links, fullname }
           rel="noreferrer noopener"
         >
           {tickerName ? <>[{tickerName}] </> : null}
-          {name || ''}
+          <span dangerouslySetInnerHTML={{ __html: name || '' }} />
         </a>
         <DesktopOnly>
           <span className="id"> {truncateString(id)}</span>
