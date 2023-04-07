@@ -1,8 +1,9 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import { Sorting } from '../API/api';
 import type { SortingEnum } from '../API/api';
-import arrowDownIcon from '../assets/arrow-select-down.svg'
+import arrowDownIcon from '../assets/arrow-select-down.svg';
 
 const WrapperSelectInput = styled.div`
   display: flex;
@@ -43,24 +44,26 @@ const SelectInput = styled.select`
 
 type Props = {|
   filter: Function,
+  isRevamp?: boolean,
 |};
 
-const selectData = [
-  {
-    label: 'Ticker',
-    value: 'ticker',
-  },
-  {
-    label: 'Score',
-    value: 'score',
-  },
-  // {
-  //   label: 'ROA',
-  //   value: 'roa',
-  // },
+export const sortingSelectData = [
+  { label: 'Score', value: Sorting.SCORE }, // default option on load
+  { label: 'Ticker and name', value: Sorting.TICKER },
 ];
 
-function SortSelect({ filter }: Props): React$Node {
+export const sortingSelectDataRevamp = [
+  { label: 'Score', value: Sorting.SCORE }, // default option on load
+  { label: 'Ticker and name', value: Sorting.TICKER },
+  { label: 'ROA', value: Sorting.ROA },
+  { label: 'Pool size', value: Sorting.POOL_SIZE },
+  { label: 'Share', value: Sorting.SHARE },
+  { label: 'Costs', value: Sorting.COSTS },
+  { label: 'Pledge', value: Sorting.PLEDGE },
+  { label: 'Blocks', value: Sorting.BLOCKS },
+];
+
+function SortSelect({ filter, isRevamp = true }: Props): React$Node {
   const [selectValue, setSelectValue] = React.useState<SortingEnum>('score');
 
   const handleChange = (e) => {
@@ -68,19 +71,11 @@ function SortSelect({ filter }: Props): React$Node {
     filter(e.currentTarget.value);
   };
 
-  React.useEffect(() => {
-    // async function getSortCategories() {
-    //   const response = await fetchCategories();
-    //   setItems(response.data.map(({ name }) => ({ label: name, value: name })));
-    // }
-    // getSortCategories();
-  }, []);
-
   return (
     <WrapperSelectInput>
       <label htmlFor="sort">Sort by:</label>
       <SelectInput name="" id="sort" value={selectValue} onChange={handleChange}>
-        {selectData.map(({ value, label }) => (
+        {(isRevamp ? sortingSelectDataRevamp : sortingSelectData).map(({ value, label }) => (
           <option key={value} value={value}>
             {label}
           </option>

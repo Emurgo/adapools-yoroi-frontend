@@ -2,16 +2,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import type { Pool } from '../API/api';
+import type { QueryState } from '../utils/types';
+import type { DelegationProps } from '../containers/Home';
+import { Sorting } from '../API/api';
 import { CostsCardRevamp } from './CostsCard';
 import { PledgeCardRevamp } from './PledgeCard';
 import { CardRoaRevamp } from './CardRoa';
 import { formatBigNumber, formatCostLabel } from '../utils/utils';
 import { ButtonRevamp } from './common/Button';
 import { TooltipRevamp } from './common/Tooltip';
-import type { QueryState } from '../utils/types';
-import type { DelegationProps } from '../containers/Home';
 import StakingPoolCardRevamp from './StakingPoolCardRevamp';
 import { PoolSizeTagRevamp } from './PoolSizeTag';
+import Label from './common/Label';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -28,6 +30,8 @@ const Table = styled.table`
     white-space: nowrap;
   }
   thead {
+    position: relative;
+
     &:after {
       content: '';
       width: 100%;
@@ -35,7 +39,7 @@ const Table = styled.table`
       position: absolute;
       left: 0;
       right: 0;
-      top: 50px;
+      bottom: 0;
       border-bottom: 2px solid #f0f4f5;
     }
     th {
@@ -44,15 +48,15 @@ const Table = styled.table`
       font-size: 14px;
       letter-spacing: 0;
       font-weight: 400;
-      padding: 12px 20px 40px 0;
-      &:first-child > div:first-child {
-        align-items: baseline;
+      padding: 12px 20px 16px 0;
+      &:first-child {
+        & > div:first-child {
+          padding-top: 18px;
+        }
       }
     }
   }
   tbody {
-    tr {
-    }
     td {
       &:not(:first-child) {
         padding-right: 25px;
@@ -97,6 +101,8 @@ type Props = {|
   +status: QueryState,
   selectedIdPools: ?Array<string>,
   totalAda: ?number,
+  handleSort: Function,
+  activeSort: Object,
 |};
 
 function DesktopTableRevamp({
@@ -105,6 +111,8 @@ function DesktopTableRevamp({
   status,
   selectedIdPools,
   totalAda,
+  handleSort,
+  activeSort,
 }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
@@ -127,47 +135,56 @@ function DesktopTableRevamp({
       id: 0,
       label: 'Ticker and name',
       textInfo: null,
+      value: Sorting.TICKER,
     },
     {
       id: 1,
-      label: 'ROA 30d',
+      label: 'ROA',
       textInfo: 'Estimated ROA (Return of ADA, annualised) based on lifetime staking results',
+      value: Sorting.ROA,
     },
     {
       id: 2,
       label: 'Pool size',
       textInfo: 'Entire Supply',
+      value: Sorting.POOL_SIZE,
     },
     {
       id: 3,
       label: 'Share',
       textInfo: 'Total share of all ada being staked in pool',
+      value: Sorting.SHARE,
     },
     {
       id: 4,
       label: 'Costs',
       textInfo: 'Tax ratio + Fix',
+      value: Sorting.COSTS,
     },
     {
       id: 5,
       label: 'Pledge',
       textInfo: 'Available Pledge',
+      value: Sorting.PLEDGE,
     },
     {
       id: 6,
       label: 'Blocks',
       textInfo:
         'Minted blocks in actual epoch + block trend; Background = today estimated performance',
+      value: Sorting.BLOCKS,
     },
   ];
+
   return (
     <TableContent>
       <Table>
         <thead>
           <tr role="row">
-            {tableTheads.map(({ label, textInfo, id }) => (
+            {tableTheads.map(({ label, value, textInfo, id }) => (
               <th key={`col-${id}`} scope="col" className={`col-${id}`}>
-                <TooltipRevamp label={label} textInfo={textInfo} />
+                <TooltipRevamp textInfo={textInfo} />
+                <Label label={label} sortValue={value} sort={handleSort} activeSort={activeSort} />
               </th>
             ))}
             <th className="col-last" />

@@ -4,23 +4,24 @@ import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import infoIcon from '../../assets/info-icon.svg';
+import questionMarkIcon from '../../assets/question-mark.svg';
 
 const WrapperToolTip = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: right;
   .label {
     padding-left: 3px;
   }
   @media (min-width: 1125px) and (max-width: 1200px) {
-    justify-content: center;
+    justify-content: right;
   }
 `;
 const ToolTip = styled.span`
   position: relative;
   cursor: pointer;
   flex-shrink: 0;
-  padding-top: 5px;
+  margin-bottom: 3px;
   &:before {
     content: attr(data-text);
     position: absolute;
@@ -42,6 +43,7 @@ const ToolTip = styled.span`
     max-width: 100%;
     width: 18px;
     height: 18px;
+    vertical-align: middle;
   }
   &:hover:before {
     display: block;
@@ -51,7 +53,7 @@ const ToolTip = styled.span`
 `;
 
 type Props = {|
-  label: string,
+  label?: string,
   textInfo: ?string,
 |};
 
@@ -70,6 +72,10 @@ const WrapperToolTipRevamp = styled.div`
   flex-direction: column;
   justify-content: flex-end;
 
+  .label {
+    padding-left: 1px;
+  }
+
   @media (min-width: 1125px) and (max-width: 1200px) {
     justify-content: center;
   }
@@ -78,8 +84,9 @@ const WrapperToolTipRevamp = styled.div`
 function TooltipRevamp({ label, textInfo }: Props): Node {
   return (
     <WrapperToolTipRevamp>
-      <ToolTip data-text={textInfo}>
-        {textInfo != null && <span className="label">{label}</span>}
+      <ToolTip data-text={textInfo} style={{ display: 'flex', gap: '2px' }}>
+        {textInfo && <img src={questionMarkIcon} alt="" />}
+        {textInfo && label && <span className="label">{label}</span>}
       </ToolTip>
     </WrapperToolTipRevamp>
   );

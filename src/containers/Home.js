@@ -75,14 +75,14 @@ const CreditSection = styled.div`
   }
 `;
 export type UrlParams = {|
-    chromeId: ?string,
-    mozId: ?string,
-    source: ?string,
-    selectedPoolIds: ?Array<string>,
-    lang: ?string,
-    totalAda: ?number,
-    layout: ?string,
-    bias: ?string,
+  chromeId: ?string,
+  mozId: ?string,
+  source: ?string,
+  selectedPoolIds: ?Array<string>,
+  lang: ?string,
+  totalAda: ?number,
+  layout: ?string,
+  bias: ?string,
 |};
 
 export type HomeProps = {|
@@ -90,11 +90,11 @@ export type HomeProps = {|
 |};
 
 export type DelegationProps = {|
-    stakepoolName: string,
-    stakepoolTotalStake: string,
-    isAlreadySaturated: boolean,
-    id: string,
-|}
+  stakepoolName: string,
+  stakepoolTotalStake: string,
+  isAlreadySaturated: boolean,
+  id: string,
+|};
 
 function Home(props: HomeProps): Node {
   const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
@@ -159,33 +159,29 @@ function Home(props: HomeProps): Node {
   };
 
   const confirmedDelegateFunction = (id: string): void => {
-    YoroiCallback(([id]), {
+    YoroiCallback([id], {
       source: urlParams.source,
       chromeId: urlParams.chromeId,
       mozId: urlParams.mozId,
     });
-  }
+  };
 
   const delegateFunction = (delegation: DelegationProps, totalAda: ?number): void => {
     if (delegation == null) return;
     const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
 
     if (Number(delegation.stakepoolTotalStake) + lovelaceDelegation >= SATURATION_LIMIT) {
-      setDelegationModalData({ ...delegation, totalAda })
-      setConfirmDelegationModal(true)
-      setOpenModal(true)
-    }
-    else {
-      confirmedDelegateFunction(delegation.id)
+      setDelegationModalData({ ...delegation, totalAda });
+      setConfirmDelegationModal(true);
+      setOpenModal(true);
+    } else {
+      confirmedDelegateFunction(delegation.id);
     }
   };
 
   const alertText = null;
 
-  function filterPools(
-    pools: ?Array<Pool>,
-    totalAda: ?number,
-  ): ?Array<Pool> {
+  function filterPools(pools: ?Array<Pool>, totalAda: ?number): ?Array<Pool> {
     if (pools == null) return pools;
 
     // don't filter out saturated pools if the user explicitly searches
@@ -197,18 +193,20 @@ function Home(props: HomeProps): Node {
 
     if (lovelaceDelegation > SATURATION_LIMIT) return pools;
 
-    return pools.filter(item => {
-      return item != null && (Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT);
+    return pools.filter((item) => {
+      return item != null && Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT;
     });
   }
 
-  const { urlParams: { selectedPoolIds, totalAda } } = props
+  const {
+    urlParams: { selectedPoolIds, totalAda },
+  } = props;
   return (
     <Layout>
       <Alert title={alertText} />
       <Header>
         <Search filter={filterSearch} />
-        <SortSelect filter={filterSelect} />
+        <SortSelect isRevamp={false} filter={filterSelect} />
         {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
         {/*  Colors meaning */}
         {/* </ColorButton> */}
@@ -235,17 +233,24 @@ function Home(props: HomeProps): Node {
         <Modal
           title=""
           isOpen={openModal && confirmDelegationModal}
-          onClose={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+          onClose={() => {
+            setOpenModal(false);
+            setConfirmDelegationModal(false);
+          }}
         >
           <SaturatedPoolAlert
             delegation={delegationModalData}
             onSuccess={confirmedDelegateFunction}
-            close={() => {setOpenModal(false); setConfirmDelegationModal(false)}}
+            close={() => {
+              setOpenModal(false);
+              setConfirmDelegationModal(false);
+            }}
           />
         </Modal>
       )}
-      <CreditSection>Powered by
-        <a href='https://cexplorer.io/' target='_blank' rel='noopener noreferrer'>
+      <CreditSection>
+        Powered by
+        <a href="https://cexplorer.io/" target="_blank" rel="noopener noreferrer">
           <img src={cexplorerIconMini} id="logo-mini" alt="cexplorer-logo" />
           <img src={cexplorerIcon} id="logo" alt="cexplorer-logo" />
         </a>

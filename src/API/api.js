@@ -21,7 +21,7 @@ const brackets = [
   { startIndex: 13, positionGap: 7 },
   { startIndex: 23, positionGap: 7 },
   { startIndex: 33, positionGap: 17 },
-  { startIndex: 53, positionGap: 27 }
+  { startIndex: 53, positionGap: 27 },
 ];
 
 export type HistBPE = {|
@@ -81,17 +81,29 @@ export type World = {|
 |};
 
 export const Sorting = Object.freeze({
-  // ROA: 'roa',
   TICKER: 'ticker',
   SCORE: 'score',
+  ROA: 'roa',
+  POOL_SIZE: 'poolSize',
+  SHARE: 'share',
+  COSTS: 'costs',
+  PLEDGE: 'pledge',
+  BLOCKS: 'blocks',
+});
+
+export const SortingDirections = Object.freeze({
+  ASC: 'asc',
+  DESC: 'desc',
 });
 
 export type SortingEnum = $Values<typeof Sorting>;
+export type SortingDirEnum = $Values<typeof SortingDirections>;
 
 export type SearchParams = {|
   limit?: number,
   search?: string,
-  sort?: SortingEnum
+  sort?: SortingEnum,
+  sortDirection?: SortingDirEnum,
 |};
 
 export type ApiPoolsResponse = {|
@@ -101,20 +113,22 @@ export type ApiPoolsResponse = {|
 
 const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
   if (pools == null) return [];
-  return Object.keys(pools).map((key) => pools[key]).filter(x => x != null);
-}
+  return Object.keys(pools)
+    .map((key) => pools[key])
+    .filter((x) => x != null);
+};
 
 export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
   const requestBody = {
     ...{ search: '', sort: Sorting.SCORE, limit: 250 },
     ...body,
-  }
+  };
 
   const encodeForm = (data) => {
     return (Object.keys(data): any)
-      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
       .join('&');
-  }
+  };
 
   return axios(`${backendUrl}`, {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -128,8 +142,8 @@ export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
     .catch((error) => {
       console.error('API::getPools Error: ', error);
       return {
-        pools: {}
-      }
+        pools: {},
+      };
     });
 }
 
@@ -137,15 +151,13 @@ const rndSign = (seed: string) => {
   const rnd = seedrandom(seed);
   return () => {
     return Math.sign(rnd() * 2 - 1);
-  }
-}
+  };
+};
 
 const sortBiasedPools = (pools: Pool[], seed: string) => {
   const rev = seed.split('').reverse().join('');
-  return [...pools]
-    .sort(rndSign(seed))
-    .sort(rndSign(rev));
-}
+  return [...pools].sort(rndSign(seed)).sort(rndSign(rev));
+};
 
 function getRandomInt(seed: string, min: number, max: number) {
   const rnd = seedrandom(seed);
@@ -156,9 +168,12 @@ function getRandomInt(seed: string, min: number, max: number) {
 
 const tail = (input: string): string => {
   return input?.slice(-10) ?? '';
-}
+};
 
-export async function listBiasedPools(externalSeed: string, searchParams: SearchParams): Promise<Pool[]> {
+export async function listBiasedPools(
+  externalSeed: string,
+  searchParams: SearchParams,
+): Promise<Pool[]> {
   const unbiasedPoolsResponse = await getPools(searchParams);
   const unbiasedPools = toPoolArray(unbiasedPoolsResponse.pools);
 
@@ -170,10 +185,10 @@ export async function listBiasedPools(externalSeed: string, searchParams: Search
   const internalSeed = tail(p1?.id) + tail(p2?.id) + tail(p3?.id);
 
   try {
-    const biasedPoolsResponse = await getPools(({ search: BIAS_POOLS_SEARCH_QUERY }));
+    const biasedPoolsResponse = await getPools({ search: BIAS_POOLS_SEARCH_QUERY });
     if (!biasedPoolsResponse) return unbiasedPools;
     const biasedPools = toPoolArray(biasedPoolsResponse.pools)
-      .filter(x => x.id && BIAS_POOL_IDS.indexOf(x.id) >= 0)
+      .filter((x) => x.id && BIAS_POOL_IDS.indexOf(x.id) >= 0)
       .sort((a, b) => {
         return BIAS_POOL_IDS.indexOf(a.id) - BIAS_POOL_IDS.indexOf(b.id);
       });
@@ -182,16 +197,15 @@ export async function listBiasedPools(externalSeed: string, searchParams: Search
 
     const topPool = biasedPoolsOrderByExternalSeed[0];
 
-    const biasedLowerPools = biasedPools.filter(p => p !== topPool);
+    const biasedLowerPools = biasedPools.filter((p) => p !== topPool);
     const biasedLowerPoolsOrderedByInternalSeed = sortBiasedPools(biasedLowerPools, internalSeed);
 
-    if (unbiasedPools.length === 0)
-      return [topPool].concat(biasedLowerPoolsOrderedByInternalSeed);
+    if (unbiasedPools.length === 0) return [topPool].concat(biasedLowerPoolsOrderedByInternalSeed);
 
     // removes the Emurgo pools from the original list, as we are reinserting it later
     for (let i = 0; i < BIAS_POOL_IDS.length; i += 1) {
       const poolId = BIAS_POOL_IDS[i];
-      const poolToRemoveIdx = unbiasedPools.findIndex(p => p.id === poolId);
+      const poolToRemoveIdx = unbiasedPools.findIndex((p) => p.id === poolId);
       if (poolToRemoveIdx >= 0) {
         unbiasedPools.splice(poolToRemoveIdx, 1);
       }
@@ -210,7 +224,6 @@ export async function listBiasedPools(externalSeed: string, searchParams: Search
   } catch (err) {
     return unbiasedPools;
   }
-  
 }
 
 export function listPools(): Promise<ApiPoolsResponse> {

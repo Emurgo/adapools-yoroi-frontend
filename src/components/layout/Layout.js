@@ -9,7 +9,7 @@ const Container = styled.div`
   margin: auto;
 `;
 const Wrapper = styled.div`
-  padding: ${({ noGutters }) => (noGutters ? '20px 0' : '40px 30px')};
+  padding: ${({ noGutters }) => (noGutters ? '20px 0' : '20px 30px')};
 `;
 const Background = styled.div`
   border-radius: 8px;

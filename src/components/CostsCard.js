@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 const Card = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   font-size: 14px;
   line-height: 22px;
   @media (max-width: 1125px) {
@@ -14,7 +14,7 @@ const Card = styled.div`
   }
   @media (min-width: 1125px) and (max-width: 1200px) {
     flex-direction: column-reverse;
-    align-items: center;
+    align-items: flex-end;
   }
   .value {
     color: #242838;

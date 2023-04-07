@@ -9,40 +9,40 @@ const Form = styled.form`
 `;
 const SearchInput = styled.input`
   height: 40px;
-  background-color: #f0f3f5;
+  background-color: #fff;
   display: block;
   font-size: 14px;
   line-height: 22px;
   color: #2b2c32;
   line-height: 1.3;
-  padding: 0.6em 44px 0.5em 0.8em;
+  padding: 9px 16px 9px 38px;
   width: 322px;
   margin: 0;
-  border: none;
+  border: 1px solid #a7afc0;
   border-radius: 8px;
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
-  background-color: #f0f3f5;
   outline: none;
   ::placeholder {
-    color: #c4cad7;
+    color: #6b7384;
   }
 `;
 const InputBtn = styled.button`
+  position: relative;
+  z-index: 10;
   height: 40px;
   margin: 0;
+  margin-right: -38px;
   border: none;
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
-  border-radius: 0 8px 8px 0;
-  padding: 0.6em 0.9em 0.5em 0.9em;
-  margin-left: -44px;
-  background: #17d1aa;
+  padding: 10px;
+  background: transparent;
   cursor: pointer;
   i {
-    color: white;
+    color: #6b7384;
   }
 `;
 
@@ -51,6 +51,7 @@ type Props = {|
 |};
 
 const SearchRevamp = ({ filter }: Props): Node => {
+  const [prevSearch, setPrevSearch] = useState('');
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearchInputChanges = (e) => {
@@ -59,20 +60,24 @@ const SearchRevamp = ({ filter }: Props): Node => {
 
   const callSearchFunction = (e) => {
     e.preventDefault();
-    filter(searchValue);
+
+    if (prevSearch !== searchValue) {
+      filter(searchValue);
+      setPrevSearch(searchValue);
+    }
   };
 
   return (
     <Form className="search">
-      <SearchInput
-        value={searchValue}
-        onChange={handleSearchInputChanges}
-        placeholder="Search By Id or Name"
-        type="text"
-      />
       <InputBtn onClick={callSearchFunction} type="submit">
         <i className="fas fa-search" />
       </InputBtn>
+      <SearchInput
+        value={searchValue}
+        onChange={handleSearchInputChanges}
+        placeholder="Search stake pool"
+        type="text"
+      />
     </Form>
   );
 };
