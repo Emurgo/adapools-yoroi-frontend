@@ -188,8 +188,14 @@ function DesktopTableRevamp({
           <tr role="row">
             {tableTheads.map(({ label, value, textInfo, id }) => (
               <th key={`col-${id}`} scope="col" className={`col-${id}`}>
-                <TooltipRevamp textInfo={textInfo} />
-                <Label label={label} sortValue={value} sort={handleSort} activeSort={activeSort} />
+                <TooltipRevamp textInfo={textInfo}>
+                  <Label
+                    label={label}
+                    sortValue={value}
+                    sort={handleSort}
+                    activeSort={activeSort}
+                  />
+                </TooltipRevamp>
               </th>
             ))}
             <th className="col-last" />

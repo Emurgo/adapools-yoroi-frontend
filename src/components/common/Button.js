@@ -44,10 +44,9 @@ function Button(props: Props): React$Node {
 
 const BtnRevampWrapper = styled.button`
   box-sizing: border-box;
-  height: 40px;
-  width: 120px;
+  padding: 9px 20px;
   font-size: 16px;
-  color: #17d1aa;
+  color: #4b6dde;
   background: none;
   border: 0;
   border-radius: 8px;
@@ -55,12 +54,23 @@ const BtnRevampWrapper = styled.button`
   text-transform: uppercase;
   cursor: pointer;
   &:hover {
-    color: #15d1aa;
+    color: #3154cb;
+    background-color: #f0f3f5;
   }
+
+  &:active {
+    color: #1737a3;
+    background-color: #eaedf2;
+  }
+
+  &:focus {
+    outline: 2px solid #ecba09;
+  }
+
   &:disabled {
-    background: transparent;
-    color: #c9ede5;
-    cursor: default;
+    background: red;
+    color: #a0b3f2;
+    cursor: not-allowed;
   }
 `;
 
