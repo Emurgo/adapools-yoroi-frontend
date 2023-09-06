@@ -49,6 +49,7 @@ export default function Label({ label, sortValue, sort, activeSort }: Props): No
         alignItems: 'center',
         gap: '6px',
         cursor: 'pointer',
+        padding: 0,
       }}
       onClick={() => sort && sort(sortValue)}
     >
@@ -56,38 +57,6 @@ export default function Label({ label, sortValue, sort, activeSort }: Props): No
         {label}
       </span>
       {sort && <SortingIcon isActiveCol={isActiveCol} sortDirection={sortDirection} />}
-      {/* {sort && isActiveCol && sortDirection === SortingDirections.DESC && (
-        <img src={ArrowsDescending} alt="Sorting Descending" />
-        <span
-          style={{
-            display: 'inline-flex',
-            flexFlow: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-start',
-            gap: '2px',
-          }}
-        >
-          <img
-            src={
-              isActiveCol && sortDirection === SortingDirections.DESC
-                ? sortingArrowDownDark
-                : sortingArrowDown
-            }
-            alt="sorting"
-          />
-          <img
-            style={{
-              transform: 'matrix(1, 0, 0, -1, 0, 0)',
-            }}
-            src={
-              isActiveCol && sortDirection === SortingDirections.ASC
-                ? sortingArrowDownDark
-                : sortingArrowDown
-            }
-            alt="sorting"
-          />
-        </span>
-      )} */}
     </div>
   );
 }

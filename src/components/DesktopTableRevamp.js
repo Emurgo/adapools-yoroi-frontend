@@ -186,18 +186,20 @@ function DesktopTableRevamp({
       <Table>
         <thead>
           <tr role="row">
-            {tableTheads.map(({ label, value, textInfo, id }) => (
-              <th key={`col-${id}`} scope="col" className={`col-${id}`}>
-                <TooltipRevamp textInfo={textInfo}>
-                  <Label
-                    label={label}
-                    sortValue={value}
-                    sort={handleSort}
-                    activeSort={activeSort}
-                  />
-                </TooltipRevamp>
-              </th>
-            ))}
+            {tableTheads.map(({ label, value, textInfo, id }) => {
+              const labelComp = (
+                <Label label={label} sortValue={value} sort={handleSort} activeSort={activeSort} />
+              );
+              return (
+                <th key={`col-${id}`} scope="col" className={`col-${id}`}>
+                  {textInfo ? (
+                    <TooltipRevamp textInfo={textInfo}>{labelComp}</TooltipRevamp>
+                  ) : (
+                    labelComp
+                  )}
+                </th>
+              );
+            })}
             <th className="col-last" />
           </tr>
         </thead>

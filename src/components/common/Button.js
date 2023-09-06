@@ -44,6 +44,7 @@ function Button(props: Props): React$Node {
 
 const BtnRevampWrapper = styled.button`
   box-sizing: border-box;
+  min-width: 120px;
   padding: 9px 20px;
   font-size: 16px;
   color: #4b6dde;
