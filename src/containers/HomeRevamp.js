@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
-import Layout from '../components/layout/Layout';
+import LayoutRevamp from '../components/layout/LayoutRevamp';
 import Alert from '../components/Alert';
 import { SendFirstAdapool, YoroiCallback } from '../API/yoroi';
 
@@ -286,7 +286,7 @@ function Home(props: HomeProps): Node {
   const filteredPools = filterPools(rowDataSorted || rowData, totalAda);
 
   return (
-    <Layout>
+    <LayoutRevamp>
       <HeaderRow>
         <Title>Stake pools ({status === 'resolved' ? filteredPools?.length : '...'})</Title>
         <Alert title={alertText} />
@@ -346,7 +346,7 @@ function Home(props: HomeProps): Node {
           <img src={cexplorerIcon} id="logo" alt="cexplorer-logo" />
         </a>
       </CreditSection>
-    </Layout>
+    </LayoutRevamp>
   );
 }
 
