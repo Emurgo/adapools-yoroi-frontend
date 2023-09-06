@@ -3,9 +3,12 @@
 import React, { useState } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
+import closeIcon from '../assets/close-icon-revamp.svg';
+import searchIcon from '../assets/search-icon.svg';
 
 const Form = styled.form`
   display: flex;
+  position: relative;
 `;
 const SearchInput = styled.input`
   height: 40px;
@@ -27,23 +30,39 @@ const SearchInput = styled.input`
   ::placeholder {
     color: #6b7384;
   }
-`;
-const InputBtn = styled.button`
-  position: relative;
-  z-index: 10;
-  height: 40px;
-  margin: 0;
-  margin-right: -38px;
-  border: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  padding: 10px;
-  background: transparent;
-  cursor: pointer;
-  i {
-    color: #6b7384;
+
+  :focus {
+    outline: 2px solid #242838;
   }
+`;
+const SearchBtn = styled.button`
+  position: absolute;
+  top: 50%;
+  left: 0px;
+  transform: translateY(-50%);
+  padding: 0px 8px;
+  background: transparent;
+  outline: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
+
+const ClearBtn = styled.button`
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  transform: translateY(-50%);
+  padding: 0px 8px;
+  background: transparent;
+  outline: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 `;
 
 type Props = {|
@@ -54,10 +73,6 @@ const SearchRevamp = ({ filter }: Props): Node => {
   const [prevSearch, setPrevSearch] = useState('');
   const [searchValue, setSearchValue] = useState('');
 
-  const handleSearchInputChanges = (e) => {
-    setSearchValue(e.target.value);
-  };
-
   const callSearchFunction = (e) => {
     e.preventDefault();
 
@@ -67,17 +82,30 @@ const SearchRevamp = ({ filter }: Props): Node => {
     }
   };
 
+  const handleSearchInputChanges = (e) => {
+    setSearchValue(e.target.value);
+    callSearchFunction(e);
+  };
+
   return (
     <Form className="search">
-      <InputBtn onClick={callSearchFunction} type="submit">
-        <i className="fas fa-search" />
-      </InputBtn>
+      <SearchBtn onClick={callSearchFunction} type="submit">
+        <img src={searchIcon} alt="Search" />
+      </SearchBtn>
       <SearchInput
         value={searchValue}
         onChange={handleSearchInputChanges}
         placeholder="Search stake pool"
         type="text"
       />
+      <ClearBtn
+        onClick={(e) => {
+          setSearchValue('');
+          callSearchFunction(e);
+        }}
+      >
+        <img src={closeIcon} alt="Clear Input" />
+      </ClearBtn>
     </Form>
   );
 };

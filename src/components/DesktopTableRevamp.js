@@ -95,6 +95,11 @@ const Table = styled.table`
   }
 `;
 
+const Message = styled.h1`
+  font-weight: 400;
+  padding: 20px 0px;
+`;
+
 type Props = {|
   data: ?Array<Pool>,
   delegateFunction: (DelegationProps, ?number) => void,
@@ -119,15 +124,15 @@ function DesktopTableRevamp({
   const isResolved = status === 'resolved';
 
   if (isResolved && data != null && data.length <= 0) {
-    return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
+    return <Message>No results found.</Message>;
   }
 
   if (isLoading) {
-    return <h1 style={{ fontWeight: 400 }}>Loading..</h1>;
+    return <Message>Loading...</Message>;
   }
 
   if (isRejected) {
-    return <h1>Oops! something wrong happened. Try again!</h1>;
+    return <Message>Oops! something wrong happened. Try again!</Message>;
   }
 
   const tableTheads = [
