@@ -32,7 +32,7 @@ const Header = styled.div`
   @media (max-width: 1125px) {
     flex-direction: column;
     align-items: center;
-    input {
+    form {
       margin-bottom: 20px;
     }
   }
