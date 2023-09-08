@@ -14,6 +14,7 @@ import { TooltipRevamp } from './common/Tooltip';
 import StakingPoolCardRevamp from './StakingPoolCardRevamp';
 import { PoolSizeTagRevamp } from './PoolSizeTag';
 import Label from './common/Label';
+import NoStakePoolsFound from './NoStakePoolsFound';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -124,7 +125,7 @@ function DesktopTableRevamp({
   const isResolved = status === 'resolved';
 
   if (isResolved && data != null && data.length <= 0) {
-    return <Message>No results found.</Message>;
+    return <NoStakePoolsFound />;
   }
 
   if (isLoading) {

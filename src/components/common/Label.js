@@ -1,8 +1,6 @@
 // @flow
 import React from 'react';
 import type { Node } from 'react';
-import sortingArrowDown from '../../assets/arrow-sorting-up.svg';
-import sortingArrowDownDark from '../../assets/arrow-sorting-up-dark.svg';
 import ArrowsIdle from '../../assets/arrows-idle.svg';
 import ArrowsAscending from '../../assets/arrows-ascending.svg';
 import ArrowsDescending from '../../assets/arrows-descending.svg';

@@ -13,6 +13,7 @@ import type { DelegationProps } from '../containers/Home';
 import StakingPoolCardRevamp from './StakingPoolCardRevamp';
 import { PoolSizeTagRevamp } from './PoolSizeTag';
 import { ValueRevamp } from './DesktopTableRevamp';
+import NoStakePoolsFound from './NoStakePoolsFound';
 
 const CardMobile = styled.div`
   display: flex;
@@ -75,7 +76,7 @@ function MobileTableRevamp({
   const isResolved = status === 'resolved';
 
   if (isResolved && data != null && data.length <= 0) {
-    return <Message>No results found.</Message>;
+    return <NoStakePoolsFound />;
   }
 
   if (isLoading) {
