@@ -4,7 +4,6 @@ import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import infoIcon from '../../assets/info-icon.svg';
-import questionMarkIcon from '../../assets/question-mark.svg';
 
 const WrapperToolTip = styled.div`
   display: flex;
@@ -17,6 +16,7 @@ const WrapperToolTip = styled.div`
     justify-content: right;
   }
 `;
+
 const ToolTip = styled.span`
   position: relative;
   cursor: pointer;
@@ -79,15 +79,22 @@ const WrapperToolTipRevamp = styled.div`
   @media (min-width: 1125px) and (max-width: 1200px) {
     justify-content: center;
   }
+
+  & > span::before {
+    width: 200px;
+    padding: 10px 12px;
+  }
 `;
 
-function TooltipRevamp({ label, textInfo }: Props): Node {
+type PropsRevamp = {|
+  children: Node,
+  textInfo: ?string,
+|};
+
+function TooltipRevamp({ textInfo, children }: PropsRevamp): Node {
   return (
     <WrapperToolTipRevamp>
-      <ToolTip data-text={textInfo} style={{ display: 'flex', gap: '2px' }}>
-        {textInfo && <img src={questionMarkIcon} alt="" />}
-        {textInfo && label && <span className="label">{label}</span>}
-      </ToolTip>
+      <ToolTip data-text={textInfo}>{children}</ToolTip>
     </WrapperToolTipRevamp>
   );
 }

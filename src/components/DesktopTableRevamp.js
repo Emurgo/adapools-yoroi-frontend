@@ -14,6 +14,7 @@ import { TooltipRevamp } from './common/Tooltip';
 import StakingPoolCardRevamp from './StakingPoolCardRevamp';
 import { PoolSizeTagRevamp } from './PoolSizeTag';
 import Label from './common/Label';
+import NoStakePoolsFound from './NoStakePoolsFound';
 
 const TableContent = styled.div`
   display: inline-flex;
@@ -95,6 +96,11 @@ const Table = styled.table`
   }
 `;
 
+const Message = styled.h1`
+  font-weight: 400;
+  padding: 20px 0px;
+`;
+
 type Props = {|
   data: ?Array<Pool>,
   delegateFunction: (DelegationProps, ?number) => void,
@@ -119,15 +125,15 @@ function DesktopTableRevamp({
   const isResolved = status === 'resolved';
 
   if (isResolved && data != null && data.length <= 0) {
-    return <h1 style={{ fontWeight: 400 }}>No results found.</h1>;
+    return <NoStakePoolsFound />;
   }
 
   if (isLoading) {
-    return <h1 style={{ fontWeight: 400 }}>Loading..</h1>;
+    return <Message>Loading...</Message>;
   }
 
   if (isRejected) {
-    return <h1>Oops! something wrong happened. Try again!</h1>;
+    return <Message>Oops! something wrong happened. Try again!</Message>;
   }
 
   const tableTheads = [
@@ -181,12 +187,20 @@ function DesktopTableRevamp({
       <Table>
         <thead>
           <tr role="row">
-            {tableTheads.map(({ label, value, textInfo, id }) => (
-              <th key={`col-${id}`} scope="col" className={`col-${id}`}>
-                <TooltipRevamp textInfo={textInfo} />
+            {tableTheads.map(({ label, value, textInfo, id }) => {
+              const labelComp = (
                 <Label label={label} sortValue={value} sort={handleSort} activeSort={activeSort} />
-              </th>
-            ))}
+              );
+              return (
+                <th key={`col-${id}`} scope="col" className={`col-${id}`}>
+                  {textInfo ? (
+                    <TooltipRevamp textInfo={textInfo}>{labelComp}</TooltipRevamp>
+                  ) : (
+                    labelComp
+                  )}
+                </th>
+              );
+            })}
             <th className="col-last" />
           </tr>
         </thead>

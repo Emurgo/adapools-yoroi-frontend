@@ -20,6 +20,10 @@ const Card = styled.div`
     color: #242838;
     font-size: 14px;
   }
+
+  &.cardRevamp {
+    justify-content: flex-start;
+  }
   .valueRevamp {
     color: #242838;
     font-size: 16px;
@@ -37,7 +41,7 @@ function CostsCard({ value }: Props): Node {
 }
 function CostsCardRevamp({ value }: Props): Node {
   return (
-    <Card>
+    <Card className="cardRevamp">
       <p className="valueRevamp">{value}</p>
     </Card>
   );
