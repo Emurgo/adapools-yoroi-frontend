@@ -86,7 +86,12 @@ const WrapperToolTipRevamp = styled.div`
   }
 `;
 
-function TooltipRevamp({ textInfo, children }: Props): Node {
+type PropsRevamp = {|
+  children: Node,
+  textInfo: ?string,
+|};
+
+function TooltipRevamp({ textInfo, children }: PropsRevamp): Node {
   return (
     <WrapperToolTipRevamp>
       <ToolTip data-text={textInfo}>{children}</ToolTip>

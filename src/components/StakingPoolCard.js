@@ -100,6 +100,7 @@ function StakingPoolCard({ id, bech, avatar, tickerName, name, links, fullname }
           rel="noreferrer noopener"
         >
           {tickerName ? <>[{tickerName}] </> : null}
+          {/* eslint-disable-next-line react/no-danger */}
           <span dangerouslySetInnerHTML={{ __html: name || '' }} />
         </a>
         <DesktopOnly>

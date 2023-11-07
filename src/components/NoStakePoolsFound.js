@@ -19,7 +19,7 @@ const Container = styled.div`
   }
 `;
 
-function NoStakePoolsFound() {
+function NoStakePoolsFound(): React$Node {
   return (
     <Container>
       <img className="staking-img" src={stakingIllustration} alt="Staking Pools" />
