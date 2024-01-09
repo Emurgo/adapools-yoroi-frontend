@@ -85,7 +85,7 @@ export const Sorting = Object.freeze({
   SCORE: 'score',
   ROA: 'roa',
   POOL_SIZE: 'poolSize',
-  SHARE: 'share',
+  SATURATION: 'saturation',
   COSTS: 'costs',
   PLEDGE: 'pledge',
   BLOCKS: 'blocks',

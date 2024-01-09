@@ -161,8 +161,8 @@ function DesktopTable({
     },
     {
       id: 2,
-      label: 'Share / Pool Size',
-      textInfo: 'Total share of all ada being staked in pool / Entire Supply',
+      label: 'Pool Size',
+      textInfo: 'How close the pool is to its limit / Total stake in the pool',
     },
     {
       id: 3,

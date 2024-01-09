@@ -57,7 +57,7 @@ export const sortingSelectDataRevamp = [
   { label: 'Ticker and name', value: Sorting.TICKER },
   { label: 'ROA', value: Sorting.ROA },
   { label: 'Pool size', value: Sorting.POOL_SIZE },
-  { label: 'Share', value: Sorting.SHARE },
+  { label: 'Saturation', value: Sorting.SATURATION },
   { label: 'Costs', value: Sorting.COSTS },
   { label: 'Pledge', value: Sorting.PLEDGE },
   { label: 'Blocks', value: Sorting.BLOCKS },

@@ -125,8 +125,8 @@ const SORTING_FUNCTIONS = {
     a.total_size - b.total_size,
   [`${Sorting.POOL_SIZE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
     b.total_size - a.total_size,
-  [`${Sorting.SHARE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => a.saturation - b.saturation,
-  [`${Sorting.SHARE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => b.saturation - a.saturation,
+  [`${Sorting.SATURATION}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => a.saturation - b.saturation,
+  [`${Sorting.SATURATION}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => b.saturation - a.saturation,
   [`${Sorting.PLEDGE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
     Number(a.pledge) - Number(b.pledge),
   [`${Sorting.PLEDGE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
