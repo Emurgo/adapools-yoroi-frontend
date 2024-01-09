@@ -11,7 +11,7 @@ import { ButtonRevamp } from './common/Button';
 import type { QueryState } from '../utils/types';
 import type { DelegationProps } from '../containers/Home';
 import StakingPoolCardRevamp from './StakingPoolCardRevamp';
-import { PoolSizeTagRevamp } from './PoolSizeTag';
+import { PoolSaturationTagRevamp } from './PoolSaturationTag';
 import { ValueRevamp } from './DesktopTableRevamp';
 import NoStakePoolsFound from './NoStakePoolsFound';
 
@@ -114,8 +114,8 @@ function MobileTableRevamp({
                   <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
                 </div>
                 <div className="item">
-                  <div className="label">Share</div>
-                  <PoolSizeTagRevamp value={pool.saturation} />
+                  <div className="label">Saturation</div>
+                  <PoolSaturationTagRevamp value={pool.saturation} />
                 </div>
               </WrapperContent>
               <WrapperContent style={{ display: 'flex' }}>

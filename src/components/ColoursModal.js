@@ -3,7 +3,7 @@
 import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
-import PoolSizeTag from './PoolSizeTag';
+import PoolSaturationTag from './PoolSaturationTag';
 import PledgeCard from './PledgeCard';
 
 const Wrapper = styled.div`
@@ -44,9 +44,9 @@ const Wrapper = styled.div`
 
 const colorsLegend = [
   {
-    text: 'Share / Pool Size',
+    text: 'Pool Size',
     piechart: true,
-    subtitle: 'Total share of all ADA being staked in pool / Entire Supply',
+    subtitle: 'How close the pool is to its limit / Total stake in the pool',
     ranges: [
       {
         id: 0,
@@ -124,7 +124,7 @@ function ColoursModal(): Node {
           {piechart ?
             ranges.map(({ id, value, description }) => (
               <div key={id} className="range-row">
-                <PoolSizeTag value={value} />
+                <PoolSaturationTag value={value} />
                 <p className="description">{description}</p>
               </div>
             )) :

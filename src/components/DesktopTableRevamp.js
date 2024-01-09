@@ -12,7 +12,7 @@ import { formatBigNumber, formatCostLabel } from '../utils/utils';
 import { ButtonRevamp } from './common/Button';
 import { TooltipRevamp } from './common/Tooltip';
 import StakingPoolCardRevamp from './StakingPoolCardRevamp';
-import { PoolSizeTagRevamp } from './PoolSizeTag';
+import { PoolSaturationTagRevamp } from './PoolSaturationTag';
 import Label from './common/Label';
 import NoStakePoolsFound from './NoStakePoolsFound';
 
@@ -152,14 +152,14 @@ function DesktopTableRevamp({
     {
       id: 2,
       label: 'Pool size',
-      textInfo: 'Entire Supply',
+      textInfo: 'Total stake in the pool',
       value: Sorting.POOL_SIZE,
     },
     {
       id: 3,
-      label: 'Share',
-      textInfo: 'Total share of all ada being staked in pool',
-      value: Sorting.SHARE,
+      label: 'Saturation',
+      textInfo: 'How close the pool is to its limit',
+      value: Sorting.SATURATION,
     },
     {
       id: 4,
@@ -228,7 +228,7 @@ function DesktopTableRevamp({
                     <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
                   </td>
                   <td>
-                    <PoolSizeTagRevamp value={pool.saturation} />
+                    <PoolSaturationTagRevamp value={pool.saturation} />
                   </td>
                   <td>
                     <CostsCardRevamp

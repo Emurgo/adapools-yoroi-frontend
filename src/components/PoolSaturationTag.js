@@ -42,7 +42,7 @@ type Props = {|
   +value: number,
 |};
 
-function PoolSizeTag({ value }: Props): Node {
+function PoolSaturationTag({ value }: Props): Node {
   const totalValue = 1
   function formatArray(percent) {
     return [
@@ -111,7 +111,7 @@ const TagRevamp = styled.div`
 
 `;
 
-function PoolSizeTagRevamp({ value }: Props): Node {
+function PoolSaturationTagRevamp({ value }: Props): Node {
   const totalValue = 1;
   function formatArray(percent) {
     return [
@@ -135,5 +135,5 @@ function PoolSizeTagRevamp({ value }: Props): Node {
   );
 }
 
-export default PoolSizeTag;
-export { PoolSizeTagRevamp };
+export default PoolSaturationTag;
+export { PoolSaturationTagRevamp };
