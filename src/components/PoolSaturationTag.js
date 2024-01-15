@@ -82,7 +82,7 @@ function PoolSaturationTag({ value }: Props): Node {
       <div className="piechart">
         <PieChart totalValue={totalValue} data={formatArray(value)} />
       </div>
-      <div className="value">{roundOneDecimal(value)}%</div>
+      <div className="value">{roundOneDecimal(value*100)}%</div>
     </Tag>
   )
 }
@@ -130,7 +130,7 @@ function PoolSaturationTagRevamp({ value }: Props): Node {
       <div className="piechart">
         <PieChart totalValue={totalValue} data={formatArray(value)} />
       </div>
-      <div className="value">{roundOneDecimal(value)}%</div>
+      <div className="value">{roundOneDecimal(value*100)}%</div>
     </TagRevamp>
   );
 }
