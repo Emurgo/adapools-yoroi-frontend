@@ -10,7 +10,7 @@ import { YoroiCallback } from '../API/yoroi';
 
 import { DesktopOnly, MobileOnly } from '../components/layout/Breakpoints';
 import { listBiasedPools } from '../API/api';
-import type { Pool, SearchParams } from '../API/api';
+import type { ListBiasedPoolsResponse, Pool, SearchParams } from '../API/api';
 import DesktopTable from '../components/DesktopTable';
 import MobileTable from '../components/MobileTable';
 import SortSelect from '../components/SortSelect';
@@ -20,9 +20,6 @@ import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
 import cexplorerIconMini from '../assets/cexplorer-logo-mini.svg';
 import cexplorerIcon from '../assets/cexplorer-logo-extend.svg';
-
-// k = 500
-const SATURATION_LIMIT = 63600000000000;
 
 const Header = styled.div`
   display: flex;
@@ -97,6 +94,7 @@ export type DelegationProps = {|
 |};
 
 function Home(props: HomeProps): Node {
+  const [saturationLimit, setSaturationLimit] = React.useState<?number>(null);
   const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
   const [status, setStatus] = React.useState<QueryState>('idle');
   const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
@@ -113,9 +111,10 @@ function Home(props: HomeProps): Node {
   useEffect(() => {
     setStatus('pending');
     listBiasedPools(seed, {})
-      .then((pools: Pool[]) => {
+      .then((resp: ListBiasedPoolsResponse) => {
         setStatus('resolved');
-        setRowData(pools);
+        setRowData(resp.pools);
+        setSaturationLimit(resp.saturationLimit);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -131,9 +130,10 @@ function Home(props: HomeProps): Node {
     setFilterOptions(newSearch);
     setStatus('pending');
     listBiasedPools(seed, newSearch)
-      .then((pools: Pool[]) => {
+      .then((resp: ListBiasedPoolsResponse) => {
         setStatus('resolved');
-        setRowData(pools);
+        setRowData(resp.pools);
+        setSaturationLimit(resp.saturationLimit);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -148,9 +148,10 @@ function Home(props: HomeProps): Node {
     setFilterOptions(newSearch);
     setStatus('pending');
     listBiasedPools(seed, newSearch)
-      .then((pools: Pool[]) => {
+      .then((resp: ListBiasedPoolsResponse) => {
         setStatus('resolved');
-        setRowData(pools);
+        setRowData(resp.pools);
+        setSaturationLimit(resp.saturationLimit);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -170,7 +171,8 @@ function Home(props: HomeProps): Node {
     if (delegation == null) return;
     const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
 
-    if (Number(delegation.stakepoolTotalStake) + lovelaceDelegation >= SATURATION_LIMIT) {
+    const limit: ?number = saturationLimit;
+    if (limit != null && Number(delegation.stakepoolTotalStake) + lovelaceDelegation >= limit) {
       setDelegationModalData({ ...delegation, totalAda });
       setConfirmDelegationModal(true);
       setOpenModal(true);
@@ -184,17 +186,19 @@ function Home(props: HomeProps): Node {
   function filterPools(pools: ?Array<Pool>, totalAda: ?number): ?Array<Pool> {
     if (pools == null) return pools;
 
+    const limit: ?number = saturationLimit;
+
     // don't filter out saturated pools if the user explicitly searches
-    if (filterOptions.search != null && filterOptions.search !== '') {
+    if (limit == null || (filterOptions.search != null && filterOptions.search !== '')) {
       return pools;
     }
 
     const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
 
-    if (lovelaceDelegation > SATURATION_LIMIT) return pools;
+    if (lovelaceDelegation > limit) return pools;
 
     return pools.filter((item) => {
-      return item != null && Number(item.total_stake) + lovelaceDelegation < SATURATION_LIMIT;
+      return item != null && Number(item.total_stake) + lovelaceDelegation < limit;
     });
   }
 
