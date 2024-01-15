@@ -78,6 +78,7 @@ export type World = {|
   +pools: string,
   +price: number,
   +delegators: string,
+  +saturation: number,
 |};
 
 export const Sorting = Object.freeze({
@@ -170,15 +171,22 @@ const tail = (input: string): string => {
   return input?.slice(-10) ?? '';
 };
 
+export type ListBiasedPoolsResponse = {|
+  pools: Pool[],
+  saturationLimit: number,
+|};
+
 export async function listBiasedPools(
   externalSeed: string,
   searchParams: SearchParams,
-): Promise<Pool[]> {
+): Promise<ListBiasedPoolsResponse> {
   const unbiasedPoolsResponse = await getPools(searchParams);
   const unbiasedPools = toPoolArray(unbiasedPoolsResponse.pools);
 
+  const saturationLimit = unbiasedPoolsResponse.world.saturation;
+
   if (searchParams.search || searchParams.sort === Sorting.TICKER) {
-    return unbiasedPools;
+    return { pools: unbiasedPools, saturationLimit };
   }
 
   const [p1, p2, p3] = unbiasedPools;
@@ -220,9 +228,9 @@ export async function listBiasedPools(
       allPools.splice(targetIndex, 0, biasedPool);
     }
 
-    return allPools;
+    return { pools: allPools, saturationLimit };
   } catch (err) {
-    return unbiasedPools;
+    return { pools: unbiasedPools, saturationLimit };
   }
 }
 
