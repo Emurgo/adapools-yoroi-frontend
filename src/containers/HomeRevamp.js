@@ -35,7 +35,8 @@ const Header = styled.div`
   }
 `;
 const Title = styled.h1`
-  color: #38393d;
+  color: #000;
+  font-weight: 500;
   font-size: 18px;
   @media (max-width: 1125px) {
     margin-bottom: 20px;
@@ -122,8 +123,10 @@ const SORTING_FUNCTIONS = {
     a.total_size - b.total_size,
   [`${Sorting.POOL_SIZE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
     b.total_size - a.total_size,
-  [`${Sorting.SATURATION}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => a.saturation - b.saturation,
-  [`${Sorting.SATURATION}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => b.saturation - a.saturation,
+  [`${Sorting.SATURATION}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
+    a.saturation - b.saturation,
+  [`${Sorting.SATURATION}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
+    b.saturation - a.saturation,
   [`${Sorting.PLEDGE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
     Number(a.pledge) - Number(b.pledge),
   [`${Sorting.PLEDGE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>

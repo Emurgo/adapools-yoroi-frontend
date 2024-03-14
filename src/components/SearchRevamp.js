@@ -9,6 +9,7 @@ import searchIcon from '../assets/search-icon.svg';
 const Form = styled.form`
   display: flex;
   position: relative;
+  margin-right: 1px;
 `;
 const SearchInput = styled.input`
   height: 40px;
@@ -32,7 +33,7 @@ const SearchInput = styled.input`
   }
 
   :focus {
-    outline: 2px solid #242838;
+    outline: 1px solid #242838;
   }
 `;
 const SearchBtn = styled.button`
