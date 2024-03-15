@@ -99,6 +99,7 @@ const SearchRevamp = ({ filter }: Props): Node => {
         placeholder="Search stake pool"
         type="text"
       />
+      {searchValue.length > 0 &&   
       <ClearBtn
         onClick={(e) => {
           setSearchValue('');
@@ -107,6 +108,8 @@ const SearchRevamp = ({ filter }: Props): Node => {
       >
         <img src={closeIcon} alt="Clear Input" />
       </ClearBtn>
+      }
+    
     </Form>
   );
 };
