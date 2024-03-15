@@ -75,6 +75,24 @@ td {
   font-family: 'Rubik', sans-serif;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+
+  backgroud-color:transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c8ccce;
+  border-radius: 12px;
+  border: 7px solid transparent,
+
+}
 html {
   font-size: 62.5%;
 }
