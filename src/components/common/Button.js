@@ -46,7 +46,8 @@ const BtnRevampWrapper = styled.button`
   box-sizing: border-box;
   min-width: 120px;
   padding: 9px 20px;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 500;
   color: #4b6dde;
   background: none;
   border: 0;
@@ -54,6 +55,7 @@ const BtnRevampWrapper = styled.button`
   width: 100%;
   text-transform: uppercase;
   cursor: pointer;
+  letter-spacing: 0.5px;
   &:hover {
     color: #3154cb;
     background-color: #f0f3f5;
