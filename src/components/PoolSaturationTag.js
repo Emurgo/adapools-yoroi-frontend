@@ -4,7 +4,7 @@ import React from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import { PieChart } from 'react-minimal-pie-chart';
-import { roundOneDecimal, } from '../utils/utils';
+import { roundOneDecimal } from '../utils/utils';
 
 const Tag = styled.div`
   padding: 2px 8px;
@@ -16,7 +16,7 @@ const Tag = styled.div`
   align-items: center;
   .value {
     margin-left: 6px;
-    color: #2B2C32;
+    color: #2b2c32;
     font-size: 14px;
     line-height: 22px;
   }
@@ -24,18 +24,17 @@ const Tag = styled.div`
     width: 15px;
     height: 15px;
     margin-right: 5px;
-    @media (min-width:1125px) and (max-width: 1200px) {
+    @media (min-width: 1125px) and (max-width: 1200px) {
       margin: 0;
     }
   }
-  @media (min-width:1125px) and (max-width: 1200px) {
+  @media (min-width: 1125px) and (max-width: 1200px) {
     margin: 0;
     margin-top: 4px;
   }
   @media (max-width: 1125px) {
     margin-bottom: 8px;
   }
-
 `;
 
 type Props = {|
@@ -43,7 +42,7 @@ type Props = {|
 |};
 
 function PoolSaturationTag({ value }: Props): Node {
-  const totalValue = 1
+  const totalValue = 1;
   function formatArray(percent) {
     return [
       {
@@ -60,21 +59,21 @@ function PoolSaturationTag({ value }: Props): Node {
   let backgroundColor = null;
 
   switch (true) {
-  case value > 0.9:
-    backgroundColor = '#FFC3D3';
-    break;
-  case value > 0.8:
-    backgroundColor = '#FCE4BC';
-    break;
-  case value > 0.7:
-    backgroundColor = '#FBF6B6';
-    break;
-  case value > 0.6:
-    backgroundColor = '#DDFBB6';
-    break;
-  default:
-    backgroundColor = '#C9EDE5';
-    break;
+    case value > 0.9:
+      backgroundColor = '#FFC3D3';
+      break;
+    case value > 0.8:
+      backgroundColor = '#FCE4BC';
+      break;
+    case value > 0.7:
+      backgroundColor = '#FBF6B6';
+      break;
+    case value > 0.6:
+      backgroundColor = '#DDFBB6';
+      break;
+    default:
+      backgroundColor = '#C9EDE5';
+      break;
   }
 
   return (
@@ -82,9 +81,9 @@ function PoolSaturationTag({ value }: Props): Node {
       <div className="piechart">
         <PieChart totalValue={totalValue} data={formatArray(value)} />
       </div>
-      <div className="value">{roundOneDecimal(value*100)}%</div>
+      <div className="value">{roundOneDecimal(value * 100)}%</div>
     </Tag>
-  )
+  );
 }
 
 const TagRevamp = styled.div`
@@ -97,7 +96,7 @@ const TagRevamp = styled.div`
   align-items: center;
   .value {
     margin-left: 6px;
-    color: #2B2C32;
+    color: #2b2c32;
     font-size: 16px;
     line-height: 22px;
   }
@@ -108,20 +107,20 @@ const TagRevamp = styled.div`
   @media (max-width: 1125px) {
     margin-bottom: 8px;
   }
-
 `;
 
 function PoolSaturationTagRevamp({ value }: Props): Node {
   const totalValue = 1;
+  const roundedSaturationValue = roundOneDecimal(value * 100);
   function formatArray(percent) {
     return [
       {
         value: percent,
-        color: '#DBE0E9',
+        color: value > 0.6 ? '#ED8600' : '#000000',
       },
       {
         value: totalValue - percent,
-        color: '#A7AFC0',
+        color: '#DBE0E9',
       },
     ];
   }
@@ -130,7 +129,7 @@ function PoolSaturationTagRevamp({ value }: Props): Node {
       <div className="piechart">
         <PieChart totalValue={totalValue} data={formatArray(value)} />
       </div>
-      <div className="value">{roundOneDecimal(value*100)}%</div>
+      <div className="value">{roundedSaturationValue}%</div>
     </TagRevamp>
   );
 }
