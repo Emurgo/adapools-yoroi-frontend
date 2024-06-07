@@ -241,7 +241,7 @@ function Home(props: HomeProps): Node {
     if (lovelaceDelegation > limit) return pools;
 
     return pools.filter((item) => {
-      return item != null && Number(item.total_stake) + lovelaceDelegation < limit;
+      return true; item != null && Number(item.total_stake) + lovelaceDelegation < limit;
     });
   }
 
@@ -289,7 +289,7 @@ function Home(props: HomeProps): Node {
     urlParams: { selectedPoolIds, totalAda },
   } = props;
 
-  const filteredPools = filterPools(rowDataSorted || rowData, totalAda);
+  const filteredPools = rowDataSorted || rowData;
 
   return (
     <LayoutRevamp>

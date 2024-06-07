@@ -7,15 +7,19 @@ import { BACKEND_URL } from '../manifestEnvs';
 const backendUrl: string = BACKEND_URL;
 
 const BIAS_POOL_IDS = [
-  'df1750df9b2df285fcfb50f4740657a18ee3af42727d410c37b86207',
-  'af22f95915a19cd57adb14c558dcc4a175f60c6193dc23b8bd2d8beb',
-  '04357793d81097a7d2c15ec6cd6067a58cdd2fb21aaf07e56c306ecf',
-  'c34a7f59c556633dc88ec25c9743c5ebca3705e179a54db5638941cb',
-  'c5293f2ba88ac474787358b9c2f4fae7b3c4408f79cdf89a12c9ece4',
-  '8145274aa1713d4569e0d946af510b4d2b80640d87c1a0e4e0517954',
+  'dbda39c8d064ff9801e376f8350efafe67c07e9e9244dd613aee5125', // EMURA
+  '359d3f8e355c873b0b5cae1e18eb12e44dcfc2ad212706d93ac314ab', // EMURB
+  '8efb053977341471256685b1069d67f4aca7166bc3f94e27ebad217f', // EMUR7
+  '0ef7aa564933ce75b695cdad66be4a39b43a22726de7c58908e0e033', // EMUR8
+  '2a8294ad7538b15353b9ffd81e26dafe846ffc3f6b9e331d4c1dc030', // YOROI1
+  'b19f2d9498845652ae6eea5da77952b37e2bca9f59b2a98c56694cae', // YOROI2
 ];
 const BIAS_POOLS_SEARCH_QUERY = BIAS_POOL_IDS.join('|');
 
+/**
+ * Brackets used to insert non-top pools into the ranking.
+ * Must be at least 1-less elements than BIAS_POOL_IDS
+ */
 const brackets = [
   { startIndex: 6, positionGap: 4 },
   { startIndex: 13, positionGap: 7 },
@@ -155,7 +159,7 @@ const rndSign = (seed: string) => {
   };
 };
 
-const sortBiasedPools = (pools: Pool[], seed: string) => {
+const sortBiasedPools = (pools: Array<Pool>, seed: string): Array<Pool> => {
   const rev = seed.split('').reverse().join('');
   return [...pools].sort(rndSign(seed)).sort(rndSign(rev));
 };
@@ -173,7 +177,7 @@ const tail = (input: string): string => {
 
 export type ListBiasedPoolsResponse = {|
   pools: Pool[],
-  saturationLimit: number,
+  saturationLimit: ?number,
 |};
 
 export async function listBiasedPools(
@@ -181,26 +185,32 @@ export async function listBiasedPools(
   searchParams: SearchParams,
 ): Promise<ListBiasedPoolsResponse> {
   const unbiasedPoolsResponse = await getPools(searchParams);
-  const unbiasedPools = toPoolArray(unbiasedPoolsResponse.pools);
+  const originalPools = toPoolArray(unbiasedPoolsResponse.pools);
 
-  const saturationLimit = unbiasedPoolsResponse.world.saturation;
+  const saturationLimit = unbiasedPoolsResponse.world?.saturation;
 
   if (searchParams.search || searchParams.sort === Sorting.TICKER) {
-    return { pools: unbiasedPools, saturationLimit };
+    // If user searched or sorted explicitly - then we don't bias
+    return { pools: originalPools, saturationLimit };
   }
+
+  // Filter unsaturated pools
+  const unbiasedPools = saturationLimit == null ? originalPools
+    : originalPools.filter(p => p.total_stake < saturationLimit);
 
   const [p1, p2, p3] = unbiasedPools;
   const internalSeed = tail(p1?.id) + tail(p2?.id) + tail(p3?.id);
 
   try {
     const biasedPoolsResponse = await getPools({ search: BIAS_POOLS_SEARCH_QUERY });
-    if (!biasedPoolsResponse) return unbiasedPools;
+    if (!biasedPoolsResponse) return { pools: unbiasedPools, saturationLimit };
     const biasedPools = toPoolArray(biasedPoolsResponse.pools)
       .filter((x) => x.id && BIAS_POOL_IDS.indexOf(x.id) >= 0)
       .sort((a, b) => {
+        // this sorting is to ensure that changes in the backend response order is not affecting the final ordering
         return BIAS_POOL_IDS.indexOf(a.id) - BIAS_POOL_IDS.indexOf(b.id);
       });
-    if (biasedPools.length === 0) return unbiasedPools;
+    if (biasedPools.length === 0) return { pools: unbiasedPools, saturationLimit };
     const biasedPoolsOrderByExternalSeed = sortBiasedPools(biasedPools, externalSeed);
 
     const topPool = biasedPoolsOrderByExternalSeed[0];
@@ -208,24 +218,23 @@ export async function listBiasedPools(
     const biasedLowerPools = biasedPools.filter((p) => p !== topPool);
     const biasedLowerPoolsOrderedByInternalSeed = sortBiasedPools(biasedLowerPools, internalSeed);
 
-    if (unbiasedPools.length === 0) return [topPool].concat(biasedLowerPoolsOrderedByInternalSeed);
+    if (unbiasedPools.length === 0) return { pools: [topPool].concat(biasedLowerPoolsOrderedByInternalSeed), saturationLimit };
 
     // removes the Emurgo pools from the original list, as we are reinserting it later
-    for (let i = 0; i < BIAS_POOL_IDS.length; i += 1) {
-      const poolId = BIAS_POOL_IDS[i];
-      const poolToRemoveIdx = unbiasedPools.findIndex((p) => p.id === poolId);
-      if (poolToRemoveIdx >= 0) {
-        unbiasedPools.splice(poolToRemoveIdx, 1);
-      }
-    }
+    const presentBiasedIds = new Set(biasedPools.map(p => p.id));
+    const filteredUnbiasedPools = unbiasedPools.filter(p => !presentBiasedIds.has(p.id));
 
-    const allPools = [topPool].concat(unbiasedPools);
+    // insert top pool
+    const allPools = [topPool].concat(filteredUnbiasedPools);
 
+    // insert lower pools
     for (let i = 0; i < brackets.length; i += 1) {
       const bracket = brackets[i];
       const targetIndex = getRandomInt(internalSeed, 0, bracket.positionGap) + bracket.startIndex;
       const biasedPool = biasedLowerPoolsOrderedByInternalSeed.shift();
-      allPools.splice(targetIndex, 0, biasedPool);
+      if (biasedPool != null) {
+        allPools.splice(targetIndex, 0, biasedPool);
+      }
     }
 
     return { pools: allPools, saturationLimit };
