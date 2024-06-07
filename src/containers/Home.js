@@ -183,25 +183,6 @@ function Home(props: HomeProps): Node {
 
   const alertText = null;
 
-  function filterPools(pools: ?Array<Pool>, totalAda: ?number): ?Array<Pool> {
-    if (pools == null) return pools;
-
-    const limit: ?number = saturationLimit;
-
-    // don't filter out saturated pools if the user explicitly searches
-    if (limit == null || (filterOptions.search != null && filterOptions.search !== '')) {
-      return pools;
-    }
-
-    const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
-
-    if (lovelaceDelegation > limit) return pools;
-
-    return pools.filter((item) => {
-      return item != null && Number(item.total_stake) + lovelaceDelegation < limit;
-    });
-  }
-
   const {
     urlParams: { selectedPoolIds, totalAda },
   } = props;
@@ -219,7 +200,7 @@ function Home(props: HomeProps): Node {
         <DesktopTable
           status={status}
           delegateFunction={delegateFunction}
-          data={filterPools(rowData, totalAda)}
+          data={rowData}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
@@ -228,7 +209,7 @@ function Home(props: HomeProps): Node {
         <MobileTable
           status={status}
           delegateFunction={delegateFunction}
-          data={filterPools(rowData, totalAda)}
+          data={rowData}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
         />
