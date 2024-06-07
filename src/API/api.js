@@ -196,7 +196,7 @@ export async function listBiasedPools(
 
   // Filter unsaturated pools
   const unbiasedPools = saturationLimit == null ? originalPools
-    : originalPools.filter(p => p.total_stake < saturationLimit);
+    : originalPools.filter(p => Number(p.total_stake) < saturationLimit);
 
   const [p1, p2, p3] = unbiasedPools;
   const internalSeed = tail(p1?.id) + tail(p2?.id) + tail(p3?.id);
@@ -217,7 +217,8 @@ export async function listBiasedPools(
 
     // TODO: manual intervention to be removed when new pools are deemed viable
     const topPool = biasedPoolsOrderByExternalSeed
-      .find(p => p.id === '0ef7aa564933ce75b695cdad66be4a39b43a22726de7c58908e0e033'); // EMUR8
+      .find(p => p.id === '0ef7aa564933ce75b695cdad66be4a39b43a22726de7c58908e0e033') // EMUR8
+      ?? biasedPoolsOrderByExternalSeed[0];
 
     const biasedLowerPools = biasedPools.filter((p) => p !== topPool);
     const biasedLowerPoolsOrderedByInternalSeed = sortBiasedPools(biasedLowerPools, internalSeed);
