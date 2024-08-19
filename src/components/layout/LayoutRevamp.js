@@ -8,15 +8,24 @@ const Container = styled.div`
   width: 100%;
   padding: 20px 0px;
 `;
-const Background = styled.div`
-  background-color: #ffffff;
-`;
 
-function LayoutRevamp({ children }: {| children?: ?Node |}): Node {
+const SBackground = styled('div')(({ isDark }) => ({
+  backgroundColor: isDark ? '#1F232E' : '#EAEDF2',
+  '& h1, & h2, & h3, & h4, & h5, & h6, & a, & p, & span': {
+    color: isDark && '#E1E6F5',
+  },
+  '& table': {
+    background: isDark && '#1F232E',
+  },
+}));
+
+function LayoutRevamp({ children, urlParams }: {| children?: ?Node, urlParams: any |}): Node {
+  const isDark = urlParams.theme === 'dark';
+
   return (
-    <Background>
+    <SBackground isDark={isDark}>
       <Container>{children}</Container>
-    </Background>
+    </SBackground>
   );
 }
 

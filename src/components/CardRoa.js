@@ -18,6 +18,7 @@ const RoaElement = styled.div`
 type Props = {|
   roa: string,
   description?: string,
+  isDark?: boolean,
 |};
 
 function CardRoa({ roa, description }: Props): Node {
@@ -31,17 +32,17 @@ function CardRoa({ roa, description }: Props): Node {
   );
 }
 
-const RoaElementRevamp = styled.div`
-  height: 26px;
-  padding: 3px 0;
-  color: #242838;
-  font-size: 16px;
-  text-align: left;
-`;
+const RoaElementRevamp = styled('div')(({ isDark }) => ({
+  height: '26px',
+  padding: '3px 0',
+  color: isDark ? '#E1E6F5' : '#242838',
+  fontSize: '16px',
+  textAlign: 'left',
+}));
 
-function CardRoaRevamp({ roa, description }: Props): Node {
+function CardRoaRevamp({ roa, description, isDark }: Props): Node {
   return (
-    <RoaElementRevamp>
+    <RoaElementRevamp isDark={isDark}>
       {description}
       {parseFloat(roa) === 0 ? 'unknown' : `${parseFloat(roa).toFixed(2)}% `}
     </RoaElementRevamp>

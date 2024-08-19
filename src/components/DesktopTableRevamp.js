@@ -21,80 +21,73 @@ const TableContent = styled.div`
   align-items: flex-end;
 `;
 
-const Table = styled.table`
-  width: 100%;
-  background: white;
-  border-spacing: 0 0.8rem;
-  position: relative;
-  table-layout: fixed;
-  tr td {
-    white-space: nowrap;
-  }
-  thead {
-    position: relative;
-
-    &:after {
-      content: '';
-      width: 100%;
-      height: 6px;
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-bottom: 2px solid #f0f4f5;
-    }
-    th {
-      text-align: left;
-      color: #6b7384;
-      font-size: 14px;
-      letter-spacing: 0;
-      font-weight: 400;
-      padding: 12px 20px 16px 0;
-      &:first-child {
-        & > div:first-child {
-          padding-top: 18px;
-        }
-      }
-    }
-  }
-  tbody {
-    td {
-      &:not(:first-child) {
-        padding-right: 25px;
-      }
-    }
-  }
-  [class^='col'] {
-    width: 180px;
-  }
-  .col-0 {
-    width: 360px;
-  }
-  .col-1 {
-    width: 100px;
-  }
-  .col-2 {
-    width: 130px;
-  }
-  .col-3 {
-    width: 100px;
-  }
-  .col-4 {
-    width: 120px;
-  }
-  .col-5 {
-    width: 90px;
-  }
-  .col-6 {
-    width: 90px;
-  }
-  .col-7 {
-    width: 70px;
-  }
-  .col-last {
-    width: 120px;
-  }
-`;
+const Table = styled('table')(({ isDark }) => ({
+  width: '100%',
+  borderSpacing: '0 0.8rem',
+  position: 'relative',
+  tableLayout: 'fixed',
+  'tr td': {
+    whiteSpace: 'nowrap',
+  },
+  thead: {
+    position: 'relative',
+    '&:after': {
+      content: '""',
+      width: '100%',
+      height: '6px',
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      borderBottom: isDark ? '2px solid #15171F' : '2px solid #f0f4f5',
+    },
+    th: {
+      textAlign: 'left',
+      fontSize: '14px',
+      letterSpacing: 0,
+      fontWeight: 400,
+      padding: '12px 20px 16px 0',
+      '&:first-child > div:first-child': {
+        paddingTop: '18px',
+      },
+    },
+  },
+  tbody: {
+    'td:not(:first-child)': {
+      paddingRight: '25px',
+    },
+  },
+  "[class^='col']": {
+    width: '180px',
+  },
+  '.col-0': {
+    width: '360px',
+  },
+  '.col-1': {
+    width: '100px',
+  },
+  '.col-2': {
+    width: '130px',
+  },
+  '.col-3': {
+    width: '100px',
+  },
+  '.col-4': {
+    width: '120px',
+  },
+  '.col-5': {
+    width: '90px',
+  },
+  '.col-6': {
+    width: '90px',
+  },
+  '.col-7': {
+    width: '70px',
+  },
+  '.col-last': {
+    width: '120px',
+  },
+}));
 
 const Message = styled.h1`
   font-weight: 400;
@@ -109,6 +102,7 @@ type Props = {|
   totalAda: ?number,
   handleSort: Function,
   activeSort: Object,
+  isDark: ?boolean,
 |};
 
 function DesktopTableRevamp({
@@ -119,6 +113,7 @@ function DesktopTableRevamp({
   totalAda,
   handleSort,
   activeSort,
+  isDark,
 }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
@@ -184,7 +179,7 @@ function DesktopTableRevamp({
 
   return (
     <TableContent>
-      <Table>
+      <Table isDark={isDark}>
         <thead>
           <tr role="row">
             {tableTheads.map(({ label, value, textInfo, id }) => {
@@ -222,24 +217,25 @@ function DesktopTableRevamp({
                     />
                   </td>
                   <td>
-                    <CardRoaRevamp roa={pool.roa} />
+                    <CardRoaRevamp roa={pool.roa} isDark={!!isDark} />
                   </td>
                   <td>
-                    <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
+                    <ValueRevamp isDark={isDark}>{formatBigNumber(pool.total_stake)}</ValueRevamp>
                   </td>
                   <td>
-                    <PoolSaturationTagRevamp value={pool.saturation} />
+                    <PoolSaturationTagRevamp value={pool.saturation} isDark={!!isDark} />
                   </td>
                   <td>
                     <CostsCardRevamp
                       value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
+                      isDark={!!isDark}
                     />
                   </td>
                   <td>
                     <PledgeCardRevamp value={pool.pledge} real={pool.pledge_real} />
                   </td>
                   <td>
-                    <ValueRevamp>{pool.blocks_epoch}</ValueRevamp>
+                    <ValueRevamp isDark={isDark}>{pool.blocks_epoch}</ValueRevamp>
                   </td>
                   <td>
                     <ButtonRevamp
@@ -269,7 +265,7 @@ function DesktopTableRevamp({
 
 export default DesktopTableRevamp;
 
-export const ValueRevamp: any = styled.div`
-  color: #242838;
-  font-size: 16px;
-`;
+export const ValueRevamp: any = styled('div')(({ isDark }) => ({
+  color: isDark ? '#E1E6F5' : '#242838',
+  fontSize: '16px',
+}));

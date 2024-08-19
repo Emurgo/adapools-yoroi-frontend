@@ -15,41 +15,41 @@ import { PoolSaturationTagRevamp } from './PoolSaturationTag';
 import { ValueRevamp } from './DesktopTableRevamp';
 import NoStakePoolsFound from './NoStakePoolsFound';
 
-const CardMobile = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-radius: 8px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
-  margin-bottom: 24px;
-  padding: 11px 16px;
-`;
-const WrapperContent = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 15px 0;
-  @media (max-width: 1125px) {
-    align-items: flex-start;
-  }
+const CardMobile = styled('div')(({ isDark }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  borderRadius: '8px',
+  backgroundColor: isDark ? '#15171F' : '#ffffff',
+  boxShadow: '0 2px 12px 0 rgba(0, 0, 0, 0.06)',
+  marginBottom: '24px',
+  padding: '11px 16px',
+}));
 
-  .label {
-    color: #6b7384;
-    font-size: 14px;
-    letter-spacing: 0;
-    line-height: 22px;
-    margin-bottom: 8px;
-  }
-  .item {
-    flex: 1;
-    @media (max-width: 1125px) {
-      align-items: flex-start;
-    }
-  }
-  .cost-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-`;
+const WrapperContent = styled('div')(({ isDark }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  margin: '15px 0',
+  '@media (max-width: 1125px)': {
+    alignItems: 'flex-start',
+  },
+  '.label': {
+    color: isDark ? '#E1E6F5' : '#6b7384',
+    fontSize: '14px',
+    letterSpacing: 0,
+    lineHeight: '22px',
+    marginBottom: '8px',
+  },
+  '.item': {
+    flex: 1,
+    '@media (max-width: 1125px)': {
+      alignItems: 'flex-start',
+    },
+  },
+  '.cost-wrapper': {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+}));
 
 const Message = styled.h1`
   font-weight: 400;
@@ -62,6 +62,7 @@ type Props = {|
   +status: QueryState,
   selectedIdPools: ?Array<string>,
   totalAda: ?number,
+  isDark: ?boolean,
 |};
 
 function MobileTableRevamp({
@@ -70,6 +71,7 @@ function MobileTableRevamp({
   status,
   selectedIdPools,
   totalAda,
+  isDark,
 }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
@@ -93,7 +95,7 @@ function MobileTableRevamp({
         data
           .filter((x) => x != null)
           .map((pool) => (
-            <CardMobile key={pool.id}>
+            <CardMobile key={pool.id} isDark={isDark}>
               <StakingPoolCardRevamp
                 id={pool.id}
                 bech={pool.id_bech}
@@ -107,15 +109,15 @@ function MobileTableRevamp({
               <WrapperContent style={{ display: 'flex' }}>
                 <div className="item">
                   <div className="label">ROA 30d</div>
-                  <CardRoaRevamp roa={pool.roa} />
+                  <CardRoaRevamp roa={pool.roa} isDark={!!isDark} />
                 </div>
                 <div className="item">
                   <div className="label">Pool size</div>
-                  <ValueRevamp>{formatBigNumber(pool.total_stake)}</ValueRevamp>
+                  <ValueRevamp isDark={!!isDark}>{formatBigNumber(pool.total_stake)}</ValueRevamp>
                 </div>
                 <div className="item">
                   <div className="label">Saturation</div>
-                  <PoolSaturationTagRevamp value={pool.saturation} />
+                  <PoolSaturationTagRevamp value={pool.saturation} isDark={!!isDark} />
                 </div>
               </WrapperContent>
               <WrapperContent style={{ display: 'flex' }}>
@@ -124,6 +126,7 @@ function MobileTableRevamp({
                   <div className="cost-wrapper">
                     <CostsCardRevamp
                       value={formatCostLabel(Number(pool.tax_ratio), pool.tax_fix)}
+                      isDark={!!isDark}
                     />
                   </div>
                 </div>

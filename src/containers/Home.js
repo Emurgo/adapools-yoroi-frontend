@@ -80,6 +80,7 @@ export type UrlParams = {|
   totalAda: ?number,
   layout: ?string,
   bias: ?string,
+  theme: ?string,
 |};
 
 export type HomeProps = {|
