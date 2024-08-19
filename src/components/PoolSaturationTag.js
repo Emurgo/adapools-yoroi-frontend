@@ -60,21 +60,21 @@ function PoolSaturationTag({ value }: Props): Node {
   let backgroundColor = null;
 
   switch (true) {
-    case value > 0.9:
-      backgroundColor = '#FFC3D3';
-      break;
-    case value > 0.8:
-      backgroundColor = '#FCE4BC';
-      break;
-    case value > 0.7:
-      backgroundColor = '#FBF6B6';
-      break;
-    case value > 0.6:
-      backgroundColor = '#DDFBB6';
-      break;
-    default:
-      backgroundColor = '#C9EDE5';
-      break;
+  case value > 0.9:
+    backgroundColor = '#FFC3D3';
+    break;
+  case value > 0.8:
+    backgroundColor = '#FCE4BC';
+    break;
+  case value > 0.7:
+    backgroundColor = '#FBF6B6';
+    break;
+  case value > 0.6:
+    backgroundColor = '#DDFBB6';
+    break;
+  default:
+    backgroundColor = '#C9EDE5';
+    break;
   }
 
   return (
