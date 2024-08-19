@@ -126,7 +126,6 @@ function PoolSaturationTagRevamp({ value, isDark }: Props): Node {
     ];
   }
 
-  console.log('PoolSaturationTagRevamp', isDark);
   return (
     <TagRevamp isDark={isDark}>
       <div className="piechart">

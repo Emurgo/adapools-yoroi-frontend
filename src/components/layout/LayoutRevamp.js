@@ -9,8 +9,9 @@ const Container = styled.div`
   padding: 20px 0px;
 `;
 
-const SBackground = styled('div')(({ isDark }) => ({
-  backgroundColor: isDark ? '#1F232E' : '#EAEDF2',
+const SBackground = styled('div')(({ isDark,isLight }) => ({
+  // eslint-disable-next-line no-nested-ternary
+  backgroundColor: isDark ? '#1F232E' :  isLight ? '#EAEDF2' : '#FFFFFF',
   '& h1, & h2, & h3, & h4, & h5, & h6, & a, & p, & span': {
     color: isDark && '#E1E6F5',
   },
@@ -21,9 +22,10 @@ const SBackground = styled('div')(({ isDark }) => ({
 
 function LayoutRevamp({ children, urlParams }: {| children?: ?Node, urlParams: any |}): Node {
   const isDark = urlParams.theme === 'dark';
+  const isLight = urlParams.theme === 'light';
 
   return (
-    <SBackground isDark={isDark}>
+    <SBackground isDark={isDark} isLight={isLight}>
       <Container>{children}</Container>
     </SBackground>
   );

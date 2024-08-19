@@ -10,9 +10,10 @@ const Form = styled.form`
   position: relative;
   margin-right: 1px;
 `;
-const SearchInput = styled('input')(({ isDark }) => ({
+const SearchInput = styled('input')(({ isDark,isLight }) => ({
   height: '40px',
-  backgroundColor:isDark ? 'transparent': '#fff',
+  // eslint-disable-next-line no-nested-ternary
+  backgroundColor:isDark ? 'transparent': isLight ? '#EAEDF2' : '#fff',
   display: 'block',
   fontSize: '14px',
   lineHeight: '1.3',  // Adjusted to match the duplicate property
@@ -72,9 +73,10 @@ const ClearBtn = styled('div')(() => ({
 type Props = {|
   filter: Function,
   isDark?: boolean,
+  isLight?: boolean,
 |};
 
-const SearchRevamp = ({ filter,isDark }: Props): Node => {
+const SearchRevamp = ({ filter,isDark,isLight }: Props): Node => {
   const [prevSearch, setPrevSearch] = useState('');
   const [searchValue, setSearchValue] = useState('');
 
@@ -103,6 +105,7 @@ const SearchRevamp = ({ filter,isDark }: Props): Node => {
         placeholder="Search stake pool"
         type="text"
         isDark={isDark}
+        isLight={isLight}
       />
       {searchValue.length > 0 &&   
       <ClearBtn

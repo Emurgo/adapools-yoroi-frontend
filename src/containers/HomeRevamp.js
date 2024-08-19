@@ -273,6 +273,7 @@ function Home(props: HomeProps): Node {
 
   const filteredPools = rowDataSorted || rowData;
   const isDark = theme === 'dark';
+  const isLight = theme === 'light';
 
   return (
     <LayoutRevamp urlParams={urlParams}>
@@ -280,9 +281,12 @@ function Home(props: HomeProps): Node {
         <Title>Stake pools ({status === 'resolved' ? filteredPools?.length : '...'})</Title>
         <Alert title={alertText} />
         <Header>
-          <SearchRevamp filter={filterSearch} isDark={isDark} />
+          <SearchRevamp filter={filterSearch} isDark={isDark} isLight={isLight} />
           <MobileOnly>
-            <SortSelect filter={filterSelect} isDark={isDark} />
+            <SortSelect
+              filter={filterSelect}
+              isDark={isDark}
+            />
           </MobileOnly>
           {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
           {/*  Colors meaning */}
