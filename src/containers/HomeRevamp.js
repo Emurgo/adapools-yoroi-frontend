@@ -280,9 +280,9 @@ function Home(props: HomeProps): Node {
         <Title>Stake pools ({status === 'resolved' ? filteredPools?.length : '...'})</Title>
         <Alert title={alertText} />
         <Header>
-          <SearchRevamp filter={filterSearch} />
+          <SearchRevamp filter={filterSearch} isDark={isDark} />
           <MobileOnly>
-            <SortSelect filter={filterSelect} />
+            <SortSelect filter={filterSelect} isDark={isDark} />
           </MobileOnly>
           {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
           {/*  Colors meaning */}
