@@ -42,15 +42,15 @@ const Title = styled.h1`
     margin-bottom: 20px;
   }
 `;
-const HeaderRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid #f0f4f5;
-  @media (max-width: 1125px) {
-    flex-direction: column;
-  }
-`;
+const HeaderRow = styled('div')(({ isDark }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  borderBottom: isDark ? '2px solid #15171F' : '2px solid #f0f4f5',
+  '@media (max-width: 1125px)': {
+    flexDirection: 'column',
+  },
+}));
 
 // const ColorButton = styled.button`
 //   border: none;
@@ -98,6 +98,7 @@ export type UrlParams = {|
   totalAda: ?number,
   layout: ?string,
   bias: ?string,
+  theme: ?string,
 |};
 
 export type HomeProps = {|
@@ -267,20 +268,25 @@ function Home(props: HomeProps): Node {
   };
 
   const {
-    urlParams: { selectedPoolIds, totalAda },
+    urlParams: { selectedPoolIds, totalAda, theme },
   } = props;
 
   const filteredPools = rowDataSorted || rowData;
+  const isDark = theme === 'dark';
+  const isLight = theme === 'light';
 
   return (
-    <LayoutRevamp>
-      <HeaderRow>
+    <LayoutRevamp urlParams={urlParams}>
+      <HeaderRow isDark={isDark}>
         <Title>Stake pools ({status === 'resolved' ? filteredPools?.length : '...'})</Title>
         <Alert title={alertText} />
         <Header>
-          <SearchRevamp filter={filterSearch} />
+          <SearchRevamp filter={filterSearch} isDark={isDark} isLight={isLight} />
           <MobileOnly>
-            <SortSelect filter={filterSelect} />
+            <SortSelect
+              filter={filterSelect}
+              isDark={isDark}
+            />
           </MobileOnly>
           {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
           {/*  Colors meaning */}
@@ -296,6 +302,7 @@ function Home(props: HomeProps): Node {
           totalAda={totalAda}
           handleSort={handleSort}
           activeSort={activeSort}
+          isDark={isDark}
         />
       </DesktopOnly>
       <MobileOnly>
@@ -305,6 +312,7 @@ function Home(props: HomeProps): Node {
           data={filteredPools}
           selectedIdPools={selectedPoolIds}
           totalAda={totalAda}
+          isDark={isDark}
         />
       </MobileOnly>
       {openModal && confirmDelegationModal && (

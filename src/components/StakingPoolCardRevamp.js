@@ -85,7 +85,15 @@ function truncateString(string: string, maxLength: number): string {
   }
   return `${string.substring(0, maxLength)}...`;
 }
-function StakingPoolCardRevamp({ id, bech, avatar, tickerName, name, links, fullname }: Props): Node {
+function StakingPoolCardRevamp({
+  id,
+  bech,
+  avatar,
+  tickerName,
+  name,
+  links,
+  fullname,
+}: Props): Node {
   const twitter = links && links.tw;
   const telegram = links && links.tg;
   const facebook = links && links.fb;
