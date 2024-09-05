@@ -24,6 +24,7 @@ const extractParams = (locationSearch: string): UrlParams => {
     totalAda: Number(params.get('totalAda')),
     layout: params.get('layout'),
     bias: params.get('bias'),
+    theme: params.get('theme'),
   };
 };
 

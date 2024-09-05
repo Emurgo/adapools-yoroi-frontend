@@ -20,31 +20,31 @@ const WrapperSelectInput = styled.div`
   }
 `;
 
-const SelectInput = styled.select`
-  height: 40px;
-  display: block;
-  font-size: 14px;
-  line-height: 22px;
-  color: #2b2c32;
-  line-height: 1.3;
-  padding: 0.6em 1.4em 0.5em 0.8em;
-  width: 322px;
-  margin: 0;
-  border: none;
-  border-radius: 8px;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  background-color: #f0f3f5;
-  background-image: url(${arrowDownIcon});
-  background-repeat: no-repeat, repeat;
-  background-position: right 0.7em top 50%, 0 0;
-  background-size: 24px auto, 100%;
-`;
+const SelectInput = styled('select')(({ isDark }) => ({
+  height: '40px',
+  display: 'block',
+  fontSize: '14px',
+  lineHeight: '1.3', // Adjusted to match the duplicate property
+  color:isDark ? '#7C85A3' :'#2b2c32',
+  padding: '0.6em 1.4em 0.5em 0.8em',
+  width: '322px',
+  margin: 0,
+  border:isDark ? '1px solid #a7afc0' : 'none',
+  borderRadius: '8px',
+  MozAppearance: 'none',
+  WebkitAppearance: 'none',
+  appearance: 'none',
+  backgroundColor: isDark ? 'transparent' : '#f0f3f5',
+  backgroundImage: `url(${arrowDownIcon})`,
+  backgroundRepeat: 'no-repeat, repeat',
+  backgroundPosition: 'right 0.7em top 50%, 0 0',
+  backgroundSize: '24px auto, 100%',
+}));
 
 type Props = {|
   filter: Function,
   isRevamp?: boolean,
+  isDark?: boolean,
 |};
 
 export const sortingSelectData = [
@@ -63,7 +63,7 @@ export const sortingSelectDataRevamp = [
   { label: 'Blocks', value: Sorting.BLOCKS },
 ];
 
-function SortSelect({ filter, isRevamp = true }: Props): React$Node {
+function SortSelect({ filter, isRevamp = true, isDark }: Props): React$Node {
   const [selectValue, setSelectValue] = React.useState<SortingEnum>('score');
 
   const handleChange = (e) => {
@@ -74,7 +74,7 @@ function SortSelect({ filter, isRevamp = true }: Props): React$Node {
   return (
     <WrapperSelectInput>
       <label htmlFor="sort">Sort by:</label>
-      <SelectInput name="" id="sort" value={selectValue} onChange={handleChange}>
+      <SelectInput name="" id="sort" value={selectValue} onChange={handleChange} isDark={isDark}>
         {(isRevamp ? sortingSelectDataRevamp : sortingSelectData).map(({ value, label }) => (
           <option key={value} value={value}>
             {label}

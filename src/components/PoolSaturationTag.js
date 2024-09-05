@@ -39,6 +39,7 @@ const Tag = styled.div`
 
 type Props = {|
   +value: number,
+  isDark?: boolean,
 |};
 
 function PoolSaturationTag({ value }: Props): Node {
@@ -86,30 +87,30 @@ function PoolSaturationTag({ value }: Props): Node {
   );
 }
 
-const TagRevamp = styled.div`
-  padding: 2px 0;
-  background: ${(props) => props.background};
-  border-radius: 8px;
-  color: #2b2c32;
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-  .value {
-    margin-left: 6px;
-    color: #2b2c32;
-    font-size: 16px;
-    line-height: 22px;
-  }
-  .piechart {
-    min-width: 17px;
-    height: 17px;
-  }
-  @media (max-width: 1125px) {
-    margin-bottom: 8px;
-  }
-`;
+const TagRevamp = styled('div')(({ background, isDark }) => ({
+  padding: '2px 0',
+  background,
+  borderRadius: '8px',
+  color: isDark ? '#E1E6F5' : '#2b2c32',
+  marginRight: '10px',
+  display: 'flex',
+  alignItems: 'center',
+  '.value': {
+    marginLeft: '6px',
+    color: isDark ? '#E1E6F5' : '#2b2c32',
+    fontSize: '16px',
+    lineHeight: '22px',
+  },
+  '.piechart': {
+    minWidth: '17px',
+    height: '17px',
+  },
+  '@media (max-width: 1125px)': {
+    marginBottom: '8px',
+  },
+}));
 
-function PoolSaturationTagRevamp({ value }: Props): Node {
+function PoolSaturationTagRevamp({ value, isDark }: Props): Node {
   const totalValue = 1;
   const roundedSaturationValue = roundOneDecimal(value * 100);
   function formatArray(percent) {
@@ -124,8 +125,9 @@ function PoolSaturationTagRevamp({ value }: Props): Node {
       },
     ];
   }
+
   return (
-    <TagRevamp>
+    <TagRevamp isDark={isDark}>
       <div className="piechart">
         <PieChart totalValue={totalValue} data={formatArray(value)} />
       </div>
