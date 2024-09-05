@@ -8,7 +8,7 @@ const backendUrl: string = BACKEND_URL;
 
 const BIAS_POOL_IDS = [
   'dbda39c8d064ff9801e376f8350efafe67c07e9e9244dd613aee5125', // EMURA
-  '359d3f8e355c873b0b5cae1e18eb12e44dcfc2ad212706d93ac314ab', // EMURB
+  // '359d3f8e355c873b0b5cae1e18eb12e44dcfc2ad212706d93ac314ab', // EMURB
   '8efb053977341471256685b1069d67f4aca7166bc3f94e27ebad217f', // EMUR7
   '0ef7aa564933ce75b695cdad66be4a39b43a22726de7c58908e0e033', // EMUR8
   '2a8294ad7538b15353b9ffd81e26dafe846ffc3f6b9e331d4c1dc030', // YORO1
@@ -213,12 +213,7 @@ export async function listBiasedPools(
     if (biasedPools.length === 0) return { pools: unbiasedPools, saturationLimit };
     const biasedPoolsOrderByExternalSeed = sortBiasedPools(biasedPools, externalSeed);
 
-    // const topPool = biasedPoolsOrderByExternalSeed[0];
-
-    // TODO: manual intervention to be removed when new pools are deemed viable
-    const topPool = biasedPoolsOrderByExternalSeed
-      .find(p => p.id === '0ef7aa564933ce75b695cdad66be4a39b43a22726de7c58908e0e033') // EMUR8
-      ?? biasedPoolsOrderByExternalSeed[0];
+    const topPool = biasedPoolsOrderByExternalSeed[0];
 
     const biasedLowerPools = biasedPools.filter((p) => p !== topPool);
     const biasedLowerPoolsOrderedByInternalSeed = sortBiasedPools(biasedLowerPools, internalSeed);
