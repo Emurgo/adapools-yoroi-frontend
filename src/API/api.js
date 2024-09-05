@@ -213,12 +213,7 @@ export async function listBiasedPools(
     if (biasedPools.length === 0) return { pools: unbiasedPools, saturationLimit };
     const biasedPoolsOrderByExternalSeed = sortBiasedPools(biasedPools, externalSeed);
 
-    // const topPool = biasedPoolsOrderByExternalSeed[0];
-
-    // TODO: manual intervention to be removed when new pools are deemed viable
-    const topPool = biasedPoolsOrderByExternalSeed
-      .find(p => p.id === '0ef7aa564933ce75b695cdad66be4a39b43a22726de7c58908e0e033') // EMUR8
-      ?? biasedPoolsOrderByExternalSeed[0];
+    const topPool = biasedPoolsOrderByExternalSeed[0];
 
     const biasedLowerPools = biasedPools.filter((p) => p !== topPool);
     const biasedLowerPoolsOrderedByInternalSeed = sortBiasedPools(biasedLowerPools, internalSeed);
