@@ -11,7 +11,7 @@ const Container = styled.div`
 
 const SBackground = styled('div')(({ isDark, isLight }) => ({
   // eslint-disable-next-line no-nested-ternary
-  backgroundColor: isDark ? '#15171F' : isLight ? '#FFFFFF' : '#FFFFFF',
+  backgroundColor: isDark ? '#15171F' : '#FFFFFF',
   '& h1, & h2, & h3, & h4, & h5, & h6, & a, & p, & span': {
     color: isDark && '#E1E6F5',
   },
