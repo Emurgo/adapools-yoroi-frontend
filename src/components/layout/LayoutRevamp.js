@@ -16,7 +16,7 @@ const SBackground = styled('div')(({ isDark, isLight }) => ({
     color: isDark && '#E1E6F5',
   },
   '& table': {
-    background: isDark && '#1F232E',
+    background: isDark && '#15171F',
   },
 }));
 
