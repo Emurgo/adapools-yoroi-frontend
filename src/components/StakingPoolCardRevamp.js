@@ -105,7 +105,6 @@ function StakingPoolCardRevamp({
   const telegram = links && links.tg;
   const facebook = links && links.fb;
   const youtube = links && links.yt;
-  const twitch = links && links.tc;
   const discord = links && links.di;
   const github = links && links.gh;
   const websiteUrl =
