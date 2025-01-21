@@ -25,11 +25,11 @@ const SelectInput = styled('select')(({ isDark }) => ({
   display: 'block',
   fontSize: '14px',
   lineHeight: '1.3', // Adjusted to match the duplicate property
-  color:isDark ? '#7C85A3' :'#2b2c32',
+  color: isDark ? '#7C85A3' : '#2b2c32',
   padding: '0.6em 1.4em 0.5em 0.8em',
   width: '322px',
   margin: 0,
-  border:isDark ? '1px solid #a7afc0' : 'none',
+  border: isDark ? '1px solid #4B5266' : 'none',
   borderRadius: '8px',
   MozAppearance: 'none',
   WebkitAppearance: 'none',

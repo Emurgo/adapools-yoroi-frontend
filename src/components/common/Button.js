@@ -48,7 +48,7 @@ const BtnRevampWrapper = styled.button`
   padding: 9px 20px;
   font-size: 14px;
   font-weight: 500;
-  color: #4b6dde;
+  color: #7892e8;
   background: none;
   border: 0;
   border-radius: 8px;
@@ -58,7 +58,7 @@ const BtnRevampWrapper = styled.button`
   letter-spacing: 0.5px;
   &:hover {
     color: #3154cb;
-    background-color: #f0f3f5;
+    background-color: #e4e8f7;
   }
 
   &:active {

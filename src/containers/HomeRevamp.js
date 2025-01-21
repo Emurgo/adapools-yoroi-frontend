@@ -274,7 +274,6 @@ function Home(props: HomeProps): Node {
   const filteredPools = rowDataSorted || rowData;
   const isDark = theme === 'dark';
   const isLight = theme === 'light';
-
   return (
     <LayoutRevamp urlParams={urlParams}>
       <HeaderRow isDark={isDark}>
@@ -283,10 +282,7 @@ function Home(props: HomeProps): Node {
         <Header>
           <SearchRevamp filter={filterSearch} isDark={isDark} isLight={isLight} />
           <MobileOnly>
-            <SortSelect
-              filter={filterSelect}
-              isDark={isDark}
-            />
+            <SortSelect filter={filterSelect} isDark={isDark} />
           </MobileOnly>
           {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
           {/*  Colors meaning */}

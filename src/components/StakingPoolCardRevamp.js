@@ -5,6 +5,13 @@ import styled from 'styled-components';
 import { toSvg } from 'jdenticon';
 import SVG from 'react-inlinesvg';
 
+import discordSVG from '../assets/social-discord-icon.svg';
+import fbSVG from '../assets/social-fb-icon.svg';
+import githubSVG from '../assets/social-github-icon.svg';
+import xSVG from '../assets/social-x-icon.svg';
+import youtubeSVG from '../assets/social-youtube-icon.svg';
+import telegramSVG from '../assets/social-telegram-icon.svg';
+
 const MainCardPool = styled.div`
   display: flex;
   padding: 15px 0;
@@ -24,7 +31,7 @@ const MainCardPool = styled.div`
   .card-info {
     display: flex;
     flex-wrap: wrap;
-    color: #1a44b7;
+    color: #7892e8;
     font-size: 16px;
     letter-spacing: 0;
     line-height: 22px;
@@ -38,7 +45,7 @@ const MainCardPool = styled.div`
   .name {
     margin-right: 8px;
     margin-bottom: 4px;
-    color: #3154cb;
+    color: #7892e8;
     text-decoration: none;
   }
   .social-media {
@@ -122,37 +129,32 @@ function StakingPoolCardRevamp({
         <span className="social-media">
           {twitter ? (
             <a href={`https://twitter.com/${twitter}`} target="_blank" rel="noreferrer noopener">
-              <i className="fa fa-twitter" />
+              <img src={xSVG} id="logo-mini" alt="twitter-logo" />
             </a>
           ) : null}
           {telegram ? (
             <a href={`https://t.me/${telegram}`} target="_blank" rel="noreferrer noopener">
-              <i className="fa fa-telegram" />
+              <img src={telegramSVG} id="logo-mini" alt="telegram-logo" />
             </a>
           ) : null}
           {facebook ? (
             <a href={`https://fb.me/${facebook}`} target="_blank" rel="noreferrer noopener">
-              <i className="fa fa-facebook" />
+              <img src={fbSVG} id="logo-mini" alt="fb-logo" />
             </a>
           ) : null}
           {youtube ? (
             <a href={`https://youtube.com/${youtube}`} target="_blank" rel="noreferrer noopener">
-              <i className="fa fa-youtube" />
-            </a>
-          ) : null}
-          {twitch ? (
-            <a href={`https://twitch.com/${twitch}`} target="_blank" rel="noreferrer noopener">
-              <i className="fa fa-twitch" />
+              <img src={youtubeSVG} id="logo-mini" alt="youtube-logo" />
             </a>
           ) : null}
           {discord ? (
             <a href={`https://discord.gg/${discord}`} target="_blank" rel="noreferrer noopener">
-              <i className="fa fa-server" />
+              <img src={discordSVG} id="logo-mini" alt="discord-logo" />
             </a>
           ) : null}
           {github ? (
             <a href={`https://github.com/${github}`} target="_blank" rel="noreferrer noopener">
-              <i className="fa fa-github-alt" />
+              <img src={githubSVG} id="logo-mini" alt="github-logo" />
             </a>
           ) : null}
           {websiteUrl ? (

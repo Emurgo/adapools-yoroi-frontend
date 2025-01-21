@@ -214,6 +214,7 @@ function DesktopTableRevamp({
                       name={pool.db_name}
                       links={pool.handles}
                       fullname={pool.fullname}
+                      isDark={isDark}
                     />
                   </td>
                   <td>
