@@ -71,9 +71,9 @@ const BtnRevampWrapper = styled.button`
   }
 
   &:disabled {
-    background: red;
     color: #a0b3f2;
     cursor: not-allowed;
+    background-color: transparent;
   }
 `;
 
