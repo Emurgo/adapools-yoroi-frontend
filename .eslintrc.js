@@ -19,7 +19,7 @@ module.exports = {
     es2020: true,
   },
   rules: {
-    'indent': [2, 2],
+    indent: ['error', 2, { SwitchCase: 1 }],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/jsx-closing-bracket-location': 1,
     'react/jsx-one-expression-per-line': 'off',
