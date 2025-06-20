@@ -100,7 +100,7 @@ function Home(props: HomeProps): Node {
   const [status, setStatus] = React.useState<QueryState>('idle');
   const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
     search: '',
-    sort: 'score',
+    sort: 'roa',
   });
   const [openModal, setOpenModal] = React.useState<boolean>(false);
   const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);

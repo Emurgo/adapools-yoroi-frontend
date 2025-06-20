@@ -125,7 +125,7 @@ const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
 
 export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
   const requestBody = {
-    ...{ search: '', sort: Sorting.SCORE, limit: 250 },
+    ...{ search: '', sort: Sorting.ROA, limit: 250 },
     ...body,
   };
 

@@ -48,14 +48,14 @@ type Props = {|
 |};
 
 export const sortingSelectData = [
-  { label: 'Score', value: Sorting.SCORE }, // default option on load
+  { label: 'ROA', value: Sorting.ROA }, // default option on load
   { label: 'Ticker and name', value: Sorting.TICKER },
 ];
 
 export const sortingSelectDataRevamp = [
-  { label: 'Score', value: Sorting.SCORE }, // default option on load
+  { label: 'ROA', value: Sorting.ROA }, // default option on load
+  { label: 'Score', value: Sorting.SCORE },
   { label: 'Ticker and name', value: Sorting.TICKER },
-  { label: 'ROA', value: Sorting.ROA },
   { label: 'Pool size', value: Sorting.POOL_SIZE },
   { label: 'Saturation', value: Sorting.SATURATION },
   { label: 'Costs', value: Sorting.COSTS },
@@ -64,7 +64,7 @@ export const sortingSelectDataRevamp = [
 ];
 
 function SortSelect({ filter, isRevamp = true, isDark }: Props): React$Node {
-  const [selectValue, setSelectValue] = React.useState<SortingEnum>('score');
+  const [selectValue, setSelectValue] = React.useState<SortingEnum>('roa');
 
   const handleChange = (e) => {
     setSelectValue(e.currentTarget.value);

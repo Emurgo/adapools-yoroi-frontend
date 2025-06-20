@@ -155,7 +155,7 @@ function Home(props: HomeProps): Node {
   const [status, setStatus] = React.useState<QueryState>('idle');
   const [filterOptions, setFilterOptions] = React.useState<SearchParams>({
     search: '',
-    sort: Sorting.SCORE,
+    sort: Sorting.ROA,
     sortDirection: SortingDirections.ASC,
   });
   const [openModal, setOpenModal] = React.useState<boolean>(false);
