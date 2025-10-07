@@ -28,13 +28,13 @@ const brackets = [
   { startIndex: 53, positionGap: 27 },
 ];
 
-export type HistBPE = {|
+type HistBPE = {|
   +val: string,
   +time: string,
   +e: number,
 |};
 
-export type SocialMediaHandles = {|
+type SocialMediaHandles = {|
   tw: ?string,
   tg: ?string,
   fb: ?string,
@@ -74,7 +74,7 @@ export type Pool = {|
   +saturation: number,
 |};
 
-export type World = {|
+type World = {|
   +epoch: string,
   +slot: string,
   +stake: string,
@@ -102,7 +102,7 @@ export const SortingDirections = Object.freeze({
 });
 
 export type SortingEnum = $Values<typeof Sorting>;
-export type SortingDirEnum = $Values<typeof SortingDirections>;
+type SortingDirEnum = $Values<typeof SortingDirections>;
 
 export type SearchParams = {|
   limit?: number,
@@ -111,7 +111,7 @@ export type SearchParams = {|
   sortDirection?: SortingDirEnum,
 |};
 
-export type ApiPoolsResponse = {|
+type ApiPoolsResponse = {|
   world?: World,
   pools?: {| [string]: Pool |},
 |};
@@ -123,7 +123,7 @@ const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
     .filter((x) => x != null);
 };
 
-export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
+function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
   const requestBody = {
     ...{ search: '', sort: Sorting.SCORE, limit: 250 },
     ...body,
@@ -243,6 +243,6 @@ export async function listBiasedPools(
   }
 }
 
-export function listPools(): Promise<ApiPoolsResponse> {
+function listPools(): Promise<ApiPoolsResponse> {
   return getPools(({}: any));
 }
