@@ -20,6 +20,7 @@ import Modal from '../components/common/Modal';
 import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
 import cexplorerIconMini from '../assets/cexplorer-logo-mini.svg';
 import cexplorerIcon from '../assets/cexplorer-logo-extend.svg';
+import type { UrlParams } from '../types';
 
 const Header = styled.div`
   display: flex;
@@ -71,17 +72,6 @@ const CreditSection = styled.div`
     height: 32px;
   }
 `;
-export type UrlParams = {|
-  chromeId: ?string,
-  mozId: ?string,
-  source: ?string,
-  selectedPoolIds: ?Array<string>,
-  lang: ?string,
-  totalAda: ?number,
-  layout: ?string,
-  bias: ?string,
-  theme: ?string,
-|};
 
 export type HomeProps = {|
   urlParams: UrlParams,
@@ -111,7 +101,7 @@ function Home(props: HomeProps): Node {
 
   useEffect(() => {
     setStatus('pending');
-    listBiasedPools(seed, {})
+    listBiasedPools(props.urlParams.network, seed, {})
       .then((resp: ListBiasedPoolsResponse) => {
         setStatus('resolved');
         setRowData(resp.pools);
@@ -130,7 +120,7 @@ function Home(props: HomeProps): Node {
     };
     setFilterOptions(newSearch);
     setStatus('pending');
-    listBiasedPools(seed, newSearch)
+    listBiasedPools(props.urlParams.network, seed, newSearch)
       .then((resp: ListBiasedPoolsResponse) => {
         setStatus('resolved');
         setRowData(resp.pools);
@@ -148,7 +138,7 @@ function Home(props: HomeProps): Node {
     };
     setFilterOptions(newSearch);
     setStatus('pending');
-    listBiasedPools(seed, newSearch)
+    listBiasedPools(props.urlParams.network, seed, newSearch)
       .then((resp: ListBiasedPoolsResponse) => {
         setStatus('resolved');
         setRowData(resp.pools);

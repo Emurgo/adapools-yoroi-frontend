@@ -5,7 +5,7 @@ import type { Node } from 'react';
 import GlobalStyle from './helpers/globalStyles';
 import Home from './containers/Home';
 import HomeRevamp from './containers/HomeRevamp';
-import type { UrlParams } from './containers/Home';
+import type { UrlParams } from './types';
 
 const parseIds = (array: ?string): Array<string> => {
   if (array == null) return [];
@@ -25,6 +25,7 @@ const extractParams = (locationSearch: string): UrlParams => {
     layout: params.get('layout'),
     bias: params.get('bias'),
     theme: params.get('theme'),
+    network: params.get('network') === 'preprod' ? 'preprod' : 'mainnet',
   };
 };
 

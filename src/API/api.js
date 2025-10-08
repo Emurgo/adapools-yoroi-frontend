@@ -4,6 +4,8 @@ import axios from 'axios';
 import seedrandom from 'seedrandom';
 import { BACKEND_URL } from '../manifestEnvs';
 
+const SATURATION = 76293289283071;
+
 const backendUrl: string = BACKEND_URL;
 
 const BIAS_POOL_IDS = [
@@ -75,13 +77,6 @@ export type Pool = {|
 |};
 
 type World = {|
-  +epoch: string,
-  +slot: string,
-  +stake: string,
-  +supply: number,
-  +pools: string,
-  +price: number,
-  +delegators: string,
   +saturation: number,
 |};
 
@@ -113,36 +108,52 @@ export type SearchParams = {|
 
 type ApiPoolsResponse = {|
   world?: World,
-  pools?: {| [string]: Pool |},
+  pools?: Array<Pool>,
 |};
 
-const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
-  if (pools == null) return [];
-  return Object.keys(pools)
-    .map((key) => pools[key])
-    .filter((x) => x != null);
-};
 
-function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
+function transformData(poolsResponse) {
+  return {
+    world: {
+      saturation: SATURATION,
+    },
+    pools: poolsResponse?.data?.data?.map((pool) => (
+      {
+        id: pool.pool_id,
+        id_bech: pool.pool_id_hash_raw,
+        db_ticker: pool.pool_name.ticker,
+        db_name: pool.pool_name.name,
+        pledge: String(pool.pledged),
+        pledge_real: String(pool.pledged),
+        total_stake: String(pool.live_stake),
+        tax_fix: String(pool.pool_update.live.fixed_cost),
+        tax_ratio: String(pool.pool_update.live.margin),
+        blocks_epoch: pool.blocks.epoch,
+        roa: String(pool.stats.lifetime.roa),
+        handles: {},
+        saturation: pool.live_stake / SATURATION,
+      }
+    )) ?? [],
+  };
+}
+
+function getPools(network: 'mainnet' | 'preprod', body: SearchParams): Promise<ApiPoolsResponse> {
   const requestBody = {
-    ...{ search: '', sort: Sorting.SCORE, limit: 250 },
+    ...{ order: 'ranking', limit: 250},
     ...body,
+    //fixme
+    //network,
   };
 
-  const encodeForm = (data) => {
-    return (Object.keys(data): any)
-      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-      .join('&');
-  };
+  const searchParams = new URLSearchParams();
+  Object.keys(requestBody).forEach((key) => {
+    searchParams.append(key, String(requestBody[key]));
+  });
 
-  return axios(`${backendUrl}`, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    method: 'post',
-    data: encodeForm(requestBody),
-  })
+  return axios(`${backendUrl}?${searchParams.toString()}`)
     .then((response) => {
       const poolsResponse: ApiPoolsResponse = response.data;
-      return poolsResponse;
+      return transformData(poolsResponse);
     })
     .catch((error) => {
       console.error('API::getPools Error: ', error);
@@ -181,11 +192,12 @@ export type ListBiasedPoolsResponse = {|
 |};
 
 export async function listBiasedPools(
+  network: 'mainnet' | 'preprod',
   externalSeed: string,
   searchParams: SearchParams,
 ): Promise<ListBiasedPoolsResponse> {
-  const unbiasedPoolsResponse = await getPools(searchParams);
-  const originalPools = toPoolArray(unbiasedPoolsResponse.pools);
+  const unbiasedPoolsResponse = await getPools(network, searchParams);
+  const originalPools = unbiasedPoolsResponse.pools;
 
   const saturationLimit = unbiasedPoolsResponse.world?.saturation;
 
@@ -202,9 +214,9 @@ export async function listBiasedPools(
   const internalSeed = tail(p1?.id) + tail(p2?.id) + tail(p3?.id);
 
   try {
-    const biasedPoolsResponse = await getPools({ search: BIAS_POOLS_SEARCH_QUERY });
+    const biasedPoolsResponse = await getPools(network, { search: BIAS_POOLS_SEARCH_QUERY });
     if (!biasedPoolsResponse) return { pools: unbiasedPools, saturationLimit };
-    const biasedPools = toPoolArray(biasedPoolsResponse.pools)
+    const biasedPools = biasedPoolsResponse.pools
       .filter((x) => x.id && BIAS_POOL_IDS.indexOf(x.id) >= 0)
       .sort((a, b) => {
         // this sorting is to ensure that changes in the backend response order is not affecting the final ordering
@@ -241,8 +253,4 @@ export async function listBiasedPools(
   } catch (err) {
     return { pools: unbiasedPools, saturationLimit };
   }
-}
-
-function listPools(): Promise<ApiPoolsResponse> {
-  return getPools(({}: any));
 }

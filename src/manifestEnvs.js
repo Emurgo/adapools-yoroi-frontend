@@ -1,8 +1,6 @@
 // @flow
 
-const BACKEND_URL /*: string */ = process.env.BACKEND_URL != null
-  ? process.env.BACKEND_URL
-  : 'https://a.cexplorer.io/yoroi-api/';
+const BACKEND_URL = 'https://api-mainnet-stage.cexplorer.io/v1/pool/list';
 
 module.exports = {
   BACKEND_URL,
