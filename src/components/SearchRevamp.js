@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import searchIcon from '../assets/search-icon.svg';
@@ -76,12 +76,16 @@ type Props = {|
   isLight?: boolean,
 |};
 
+const SEARCH_DEBOUNCE_DELAY = 500;
+
 const SearchRevamp = ({ filter, isDark, isLight }: Props): Node => {
   const [prevSearch, setPrevSearch] = useState('');
   const [searchValue, setSearchValue] = useState('');
 
   const callSearchFunction = (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
 
     if (prevSearch !== searchValue) {
       filter(searchValue);
@@ -90,9 +94,19 @@ const SearchRevamp = ({ filter, isDark, isLight }: Props): Node => {
   };
 
   const handleSearchInputChanges = (e) => {
+    e.preventDefault();
     setSearchValue(e.target.value);
-    callSearchFunction(e);
   };
+
+  useEffect(() => {
+    const handle = setTimeout(() => {
+      callSearchFunction();
+    }, SEARCH_DEBOUNCE_DELAY);
+
+    return () => {
+      clearTimeout(handle);
+    };
+  }, [searchValue]);
 
   return (
     <Form className="search">
