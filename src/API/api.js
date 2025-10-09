@@ -107,8 +107,8 @@ export type SearchParams = {|
 |};
 
 type ApiPoolsResponse = {|
-  world?: World,
-  pools?: Array<Pool>,
+  world: World,
+  pools: Array<Pool>,
 |};
 
 
@@ -152,8 +152,7 @@ function getPools(network: 'mainnet' | 'preprod', body: SearchParams): Promise<A
 
   return axios(`${backendUrl}?${searchParams.toString()}`)
     .then((response) => {
-      const poolsResponse: ApiPoolsResponse = response.data;
-      return transformData(poolsResponse);
+      return transformData(response.data);
     })
     .catch((error) => {
       console.error('API::getPools Error: ', error);
