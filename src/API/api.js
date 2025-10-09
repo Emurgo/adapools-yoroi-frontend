@@ -132,24 +132,36 @@ function transformData(poolsResponse) {
         roa: String(pool.stats.lifetime.roa),
         handles: {},
         saturation: pool.live_stake / SATURATION,
+        pool_pic: `https://ix.cexplorer.io/${pool.pool_id}`,
       }
     )) ?? [],
   };
 }
 
-function getPools(network: 'mainnet' | 'preprod', body: SearchParams): Promise<ApiPoolsResponse> {
+function getPools(network: 'mainnet' | 'preprod', body: SearchParams, bias: ?string = null): Promise<ApiPoolsResponse> {
   const requestBody = {
-    ...{ order: 'ranking', limit: 250},
+    ...{ sort: 'ranking', limit: 250},
     ...body,
     //fixme
     //network,
   };
 
   const searchParams = new URLSearchParams();
-  Object.keys(requestBody).forEach((key) => {
-    searchParams.append(key, String(requestBody[key]));
-  });
-
+  if (requestBody.sort === 'ranking') {
+    searchParams.append('order', 'ranking');
+  }
+  if (requestBody.limit) {
+    searchParams.append('limit', String(requestBody.limit));
+  }
+  if (requestBody.sortDirection) {
+    searchParams.append('sort', requestBody.sortDirection);
+  }
+  if (requestBody.search) {
+    searchParams.append('name', requestBody.search);
+  }
+  if (bias) {
+    searchParams.append('pool_id', bias);
+  }
   return axios(`${backendUrl}?${searchParams.toString()}`)
     .then((response) => {
       return transformData(response.data);
@@ -213,7 +225,7 @@ export async function listBiasedPools(
   const internalSeed = tail(p1?.id) + tail(p2?.id) + tail(p3?.id);
 
   try {
-    const biasedPoolsResponse = await getPools(network, { search: BIAS_POOLS_SEARCH_QUERY });
+    const biasedPoolsResponse = await getPools(network, ({}: any), BIAS_POOLS_SEARCH_QUERY);
     if (!biasedPoolsResponse) return { pools: unbiasedPools, saturationLimit };
     const biasedPools = biasedPoolsResponse.pools
       .filter((x) => x.id && BIAS_POOL_IDS.indexOf(x.id) >= 0)
