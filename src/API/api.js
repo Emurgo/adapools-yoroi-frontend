@@ -2,11 +2,9 @@
 
 import axios from 'axios';
 import seedrandom from 'seedrandom';
-import { BACKEND_URL } from '../manifestEnvs';
+import { BACKEND_URL_FOR_PREPROD, BACKEND_URL_FOR_MAINNET } from '../manifestEnvs';
 
 const SATURATION = 76293289283071;
-
-const backendUrl: string = BACKEND_URL;
 
 const BIAS_POOL_IDS = [
   'dbda39c8d064ff9801e376f8350efafe67c07e9e9244dd613aee5125', // EMURA
@@ -140,10 +138,9 @@ function transformData(poolsResponse) {
 
 function getPools(network: 'mainnet' | 'preprod', body: SearchParams, bias: ?string = null): Promise<ApiPoolsResponse> {
   const requestBody = {
-    ...{ sort: 'ranking', limit: 250},
+    ...{ limit: 250},
     ...body,
-    //fixme
-    //network,
+    ...{ sort: 'ranking' }
   };
 
   const searchParams = new URLSearchParams();
@@ -160,8 +157,13 @@ function getPools(network: 'mainnet' | 'preprod', body: SearchParams, bias: ?str
     searchParams.append('name', requestBody.search);
   }
   if (bias) {
-    searchParams.append('pool_id', bias);
+    searchParams.append('poolId', bias);
   }
+  const backendUrl = {
+    preprod: BACKEND_URL_FOR_PREPROD,
+    mainnet: BACKEND_URL_FOR_MAINNET,
+  }[network];
+
   return axios(`${backendUrl}?${searchParams.toString()}`)
     .then((response) => {
       return transformData(response.data);
