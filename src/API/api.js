@@ -117,8 +117,8 @@ function transformData(poolsResponse) {
     },
     pools: poolsResponse?.data?.data?.map((pool) => (
       {
-        id: pool.pool_id,
-        id_bech: pool.pool_id_hash_raw,
+        id: pool.pool_id_hash_raw,
+        id_bech: pool.pool_id,
         db_ticker: pool.pool_name.ticker,
         db_name: pool.pool_name.name,
         pledge: String(pool.pledged),
