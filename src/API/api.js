@@ -214,7 +214,7 @@ export async function listBiasedPools(
 
   const saturationLimit = unbiasedPoolsResponse.world?.saturation;
 
-  if (searchParams.search || searchParams.sort === Sorting.TICKER) {
+  if (searchParams.search || searchParams.sort === Sorting.TICKER || network !== 'mainnet') {
     // If user searched or sorted explicitly - then we don't bias
     return { pools: originalPools, saturationLimit };
   }
