@@ -170,9 +170,7 @@ function getPools(network: 'mainnet' | 'preprod', body: SearchParams, bias: ?str
     })
     .catch((error) => {
       console.error('API::getPools Error: ', error);
-      return {
-        pools: {},
-      };
+      return transformData(null);
     });
 }
 
