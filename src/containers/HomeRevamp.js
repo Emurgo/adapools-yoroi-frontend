@@ -109,10 +109,10 @@ const SORTING_FUNCTIONS = {
     b.db_ticker?.localeCompare(String(a.db_ticker)),
   [`${Sorting.ROA}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => Number(a.roa) - Number(b.roa),
   [`${Sorting.ROA}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => Number(b.roa) - Number(a.roa),
-  [`${Sorting.POOL_SIZE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    a.total_size - b.total_size,
-  [`${Sorting.POOL_SIZE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    b.total_size - a.total_size,
+  // [`${Sorting.POOL_SIZE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
+  //   a.total_size - b.total_size,
+  // [`${Sorting.POOL_SIZE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
+  //   b.total_size - a.total_size,
   [`${Sorting.SATURATION}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
     a.saturation - b.saturation,
   [`${Sorting.SATURATION}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
