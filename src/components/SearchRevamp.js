@@ -106,7 +106,7 @@ const SearchRevamp = ({ filter, isDark, isLight }: Props): Node => {
     return () => {
       clearTimeout(handle);
     };
-  }, [prevSearch, searchValue, filter]);
+  }, [prevSearch, searchValue]);
 
   return (
     <Form className="search">
