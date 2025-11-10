@@ -125,7 +125,6 @@ const SearchRevamp = ({ filter, isDark, isLight }: Props): Node => {
         <ClearBtn
           onClick={(e) => {
             setSearchValue('');
-            callSearchFunction(e);
           }}
         >
           <svg
