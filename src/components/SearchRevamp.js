@@ -123,7 +123,7 @@ const SearchRevamp = ({ filter, isDark, isLight }: Props): Node => {
       />
       {searchValue.length > 0 && (
         <ClearBtn
-          onClick={(e) => {
+          onClick={() => {
             setSearchValue('');
           }}
         >

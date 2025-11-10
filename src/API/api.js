@@ -80,12 +80,9 @@ type World = {|
 |};
 
 export const Sorting = Object.freeze({
-  TICKER: 'ticker',
   SCORE: 'score',
   ROA: 'roa',
   POOL_SIZE: 'poolSize',
-  SATURATION: 'saturation',
-  COSTS: 'costs',
   PLEDGE: 'pledge',
   BLOCKS: 'blocks',
 });
@@ -145,11 +142,20 @@ function transformData(poolsResponse) {
   };
 }
 
+function convertSortingToBackendSorting(sorting: ?SortingEnum): string {
+  if (sorting === Sorting.SCORE) return 'ranking';
+  if (sorting === Sorting.ROA) return 'roa_lifetime';
+  if (sorting === Sorting.POOL_SIZE) return 'live_stake';
+  if (sorting === Sorting.PLEDGE) return 'pledge';
+  if (sorting === Sorting.BLOCKS) return 'blocks';
+  return 'ranking';
+}
+
 function getPools(network: 'mainnet' | 'preprod', body: SearchParams, bias: ?string = null): Promise<ApiPoolsResponse> {
   const requestBody = {
     ...{ limit: 250 },
     ...body,
-    ...{ sort: 'ranking' }
+    ...{ sort: convertSortingToBackendSorting(body.sort) }
   };
 
   const searchParams = new URLSearchParams();
@@ -221,7 +227,7 @@ export async function listBiasedPools(
 
   const saturationLimit = unbiasedPoolsResponse.world?.saturation;
 
-  if (searchParams.search || searchParams.sort === Sorting.TICKER || network !== 'mainnet') {
+  if (searchParams.search || searchParams.sort !== Sorting.SCORE || network !== 'mainnet') {
     // If user searched or sorted explicitly - then we don't bias
     return { pools: originalPools, saturationLimit };
   }

@@ -136,7 +136,7 @@ function DesktopTableRevamp({
       id: 0,
       label: 'Ticker and name',
       textInfo: null,
-      value: Sorting.TICKER,
+      value: null,
     },
     {
       id: 1,
@@ -154,13 +154,13 @@ function DesktopTableRevamp({
       id: 3,
       label: 'Saturation',
       textInfo: 'How close the pool is to its limit',
-      value: Sorting.SATURATION,
+      value: null,
     },
     {
       id: 4,
       label: 'Costs',
       textInfo: 'Tax ratio + Fix',
-      value: Sorting.COSTS,
+      value: null,
     },
     {
       id: 5,

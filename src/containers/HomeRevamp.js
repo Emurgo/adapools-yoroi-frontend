@@ -20,7 +20,6 @@ import cexplorerIcon from '../assets/cexplorer-logo-extend.svg';
 import DesktopTableRevamp from '../components/DesktopTableRevamp';
 import SearchRevamp from '../components/SearchRevamp';
 import MobileTableRevamp from '../components/MobileTableRevamp';
-import { formatCostLabel } from '../utils/utils';
 import type { UrlParams } from '../types';
 
 const Header = styled.div`
@@ -103,39 +102,15 @@ export type DelegationProps = {|
 
 // Ref for sorting strings: https://stackoverflow.com/a/51169/7714589
 const SORTING_FUNCTIONS = {
-  [`${Sorting.TICKER}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    a.db_ticker?.localeCompare(String(b.db_ticker)),
-  [`${Sorting.TICKER}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    b.db_ticker?.localeCompare(String(a.db_ticker)),
   [`${Sorting.ROA}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => Number(a.roa) - Number(b.roa),
   [`${Sorting.ROA}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => Number(b.roa) - Number(a.roa),
-  // [`${Sorting.POOL_SIZE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-  //   a.total_size - b.total_size,
-  // [`${Sorting.POOL_SIZE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-  //   b.total_size - a.total_size,
-  [`${Sorting.SATURATION}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    a.saturation - b.saturation,
-  [`${Sorting.SATURATION}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    b.saturation - a.saturation,
-  [`${Sorting.PLEDGE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    Number(a.pledge) - Number(b.pledge),
-  [`${Sorting.PLEDGE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    Number(b.pledge) - Number(a.pledge),
-  [`${Sorting.BLOCKS}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    Number(a.blocks_epoch) - Number(b.blocks_epoch),
-  [`${Sorting.BLOCKS}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    Number(b.blocks_epoch) - Number(a.blocks_epoch),
-  [`${Sorting.COSTS}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    formatCostLabel(Number(a.tax_ratio), a.tax_fix).localeCompare(
-      formatCostLabel(Number(b.tax_ratio), b.tax_fix),
-    ),
-  [`${Sorting.COSTS}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    formatCostLabel(Number(b.tax_ratio), b.tax_fix).localeCompare(
-      formatCostLabel(Number(a.tax_ratio), a.tax_fix),
-    ),
+  [`${Sorting.PLEDGE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => Number(a.pledge) - Number(b.pledge),
+  [`${Sorting.PLEDGE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => Number(b.pledge) - Number(a.pledge),
+  [`${Sorting.BLOCKS}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => Number(a.blocks_epoch) - Number(b.blocks_epoch),
+  [`${Sorting.BLOCKS}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => Number(b.blocks_epoch) - Number(a.blocks_epoch),
 };
 
-const defaultActiveSort = { sort: Sorting.TICKER, sortDirection: '' };
+const defaultActiveSort = { sort: Sorting.SCORE, sortDirection: SortingDirections.ASC };
 
 function Home(props: HomeProps): Node {
   const [saturationLimit, setSaturationLimit] = React.useState<?number>(null);

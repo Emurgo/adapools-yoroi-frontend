@@ -49,16 +49,13 @@ type Props = {|
 
 export const sortingSelectData = [
   { label: 'Score', value: Sorting.SCORE }, // default option on load
-  { label: 'Ticker and name', value: Sorting.TICKER },
+  { label: 'ROA', value: Sorting.ROA },
 ];
 
 export const sortingSelectDataRevamp = [
   { label: 'Score', value: Sorting.SCORE }, // default option on load
-  { label: 'Ticker and name', value: Sorting.TICKER },
   { label: 'ROA', value: Sorting.ROA },
   { label: 'Pool size', value: Sorting.POOL_SIZE },
-  { label: 'Saturation', value: Sorting.SATURATION },
-  { label: 'Costs', value: Sorting.COSTS },
   { label: 'Pledge', value: Sorting.PLEDGE },
   { label: 'Blocks', value: Sorting.BLOCKS },
 ];
