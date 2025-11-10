@@ -82,7 +82,8 @@ type Props = {|
     tc: ?string,
     di: ?string,
     gh: ?string,
-    icon: ?string,
+    homepage?: ?string,
+    icon?: ?string,
   |},
 |};
 
