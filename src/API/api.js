@@ -42,6 +42,7 @@ type SocialMediaHandles = {|
   tc: ?string,
   di: ?string,
   gh: ?string,
+  homepage?: ?string,
   icon?: ?string,
 |};
 
@@ -121,7 +122,7 @@ function transformData(poolsResponse) {
         db_ticker: pool.pool_name.ticker,
         db_name: pool.pool_name.name,
         pool_pic: `https://ix.cexplorer.io/${pool.pool_id}`,
-        pledge: String(pool.pledged),
+        pledge: String(pool.pool_update.active.pledge),
         pledge_real: String(pool.pledged),
         total_stake: String(pool.live_stake),
         tax_fix: String(pool.pool_update.live.fixed_cost),
@@ -136,6 +137,7 @@ function transformData(poolsResponse) {
           tc: pool.pool_name.extended?.twitch_handle ?? undefined,
           di: pool.pool_name.extended?.discord_handle ?? undefined,
           gh: pool.pool_name.extended?.github_handle ?? undefined,
+          homepage: pool.pool_name.homepage ?? undefined,
         },
         saturation: pool.live_stake / SATURATION,
       }
