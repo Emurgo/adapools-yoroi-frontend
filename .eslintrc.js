@@ -19,7 +19,7 @@ module.exports = {
     es2020: true,
   },
   rules: {
-    indent: ['error', 2, { SwitchCase: 1 }],
+    indent: ['error', 2, { SwitchCase: 1, ignoredNodes: ["TemplateLiteral"] }],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/jsx-closing-bracket-location': 1,
     'react/jsx-one-expression-per-line': 'off',
@@ -49,6 +49,7 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 0,
     'jsx-a11y/control-has-associated-label': 0,
     'jsx-a11y/media-has-caption': 0,
+    "template-curly-spacing" : 0,
   },
   plugins: ['import', 'promise', 'react', 'flowtype'],
 };

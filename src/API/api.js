@@ -109,7 +109,6 @@ type ApiPoolsResponse = {|
   pools: Array<Pool>,
 |};
 
-
 function transformData(poolsResponse) {
   return {
     world: {
@@ -138,7 +137,7 @@ function transformData(poolsResponse) {
 
 function getPools(network: 'mainnet' | 'preprod', body: SearchParams, bias: ?string = null): Promise<ApiPoolsResponse> {
   const requestBody = {
-    ...{ limit: 250},
+    ...{ limit: 250 },
     ...body,
     ...{ sort: 'ranking' }
   };
