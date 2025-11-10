@@ -125,7 +125,7 @@ function transformData(poolsResponse) {
         total_stake: String(pool.live_stake),
         tax_fix: String(pool.pool_update.live.fixed_cost),
         tax_ratio: String(pool.pool_update.live.margin),
-        blocks_epoch: pool.blocks.epoch,
+        blocks_epoch: String(pool.blocks.epoch),
         roa: String(pool.stats.lifetime.roa),
         handles: {},
         saturation: pool.live_stake / SATURATION,
