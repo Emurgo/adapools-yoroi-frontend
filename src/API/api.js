@@ -196,17 +196,19 @@ const rndSign = (seed: string) => {
   };
 };
 
+function initializeRandomInt(seed: string): (min: number, max: number) => number {
+  const rnd = seedrandom(seed);
+  return (min: number, max: number) => {
+    const intMin = Math.ceil(min);
+    const intmax = Math.floor(max);
+    return Math.floor(rnd() * (intmax - intMin + 1)) + intMin;
+  };
+}
+
 const sortBiasedPools = (pools: Array<Pool>, seed: string): Array<Pool> => {
   const rev = seed.split('').reverse().join('');
   return [...pools].sort(rndSign(seed)).sort(rndSign(rev));
 };
-
-function getRandomInt(seed: string, min: number, max: number) {
-  const rnd = seedrandom(seed);
-  const intMin = Math.ceil(min);
-  const intmax = Math.floor(max);
-  return Math.floor(rnd() * (intmax - intMin + 1)) + intMin;
-}
 
 const tail = (input: string): string => {
   return input?.slice(-10) ?? '';
@@ -265,10 +267,12 @@ export async function listBiasedPools(
     // insert top pool
     const allPools = [topPool].concat(filteredUnbiasedPools);
 
+    const createRandomInt = initializeRandomInt(internalSeed);
+
     // insert lower pools
     for (let i = 0; i < brackets.length; i += 1) {
       const bracket = brackets[i];
-      const targetIndex = getRandomInt(internalSeed, 0, bracket.positionGap) + bracket.startIndex;
+      const targetIndex = createRandomInt(0, bracket.positionGap) + bracket.startIndex;
       const biasedPool = biasedLowerPoolsOrderedByInternalSeed.shift();
       if (biasedPool != null) {
         allPools.splice(targetIndex, 0, biasedPool);
