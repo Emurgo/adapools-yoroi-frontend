@@ -42,7 +42,7 @@ type SocialMediaHandles = {|
   tc: ?string,
   di: ?string,
   gh: ?string,
-  icon: ?string,
+  icon?: ?string,
 |};
 
 export type Pool = {|
@@ -51,26 +51,26 @@ export type Pool = {|
   +db_ticker: ?string, // may not have a ticker
   +db_name: ?string, // may not have a name
   +pool_pic: ?string, // may not have a pic
-  +fullname: ?string,
+  +fullname?: ?string,
   +pledge: string,
   +pledge_real: string, // not sure diff with "pledge"
   +total_stake: string, // in lovelace
-  +total_size: number, // percentage of total
+  +total_size?: number, // percentage of total
   +tax_fix: string, // fix tax in lovelace
   +tax_ratio: string, // ratio tax in percentage
-  +tax_computed: number, // not sure
+  +tax_computed?: number, // not sure
   +blocks_epoch: string,
   +roa: string,
-  +hist_bpe: {| [string]: HistBPE |},
-  +hist_roa: any, // no examples yet. similar to bpe?
-  +score: number,
+  +hist_bpe?: {| [string]: HistBPE |},
+  +hist_roa?: any, // no examples yet. similar to bpe?
+  +score?: number,
   +handles: SocialMediaHandles, // social media stuff
-  +last_rewards: string,
-  +position: number,
-  +color_roa: string, // hsl(240,95%,95%)
-  +color_stake: string, // hsl(240,95%,95%)
-  +color_fees: string, // hsl(240,95%,95%)
-  +color_pledge: string, // hsl(240,95%,95%)
+  +last_rewards?: string,
+  +position?: number,
+  +color_roa?: string, // hsl(240,95%,95%)
+  +color_stake?: string, // hsl(240,95%,95%)
+  +color_fees?: string, // hsl(240,95%,95%)
+  +color_pledge?: string, // hsl(240,95%,95%)
   +saturation: number,
 |};
 
@@ -120,6 +120,7 @@ function transformData(poolsResponse) {
         id_bech: pool.pool_id,
         db_ticker: pool.pool_name.ticker,
         db_name: pool.pool_name.name,
+        pool_pic: `https://ix.cexplorer.io/${pool.pool_id}`,
         pledge: String(pool.pledged),
         pledge_real: String(pool.pledged),
         total_stake: String(pool.live_stake),
@@ -127,9 +128,16 @@ function transformData(poolsResponse) {
         tax_ratio: String(pool.pool_update.live.margin),
         blocks_epoch: String(pool.blocks.epoch),
         roa: String(pool.stats.lifetime.roa),
-        handles: {},
+        handles: {
+          tw: pool.pool_name.extended?.twitter_handle ?? undefined,
+          tg: pool.pool_name.extended?.telegram_handle ?? undefined,
+          fb: pool.pool_name.extended?.facebook_handle ?? undefined,
+          yt: pool.pool_name.extended?.youtube_handle ?? undefined,
+          tc: pool.pool_name.extended?.twitch_handle ?? undefined,
+          di: pool.pool_name.extended?.discord_handle ?? undefined,
+          gh: pool.pool_name.extended?.github_handle ?? undefined,
+        },
         saturation: pool.live_stake / SATURATION,
-        pool_pic: `https://ix.cexplorer.io/${pool.pool_id}`,
       }
     )) ?? [],
   };
