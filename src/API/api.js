@@ -229,7 +229,7 @@ export async function listBiasedPools(
 
   const saturationLimit = unbiasedPoolsResponse.world?.saturation;
 
-  if (searchParams.search || searchParams.sort !== Sorting.SCORE || network !== 'mainnet') {
+  if (searchParams.search || (searchParams.sort !== undefined && searchParams.sort !== Sorting.SCORE) || network !== 'mainnet') {
     // If user searched or sorted explicitly - then we don't bias
     return { pools: originalPools, saturationLimit };
   }
