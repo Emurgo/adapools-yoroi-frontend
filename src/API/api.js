@@ -122,8 +122,8 @@ function transformData(poolsResponse) {
         pledge: String(pool.pool_update.active.pledge),
         pledge_real: String(pool.pledged),
         total_stake: String(pool.live_stake),
-        tax_fix: String(pool.pool_update.live.fixed_cost),
-        tax_ratio: String(pool.pool_update.live.margin),
+        tax_fix: String(pool.pool_update.active.fixed_cost),
+        tax_ratio: String(pool.pool_update.active.margin),
         blocks_epoch: String(pool.blocks.epoch),
         roa: String(pool.stats.lifetime.roa),
         handles: {
