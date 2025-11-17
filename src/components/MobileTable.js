@@ -47,13 +47,12 @@ const WrapperContent = styled.div`
 `;
 type Props = {|
   data: ?Array<Pool>,
-  delegateFunction: (DelegationProps, ?number) => void,
+  delegateFunction: (DelegationProps) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
-  totalAda: ?number,
 |};
 
-function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda }: Props): React$Node {
+function MobileTable({ data, delegateFunction, status, selectedIdPools }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
   const isResolved = status === 'resolved';
@@ -120,8 +119,8 @@ function MobileTable({ data, delegateFunction, status, selectedIdPools, totalAda
                     stakepoolName: pool.db_name ?? pool.id,
                     stakepoolTotalStake: pool.total_stake,
                     isAlreadySaturated: pool.saturation >= 1,
-                    id: pool.id },
-                  totalAda)
+                    id: pool.id
+                  })
                 )}
               >
                 Delegate

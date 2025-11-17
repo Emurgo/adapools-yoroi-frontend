@@ -4,8 +4,6 @@ import axios from 'axios';
 import seedrandom from 'seedrandom';
 import { BACKEND_URL_FOR_PREPROD, BACKEND_URL_FOR_MAINNET } from '../manifestEnvs';
 
-const SATURATION = 76293289283071;
-
 const BIAS_POOL_IDS = [
   'dbda39c8d064ff9801e376f8350efafe67c07e9e9244dd613aee5125', // EMURA
   '8efb053977341471256685b1069d67f4aca7166bc3f94e27ebad217f', // EMUR7
@@ -75,10 +73,6 @@ export type Pool = {|
   +saturation: number,
 |};
 
-type World = {|
-  +saturation: number,
-|};
-
 export const Sorting = Object.freeze({
   SCORE: 'score',
   ROA: 'roa',
@@ -103,15 +97,11 @@ export type SearchParams = {|
 |};
 
 type ApiPoolsResponse = {|
-  world: World,
   pools: Array<Pool>,
 |};
 
 function transformData(poolsResponse) {
   return {
-    world: {
-      saturation: SATURATION,
-    },
     pools: poolsResponse?.data?.data?.map((pool) => (
       {
         id: pool.pool_id_hash_raw,
@@ -136,7 +126,7 @@ function transformData(poolsResponse) {
           gh: pool.pool_name.extended?.github_handle ?? undefined,
           homepage: pool.pool_name.homepage ?? undefined,
         },
-        saturation: pool.live_stake / SATURATION,
+        saturation: pool.saturation,
       }
     )) ?? [],
   };
@@ -216,7 +206,6 @@ const tail = (input: string): string => {
 
 export type ListBiasedPoolsResponse = {|
   pools: Pool[],
-  saturationLimit: ?number,
 |};
 
 export async function listBiasedPools(
@@ -227,30 +216,27 @@ export async function listBiasedPools(
   const unbiasedPoolsResponse = await getPools(network, searchParams);
   const originalPools = unbiasedPoolsResponse.pools;
 
-  const saturationLimit = unbiasedPoolsResponse.world?.saturation;
-
   if (searchParams.search || (searchParams.sort !== undefined && searchParams.sort !== Sorting.SCORE) || network !== 'mainnet') {
     // If user searched or sorted explicitly - then we don't bias
-    return { pools: originalPools, saturationLimit };
+    return { pools: originalPools };
   }
 
   // Filter unsaturated pools
-  const unbiasedPools = saturationLimit == null ? originalPools
-    : originalPools.filter(p => Number(p.total_stake) < saturationLimit);
+  const unbiasedPools = originalPools.filter(p => Number(p.saturation) < 1.0);
 
   const [p1, p2, p3] = unbiasedPools;
   const internalSeed = tail(p1?.id) + tail(p2?.id) + tail(p3?.id);
 
   try {
     const biasedPoolsResponse = await getPools(network, ({}: any), BIAS_POOLS_SEARCH_QUERY);
-    if (!biasedPoolsResponse) return { pools: unbiasedPools, saturationLimit };
+    if (!biasedPoolsResponse) return { pools: unbiasedPools };
     const biasedPools = biasedPoolsResponse.pools
       .filter((x) => x.id && BIAS_POOL_IDS.indexOf(x.id) >= 0)
       .sort((a, b) => {
         // this sorting is to ensure that changes in the backend response order is not affecting the final ordering
         return BIAS_POOL_IDS.indexOf(a.id) - BIAS_POOL_IDS.indexOf(b.id);
       });
-    if (biasedPools.length === 0) return { pools: unbiasedPools, saturationLimit };
+    if (biasedPools.length === 0) return { pools: unbiasedPools };
     const biasedPoolsOrderByExternalSeed = sortBiasedPools(biasedPools, externalSeed);
 
     const topPool = biasedPoolsOrderByExternalSeed[0];
@@ -258,7 +244,7 @@ export async function listBiasedPools(
     const biasedLowerPools = biasedPools.filter((p) => p !== topPool);
     const biasedLowerPoolsOrderedByInternalSeed = sortBiasedPools(biasedLowerPools, internalSeed);
 
-    if (unbiasedPools.length === 0) return { pools: [topPool].concat(biasedLowerPoolsOrderedByInternalSeed), saturationLimit };
+    if (unbiasedPools.length === 0) return { pools: [topPool].concat(biasedLowerPoolsOrderedByInternalSeed) };
 
     // removes the Emurgo pools from the original list, as we are reinserting it later
     const presentBiasedIds = new Set(biasedPools.map(p => p.id));
@@ -279,8 +265,8 @@ export async function listBiasedPools(
       }
     }
 
-    return { pools: allPools, saturationLimit };
+    return { pools: allPools };
   } catch (err) {
-    return { pools: unbiasedPools, saturationLimit };
+    return { pools: unbiasedPools };
   }
 }

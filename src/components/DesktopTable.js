@@ -119,10 +119,9 @@ const Table = styled.table`
 
 type Props = {|
   data: ?Array<Pool>,
-  delegateFunction: (DelegationProps, ?number) => void,
+  delegateFunction: (DelegationProps) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
-  totalAda: ?number,
 |};
 
 function DesktopTable({
@@ -130,7 +129,6 @@ function DesktopTable({
   delegateFunction,
   status,
   selectedIdPools,
-  totalAda,
 }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
   const isRejected = status === 'rejected';
@@ -237,8 +235,7 @@ function DesktopTable({
                             stakepoolTotalStake: pool.total_stake,
                             isAlreadySaturated: pool.saturation >= 1,
                             id: pool.id,
-                          },
-                          totalAda,
+                          }
                         )
                       }
                     >

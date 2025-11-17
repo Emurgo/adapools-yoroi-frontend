@@ -13,8 +13,6 @@ import type { ListBiasedPoolsResponse, Pool, SearchParams } from '../API/api';
 import SortSelect from '../components/SortSelect';
 import type { QueryState } from '../utils/types';
 
-import Modal from '../components/common/Modal';
-import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
 import cexplorerIconMini from '../assets/cexplorer-logo-mini.svg';
 import cexplorerIcon from '../assets/cexplorer-logo-extend.svg';
 import DesktopTableRevamp from '../components/DesktopTableRevamp';
@@ -115,7 +113,6 @@ const SORTING_FUNCTIONS = {
 const defaultActiveSort = { sort: Sorting.SCORE, sortDirection: SortingDirections.ASC };
 
 function Home(props: HomeProps): Node {
-  const [saturationLimit, setSaturationLimit] = React.useState<?number>(null);
   const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
   const [rowDataSorted, setRowDataSorted] = React.useState<?Array<Pool>>(null);
   const [status, setStatus] = React.useState<QueryState>('idle');
@@ -124,9 +121,6 @@ function Home(props: HomeProps): Node {
     sort: Sorting.SCORE,
     sortDirection: SortingDirections.ASC,
   });
-  const [openModal, setOpenModal] = React.useState<boolean>(false);
-  const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);
-  const [delegationModalData, setDelegationModalData] = React.useState<Object>({});
 
   const { urlParams } = props;
   const seed = urlParams?.bias ?? 'bias';
@@ -134,11 +128,10 @@ function Home(props: HomeProps): Node {
 
   useEffect(() => {
     setStatus('pending');
-    listBiasedPools(props.urlParams.network, seed, {})
+    listBiasedPools(urlParams.network, seed, {})
       .then((resp: ListBiasedPoolsResponse) => {
         setStatus('resolved');
         setRowData(resp.pools);
-        setSaturationLimit(resp.saturationLimit);
         // used to show the first pool in revamp banner
         SendFirstAdapool(resp.pools[0]);
       })
@@ -155,13 +148,12 @@ function Home(props: HomeProps): Node {
     };
     setFilterOptions(newSearch);
     setStatus('pending');
-    listBiasedPools(props.urlParams.network, seed, newSearch)
+    listBiasedPools(urlParams.network, seed, newSearch)
       .then((resp: ListBiasedPoolsResponse) => {
         setStatus('resolved');
         setRowData(resp.pools);
         setRowDataSorted(resp.pools);
         setActiveSort(defaultActiveSort);
-        setSaturationLimit(resp.saturationLimit);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -177,18 +169,9 @@ function Home(props: HomeProps): Node {
     });
   };
 
-  const delegateFunction = (delegation: DelegationProps, totalAda: ?number): void => {
+  const delegateFunction = (delegation: DelegationProps): void => {
     if (delegation == null) return;
-    const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
-
-    const limit: ?number = saturationLimit;
-    if (limit != null && Number(delegation.stakepoolTotalStake) + lovelaceDelegation >= limit) {
-      setDelegationModalData({ ...delegation, totalAda });
-      setConfirmDelegationModal(true);
-      setOpenModal(true);
-    } else {
-      confirmedDelegateFunction(delegation.id);
-    }
+    confirmedDelegateFunction(delegation.id);
   };
 
   const alertText = null;
@@ -234,7 +217,7 @@ function Home(props: HomeProps): Node {
   };
 
   const {
-    urlParams: { selectedPoolIds, totalAda, theme },
+    urlParams: { selectedPoolIds, theme },
   } = props;
 
   const filteredPools = rowDataSorted || rowData;
@@ -250,9 +233,6 @@ function Home(props: HomeProps): Node {
           <MobileOnly>
             <SortSelect filter={filterSelect} isDark={isDark} />
           </MobileOnly>
-          {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
-          {/*  Colors meaning */}
-          {/* </ColorButton> */}
         </Header>
       </HeaderRow>
       <DesktopOnly>
@@ -261,7 +241,6 @@ function Home(props: HomeProps): Node {
           delegateFunction={delegateFunction}
           data={filteredPools}
           selectedIdPools={selectedPoolIds}
-          totalAda={totalAda}
           handleSort={handleSort}
           activeSort={activeSort}
           isDark={isDark}
@@ -273,29 +252,9 @@ function Home(props: HomeProps): Node {
           delegateFunction={delegateFunction}
           data={filteredPools}
           selectedIdPools={selectedPoolIds}
-          totalAda={totalAda}
           isDark={isDark}
         />
       </MobileOnly>
-      {openModal && confirmDelegationModal && (
-        <Modal
-          title=""
-          isOpen={openModal && confirmDelegationModal}
-          onClose={() => {
-            setOpenModal(false);
-            setConfirmDelegationModal(false);
-          }}
-        >
-          <SaturatedPoolAlert
-            delegation={delegationModalData}
-            onSuccess={confirmedDelegateFunction}
-            close={() => {
-              setOpenModal(false);
-              setConfirmDelegationModal(false);
-            }}
-          />
-        </Modal>
-      )}
       <CreditSection>
         Powered by
         <a href="https://cexplorer.io/" target="_blank" rel="noopener noreferrer">
