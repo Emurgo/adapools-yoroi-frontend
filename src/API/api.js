@@ -2,9 +2,7 @@
 
 import axios from 'axios';
 import seedrandom from 'seedrandom';
-import { BACKEND_URL } from '../manifestEnvs';
-
-const backendUrl: string = BACKEND_URL;
+import { BACKEND_URL_FOR_PREPROD, BACKEND_URL_FOR_MAINNET } from '../manifestEnvs';
 
 const BIAS_POOL_IDS = [
   'dbda39c8d064ff9801e376f8350efafe67c07e9e9244dd613aee5125', // EMURA
@@ -28,13 +26,13 @@ const brackets = [
   { startIndex: 53, positionGap: 27 },
 ];
 
-export type HistBPE = {|
+type HistBPE = {|
   +val: string,
   +time: string,
   +e: number,
 |};
 
-export type SocialMediaHandles = {|
+type SocialMediaHandles = {|
   tw: ?string,
   tg: ?string,
   fb: ?string,
@@ -42,7 +40,8 @@ export type SocialMediaHandles = {|
   tc: ?string,
   di: ?string,
   gh: ?string,
-  icon: ?string,
+  homepage?: ?string,
+  icon?: ?string,
 |};
 
 export type Pool = {|
@@ -51,47 +50,33 @@ export type Pool = {|
   +db_ticker: ?string, // may not have a ticker
   +db_name: ?string, // may not have a name
   +pool_pic: ?string, // may not have a pic
-  +fullname: ?string,
+  +fullname?: ?string,
   +pledge: string,
   +pledge_real: string, // not sure diff with "pledge"
   +total_stake: string, // in lovelace
-  +total_size: number, // percentage of total
+  +total_size?: number, // percentage of total
   +tax_fix: string, // fix tax in lovelace
   +tax_ratio: string, // ratio tax in percentage
-  +tax_computed: number, // not sure
+  +tax_computed?: number, // not sure
   +blocks_epoch: string,
   +roa: string,
-  +hist_bpe: {| [string]: HistBPE |},
-  +hist_roa: any, // no examples yet. similar to bpe?
-  +score: number,
+  +hist_bpe?: {| [string]: HistBPE |},
+  +hist_roa?: any, // no examples yet. similar to bpe?
+  +score?: number,
   +handles: SocialMediaHandles, // social media stuff
-  +last_rewards: string,
-  +position: number,
-  +color_roa: string, // hsl(240,95%,95%)
-  +color_stake: string, // hsl(240,95%,95%)
-  +color_fees: string, // hsl(240,95%,95%)
-  +color_pledge: string, // hsl(240,95%,95%)
-  +saturation: number,
-|};
-
-export type World = {|
-  +epoch: string,
-  +slot: string,
-  +stake: string,
-  +supply: number,
-  +pools: string,
-  +price: number,
-  +delegators: string,
+  +last_rewards?: string,
+  +position?: number,
+  +color_roa?: string, // hsl(240,95%,95%)
+  +color_stake?: string, // hsl(240,95%,95%)
+  +color_fees?: string, // hsl(240,95%,95%)
+  +color_pledge?: string, // hsl(240,95%,95%)
   +saturation: number,
 |};
 
 export const Sorting = Object.freeze({
-  TICKER: 'ticker',
   SCORE: 'score',
   ROA: 'roa',
   POOL_SIZE: 'poolSize',
-  SATURATION: 'saturation',
-  COSTS: 'costs',
   PLEDGE: 'pledge',
   BLOCKS: 'blocks',
 });
@@ -102,7 +87,7 @@ export const SortingDirections = Object.freeze({
 });
 
 export type SortingEnum = $Values<typeof Sorting>;
-export type SortingDirEnum = $Values<typeof SortingDirections>;
+type SortingDirEnum = $Values<typeof SortingDirections>;
 
 export type SearchParams = {|
   limit?: number,
@@ -111,44 +96,86 @@ export type SearchParams = {|
   sortDirection?: SortingDirEnum,
 |};
 
-export type ApiPoolsResponse = {|
-  world?: World,
-  pools?: {| [string]: Pool |},
+type ApiPoolsResponse = {|
+  pools: Array<Pool>,
 |};
 
-const toPoolArray: (?{| [string]: Pool |}) => Array<Pool> = (pools) => {
-  if (pools == null) return [];
-  return Object.keys(pools)
-    .map((key) => pools[key])
-    .filter((x) => x != null);
-};
+function transformData(poolsResponse) {
+  return {
+    pools: poolsResponse?.data?.data?.map((pool) => (
+      {
+        id: pool.pool_id_hash_raw,
+        id_bech: pool.pool_id,
+        db_ticker: pool.pool_name.ticker,
+        db_name: pool.pool_name.name,
+        pool_pic: `https://ix.cexplorer.io/${pool.pool_id}?nodefault`,
+        pledge: String(pool.pool_update.active.pledge),
+        pledge_real: String(pool.pledged),
+        total_stake: String(pool.live_stake),
+        tax_fix: String(pool.pool_update.active.fixed_cost),
+        tax_ratio: String(pool.pool_update.active.margin),
+        blocks_epoch: String(pool.blocks.epoch),
+        roa: String(pool.stats.lifetime.roa),
+        handles: {
+          tw: pool.pool_name.extended?.twitter_handle ?? undefined,
+          tg: pool.pool_name.extended?.telegram_handle ?? undefined,
+          fb: pool.pool_name.extended?.facebook_handle ?? undefined,
+          yt: pool.pool_name.extended?.youtube_handle ?? undefined,
+          tc: pool.pool_name.extended?.twitch_handle ?? undefined,
+          di: pool.pool_name.extended?.discord_handle ?? undefined,
+          gh: pool.pool_name.extended?.github_handle ?? undefined,
+          homepage: pool.pool_name.homepage ?? undefined,
+        },
+        saturation: pool.saturation,
+      }
+    )) ?? [],
+  };
+}
 
-export function getPools(body: SearchParams): Promise<ApiPoolsResponse> {
+function convertSortingToBackendSorting(sorting: ?SortingEnum): string {
+  if (sorting === Sorting.SCORE) return 'ranking';
+  if (sorting === Sorting.ROA) return 'roa_lifetime';
+  if (sorting === Sorting.POOL_SIZE) return 'live_stake';
+  if (sorting === Sorting.PLEDGE) return 'pledge';
+  if (sorting === Sorting.BLOCKS) return 'blocks';
+  return 'ranking';
+}
+
+function getPools(network: 'mainnet' | 'preprod', body: SearchParams, bias: ?string = null): Promise<ApiPoolsResponse> {
   const requestBody = {
-    ...{ search: '', sort: Sorting.SCORE, limit: 250 },
+    ...{ limit: 250 },
     ...body,
+    ...{ sort: convertSortingToBackendSorting(body.sort) }
   };
 
-  const encodeForm = (data) => {
-    return (Object.keys(data): any)
-      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-      .join('&');
-  };
+  const searchParams = new URLSearchParams();
+  if (requestBody.sort === 'ranking') {
+    searchParams.append('order', 'ranking');
+  }
+  if (requestBody.limit) {
+    searchParams.append('limit', String(requestBody.limit));
+  }
+  if (requestBody.sortDirection) {
+    searchParams.append('sort', requestBody.sortDirection);
+  }
+  if (requestBody.search) {
+    searchParams.append('name', requestBody.search);
+  }
+  if (bias) {
+    searchParams.append('poolId', bias);
+  }
+  const backendUrl = {
+    preprod: BACKEND_URL_FOR_PREPROD,
+    mainnet: BACKEND_URL_FOR_MAINNET,
+  }[network];
 
-  return axios(`${backendUrl}`, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    method: 'post',
-    data: encodeForm(requestBody),
-  })
+  return axios(`${backendUrl}?${searchParams.toString()}`)
     .then((response) => {
-      const poolsResponse: ApiPoolsResponse = response.data;
-      return poolsResponse;
+      return transformData(response.data);
     })
     .catch((error) => {
       console.error('API::getPools Error: ', error);
-      return {
-        pools: {},
-      };
+      return transformData(null);
     });
 }
 
@@ -159,17 +186,19 @@ const rndSign = (seed: string) => {
   };
 };
 
+function initializeRandomInt(seed: string): (min: number, max: number) => number {
+  const rnd = seedrandom(seed);
+  return (min: number, max: number) => {
+    const intMin = Math.ceil(min);
+    const intmax = Math.floor(max);
+    return Math.floor(rnd() * (intmax - intMin + 1)) + intMin;
+  };
+}
+
 const sortBiasedPools = (pools: Array<Pool>, seed: string): Array<Pool> => {
   const rev = seed.split('').reverse().join('');
   return [...pools].sort(rndSign(seed)).sort(rndSign(rev));
 };
-
-function getRandomInt(seed: string, min: number, max: number) {
-  const rnd = seedrandom(seed);
-  const intMin = Math.ceil(min);
-  const intmax = Math.floor(max);
-  return Math.floor(rnd() * (intmax - intMin + 1)) + intMin;
-}
 
 const tail = (input: string): string => {
   return input?.slice(-10) ?? '';
@@ -177,40 +206,37 @@ const tail = (input: string): string => {
 
 export type ListBiasedPoolsResponse = {|
   pools: Pool[],
-  saturationLimit: ?number,
 |};
 
 export async function listBiasedPools(
+  network: 'mainnet' | 'preprod',
   externalSeed: string,
   searchParams: SearchParams,
 ): Promise<ListBiasedPoolsResponse> {
-  const unbiasedPoolsResponse = await getPools(searchParams);
-  const originalPools = toPoolArray(unbiasedPoolsResponse.pools);
+  const unbiasedPoolsResponse = await getPools(network, searchParams);
+  const originalPools = unbiasedPoolsResponse.pools;
 
-  const saturationLimit = unbiasedPoolsResponse.world?.saturation;
-
-  if (searchParams.search || searchParams.sort === Sorting.TICKER) {
+  if (searchParams.search || (searchParams.sort !== undefined && searchParams.sort !== Sorting.SCORE) || network !== 'mainnet') {
     // If user searched or sorted explicitly - then we don't bias
-    return { pools: originalPools, saturationLimit };
+    return { pools: originalPools };
   }
 
   // Filter unsaturated pools
-  const unbiasedPools = saturationLimit == null ? originalPools
-    : originalPools.filter(p => Number(p.total_stake) < saturationLimit);
+  const unbiasedPools = originalPools.filter(p => Number(p.saturation) < 1.0);
 
   const [p1, p2, p3] = unbiasedPools;
   const internalSeed = tail(p1?.id) + tail(p2?.id) + tail(p3?.id);
 
   try {
-    const biasedPoolsResponse = await getPools({ search: BIAS_POOLS_SEARCH_QUERY });
-    if (!biasedPoolsResponse) return { pools: unbiasedPools, saturationLimit };
-    const biasedPools = toPoolArray(biasedPoolsResponse.pools)
+    const biasedPoolsResponse = await getPools(network, ({}: any), BIAS_POOLS_SEARCH_QUERY);
+    if (!biasedPoolsResponse) return { pools: unbiasedPools };
+    const biasedPools = biasedPoolsResponse.pools
       .filter((x) => x.id && BIAS_POOL_IDS.indexOf(x.id) >= 0)
       .sort((a, b) => {
         // this sorting is to ensure that changes in the backend response order is not affecting the final ordering
         return BIAS_POOL_IDS.indexOf(a.id) - BIAS_POOL_IDS.indexOf(b.id);
       });
-    if (biasedPools.length === 0) return { pools: unbiasedPools, saturationLimit };
+    if (biasedPools.length === 0) return { pools: unbiasedPools };
     const biasedPoolsOrderByExternalSeed = sortBiasedPools(biasedPools, externalSeed);
 
     const topPool = biasedPoolsOrderByExternalSeed[0];
@@ -218,7 +244,7 @@ export async function listBiasedPools(
     const biasedLowerPools = biasedPools.filter((p) => p !== topPool);
     const biasedLowerPoolsOrderedByInternalSeed = sortBiasedPools(biasedLowerPools, internalSeed);
 
-    if (unbiasedPools.length === 0) return { pools: [topPool].concat(biasedLowerPoolsOrderedByInternalSeed), saturationLimit };
+    if (unbiasedPools.length === 0) return { pools: [topPool].concat(biasedLowerPoolsOrderedByInternalSeed) };
 
     // removes the Emurgo pools from the original list, as we are reinserting it later
     const presentBiasedIds = new Set(biasedPools.map(p => p.id));
@@ -227,22 +253,20 @@ export async function listBiasedPools(
     // insert top pool
     const allPools = [topPool].concat(filteredUnbiasedPools);
 
+    const createRandomInt = initializeRandomInt(internalSeed);
+
     // insert lower pools
     for (let i = 0; i < brackets.length; i += 1) {
       const bracket = brackets[i];
-      const targetIndex = getRandomInt(internalSeed, 0, bracket.positionGap) + bracket.startIndex;
+      const targetIndex = createRandomInt(0, bracket.positionGap) + bracket.startIndex;
       const biasedPool = biasedLowerPoolsOrderedByInternalSeed.shift();
       if (biasedPool != null) {
         allPools.splice(targetIndex, 0, biasedPool);
       }
     }
 
-    return { pools: allPools, saturationLimit };
+    return { pools: allPools };
   } catch (err) {
-    return { pools: unbiasedPools, saturationLimit };
+    return { pools: unbiasedPools };
   }
-}
-
-export function listPools(): Promise<ApiPoolsResponse> {
-  return getPools(({}: any));
 }

@@ -58,10 +58,9 @@ const Message = styled.h1`
 
 type Props = {|
   data: ?Array<Pool>,
-  delegateFunction: (DelegationProps, ?number) => void,
+  delegateFunction: (DelegationProps) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
-  totalAda: ?number,
   isDark: ?boolean,
 |};
 
@@ -70,7 +69,6 @@ function MobileTableRevamp({
   delegateFunction,
   status,
   selectedIdPools,
-  totalAda,
   isDark,
 }: Props): React$Node {
   const isLoading = status === 'pending' || status === 'idle';
@@ -146,8 +144,7 @@ function MobileTableRevamp({
                         stakepoolTotalStake: pool.total_stake,
                         isAlreadySaturated: pool.saturation >= 1,
                         id: pool.id,
-                      },
-                      totalAda,
+                      }
                     )
                   }
                 >

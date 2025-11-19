@@ -13,14 +13,12 @@ import type { ListBiasedPoolsResponse, Pool, SearchParams } from '../API/api';
 import SortSelect from '../components/SortSelect';
 import type { QueryState } from '../utils/types';
 
-import Modal from '../components/common/Modal';
-import SaturatedPoolAlert from '../components/SaturatedPoolAlert';
 import cexplorerIconMini from '../assets/cexplorer-logo-mini.svg';
 import cexplorerIcon from '../assets/cexplorer-logo-extend.svg';
 import DesktopTableRevamp from '../components/DesktopTableRevamp';
 import SearchRevamp from '../components/SearchRevamp';
 import MobileTableRevamp from '../components/MobileTableRevamp';
-import { formatCostLabel } from '../utils/utils';
+import type { UrlParams } from '../types';
 
 const Header = styled.div`
   display: flex;
@@ -89,18 +87,6 @@ const CreditSection = styled.div`
     height: 32px;
   }
 `;
-export type UrlParams = {|
-  chromeId: ?string,
-  mozId: ?string,
-  source: ?string,
-  selectedPoolIds: ?Array<string>,
-  lang: ?string,
-  totalAda: ?number,
-  layout: ?string,
-  bias: ?string,
-  theme: ?string,
-|};
-
 export type HomeProps = {|
   urlParams: UrlParams,
 |};
@@ -114,42 +100,19 @@ export type DelegationProps = {|
 
 // Ref for sorting strings: https://stackoverflow.com/a/51169/7714589
 const SORTING_FUNCTIONS = {
-  [`${Sorting.TICKER}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    a.db_ticker?.localeCompare(String(b.db_ticker)),
-  [`${Sorting.TICKER}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    b.db_ticker?.localeCompare(String(a.db_ticker)),
   [`${Sorting.ROA}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => Number(a.roa) - Number(b.roa),
   [`${Sorting.ROA}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => Number(b.roa) - Number(a.roa),
-  [`${Sorting.POOL_SIZE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    a.total_size - b.total_size,
-  [`${Sorting.POOL_SIZE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    b.total_size - a.total_size,
-  [`${Sorting.SATURATION}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    a.saturation - b.saturation,
-  [`${Sorting.SATURATION}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    b.saturation - a.saturation,
-  [`${Sorting.PLEDGE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    Number(a.pledge) - Number(b.pledge),
-  [`${Sorting.PLEDGE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    Number(b.pledge) - Number(a.pledge),
-  [`${Sorting.BLOCKS}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    Number(a.blocks_epoch) - Number(b.blocks_epoch),
-  [`${Sorting.BLOCKS}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    Number(b.blocks_epoch) - Number(a.blocks_epoch),
-  [`${Sorting.COSTS}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) =>
-    formatCostLabel(Number(a.tax_ratio), a.tax_fix).localeCompare(
-      formatCostLabel(Number(b.tax_ratio), b.tax_fix),
-    ),
-  [`${Sorting.COSTS}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) =>
-    formatCostLabel(Number(b.tax_ratio), b.tax_fix).localeCompare(
-      formatCostLabel(Number(a.tax_ratio), a.tax_fix),
-    ),
+  [`${Sorting.POOL_SIZE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => Number(a.total_stake) - Number(b.total_stake),
+  [`${Sorting.POOL_SIZE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => Number(b.total_stake) - Number(a.total_stake),
+  [`${Sorting.PLEDGE}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => Number(a.pledge) - Number(b.pledge),
+  [`${Sorting.PLEDGE}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => Number(b.pledge) - Number(a.pledge),
+  [`${Sorting.BLOCKS}_${SortingDirections.ASC}`]: (a: Pool, b: Pool) => Number(a.blocks_epoch) - Number(b.blocks_epoch),
+  [`${Sorting.BLOCKS}_${SortingDirections.DESC}`]: (a: Pool, b: Pool) => Number(b.blocks_epoch) - Number(a.blocks_epoch),
 };
 
-const defaultActiveSort = { sort: Sorting.TICKER, sortDirection: '' };
+const defaultActiveSort = { sort: Sorting.SCORE, sortDirection: SortingDirections.ASC };
 
 function Home(props: HomeProps): Node {
-  const [saturationLimit, setSaturationLimit] = React.useState<?number>(null);
   const [rowData, setRowData] = React.useState<?Array<Pool>>(null);
   const [rowDataSorted, setRowDataSorted] = React.useState<?Array<Pool>>(null);
   const [status, setStatus] = React.useState<QueryState>('idle');
@@ -158,9 +121,6 @@ function Home(props: HomeProps): Node {
     sort: Sorting.SCORE,
     sortDirection: SortingDirections.ASC,
   });
-  const [openModal, setOpenModal] = React.useState<boolean>(false);
-  const [confirmDelegationModal, setConfirmDelegationModal] = React.useState<boolean>(false);
-  const [delegationModalData, setDelegationModalData] = React.useState<Object>({});
 
   const { urlParams } = props;
   const seed = urlParams?.bias ?? 'bias';
@@ -168,11 +128,10 @@ function Home(props: HomeProps): Node {
 
   useEffect(() => {
     setStatus('pending');
-    listBiasedPools(seed, {})
+    listBiasedPools(urlParams.network, seed, {})
       .then((resp: ListBiasedPoolsResponse) => {
         setStatus('resolved');
         setRowData(resp.pools);
-        setSaturationLimit(resp.saturationLimit);
         // used to show the first pool in revamp banner
         SendFirstAdapool(resp.pools[0]);
       })
@@ -189,13 +148,12 @@ function Home(props: HomeProps): Node {
     };
     setFilterOptions(newSearch);
     setStatus('pending');
-    listBiasedPools(seed, newSearch)
+    listBiasedPools(urlParams.network, seed, newSearch)
       .then((resp: ListBiasedPoolsResponse) => {
         setStatus('resolved');
         setRowData(resp.pools);
         setRowDataSorted(resp.pools);
         setActiveSort(defaultActiveSort);
-        setSaturationLimit(resp.saturationLimit);
       })
       .catch((err) => {
         setStatus('rejected');
@@ -211,18 +169,9 @@ function Home(props: HomeProps): Node {
     });
   };
 
-  const delegateFunction = (delegation: DelegationProps, totalAda: ?number): void => {
+  const delegateFunction = (delegation: DelegationProps): void => {
     if (delegation == null) return;
-    const lovelaceDelegation = totalAda == null ? 0 : totalAda * 1000000;
-
-    const limit: ?number = saturationLimit;
-    if (limit != null && Number(delegation.stakepoolTotalStake) + lovelaceDelegation >= limit) {
-      setDelegationModalData({ ...delegation, totalAda });
-      setConfirmDelegationModal(true);
-      setOpenModal(true);
-    } else {
-      confirmedDelegateFunction(delegation.id);
-    }
+    confirmedDelegateFunction(delegation.id);
   };
 
   const alertText = null;
@@ -268,7 +217,7 @@ function Home(props: HomeProps): Node {
   };
 
   const {
-    urlParams: { selectedPoolIds, totalAda, theme },
+    urlParams: { selectedPoolIds, theme },
   } = props;
 
   const filteredPools = rowDataSorted || rowData;
@@ -284,9 +233,6 @@ function Home(props: HomeProps): Node {
           <MobileOnly>
             <SortSelect filter={filterSelect} isDark={isDark} />
           </MobileOnly>
-          {/* <ColorButton type="button" onClick={() => setOpenModal(true)}> */}
-          {/*  Colors meaning */}
-          {/* </ColorButton> */}
         </Header>
       </HeaderRow>
       <DesktopOnly>
@@ -295,7 +241,6 @@ function Home(props: HomeProps): Node {
           delegateFunction={delegateFunction}
           data={filteredPools}
           selectedIdPools={selectedPoolIds}
-          totalAda={totalAda}
           handleSort={handleSort}
           activeSort={activeSort}
           isDark={isDark}
@@ -307,29 +252,9 @@ function Home(props: HomeProps): Node {
           delegateFunction={delegateFunction}
           data={filteredPools}
           selectedIdPools={selectedPoolIds}
-          totalAda={totalAda}
           isDark={isDark}
         />
       </MobileOnly>
-      {openModal && confirmDelegationModal && (
-        <Modal
-          title=""
-          isOpen={openModal && confirmDelegationModal}
-          onClose={() => {
-            setOpenModal(false);
-            setConfirmDelegationModal(false);
-          }}
-        >
-          <SaturatedPoolAlert
-            delegation={delegationModalData}
-            onSuccess={confirmedDelegateFunction}
-            close={() => {
-              setOpenModal(false);
-              setConfirmDelegationModal(false);
-            }}
-          />
-        </Modal>
-      )}
       <CreditSection>
         Powered by
         <a href="https://cexplorer.io/" target="_blank" rel="noopener noreferrer">

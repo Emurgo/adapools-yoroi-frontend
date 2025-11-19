@@ -56,6 +56,7 @@ export const YoroiCallback = (
 };
 
 export const SendFirstAdapool = (firstPool: Object): void => {
+  if (!firstPool) return;
   const poolInfo = {
     id: firstPool.id,
     name: `[${firstPool.db_ticker}] ${firstPool.db_name}`,

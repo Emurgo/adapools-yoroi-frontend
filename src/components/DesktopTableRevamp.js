@@ -96,10 +96,9 @@ const Message = styled.h1`
 
 type Props = {|
   data: ?Array<Pool>,
-  delegateFunction: (DelegationProps, ?number) => void,
+  delegateFunction: (DelegationProps) => void,
   +status: QueryState,
   selectedIdPools: ?Array<string>,
-  totalAda: ?number,
   handleSort: Function,
   activeSort: Object,
   isDark: ?boolean,
@@ -110,7 +109,6 @@ function DesktopTableRevamp({
   delegateFunction,
   status,
   selectedIdPools,
-  totalAda,
   handleSort,
   activeSort,
   isDark,
@@ -136,7 +134,7 @@ function DesktopTableRevamp({
       id: 0,
       label: 'Ticker and name',
       textInfo: null,
-      value: Sorting.TICKER,
+      value: null,
     },
     {
       id: 1,
@@ -154,13 +152,13 @@ function DesktopTableRevamp({
       id: 3,
       label: 'Saturation',
       textInfo: 'How close the pool is to its limit',
-      value: Sorting.SATURATION,
+      value: null,
     },
     {
       id: 4,
       label: 'Costs',
       textInfo: 'Tax ratio + Fix',
-      value: Sorting.COSTS,
+      value: null,
     },
     {
       id: 5,
@@ -247,8 +245,7 @@ function DesktopTableRevamp({
                             stakepoolTotalStake: pool.total_stake,
                             isAlreadySaturated: pool.saturation >= 1,
                             id: pool.id,
-                          },
-                          totalAda,
+                          }
                         )
                       }
                     >

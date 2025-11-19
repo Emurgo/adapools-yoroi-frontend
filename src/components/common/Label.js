@@ -9,7 +9,7 @@ import { SortingDirections } from '../../API/api';
 type Props = {|
   label: string,
   sort?: Function | null,
-  sortValue?: string,
+  sortValue?: ?string,
   activeSort?: {|
     sort: string,
     sortDirection: string,
