@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 import { toSvg } from 'jdenticon';
@@ -102,6 +102,15 @@ function StakingPoolCardRevamp({
   links,
   fullname,
 }: Props): Node {
+  const [avatarImageLoaded, setAvatarImageLoaded] = useState(false);
+  const [avatarImageError, setAvatarImageError] = useState(false);
+
+  useEffect(() => {
+    // Reset states when avatar changes
+    setAvatarImageLoaded(false);
+    setAvatarImageError(false);
+  }, [avatar]);
+
   const twitter = links && links.tw;
   const telegram = links && links.tg;
   const facebook = links && links.fb;
@@ -111,10 +120,32 @@ function StakingPoolCardRevamp({
   const websiteUrl =
     fullname == null ? undefined : fullname.match(/(https?:\/\/[^\s]+"?utm_source=cexplorer.io)/g);
 
+  // only show avatar if it is loaded and not errored
+  const showAvatar = avatar && avatarImageLoaded && !avatarImageError;
+
   return (
     <MainCardPool>
       <div className="card-image">
-        {avatar ? <img src={avatar} alt="" /> : <SVG src={toSvg(id, 42)} />}
+        <>
+          {
+            // Try loading avatar if URL present at all
+            avatar && (
+              <img
+                src={avatar}
+                alt=""
+                style={{ ...(showAvatar ? {} : { display: 'none' }) }}
+                onLoad={() => setAvatarImageLoaded(true)}
+                onError={() => setAvatarImageError(true)}
+              />
+            )
+          }
+          {
+            // Display default jdenticon if avatar not present or not loaded
+            !showAvatar && (
+              <SVG src={toSvg(id, 42)} />
+            )
+          }
+        </>
       </div>
       <div className="card-info">
         <a

@@ -108,7 +108,7 @@ function transformData(poolsResponse) {
         id_bech: pool.pool_id,
         db_ticker: pool.pool_name.ticker,
         db_name: pool.pool_name.name,
-        pool_pic: `https://ix.cexplorer.io/${pool.pool_id}`,
+        pool_pic: `https://ix.cexplorer.io/${pool.pool_id}?nodefault`,
         pledge: String(pool.pool_update.active.pledge),
         pledge_real: String(pool.pledged),
         total_stake: String(pool.live_stake),
