@@ -135,9 +135,6 @@ function transformData(poolsResponse) {
 function convertSortingToBackendSorting(sorting: ?SortingEnum): string {
   if (sorting === Sorting.SCORE) return 'ranking';
   if (sorting === Sorting.ROA) return 'roa_lifetime';
-  if (sorting === Sorting.POOL_SIZE) return 'live_stake';
-  if (sorting === Sorting.PLEDGE) return 'pledge';
-  if (sorting === Sorting.BLOCKS) return 'blocks';
   return 'ranking';
 }
 
@@ -149,9 +146,7 @@ function getPools(network: 'mainnet' | 'preprod', body: SearchParams, bias: ?str
   };
 
   const searchParams = new URLSearchParams();
-  if (requestBody.sort === 'ranking') {
-    searchParams.append('order', 'ranking');
-  }
+  searchParams.append('order', requestBody.sort ?? 'ranking');
   if (requestBody.limit) {
     searchParams.append('limit', String(requestBody.limit));
   }
