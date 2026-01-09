@@ -5,12 +5,13 @@ import seedrandom from 'seedrandom';
 import { BACKEND_URL_FOR_PREPROD, BACKEND_URL_FOR_MAINNET } from '../manifestEnvs';
 
 const BIAS_POOL_IDS = [
-  'dbda39c8d064ff9801e376f8350efafe67c07e9e9244dd613aee5125', // EMURA
-  '8efb053977341471256685b1069d67f4aca7166bc3f94e27ebad217f', // EMUR7
+  '6a2eecc8015c24b496c70f60141477f9efcd98cf9dfd0b47d27f5bd5', // YORO3
+  // 'dbda39c8d064ff9801e376f8350efafe67c07e9e9244dd613aee5125', // EMURA
+  // '8efb053977341471256685b1069d67f4aca7166bc3f94e27ebad217f', // EMUR7
   // '0ef7aa564933ce75b695cdad66be4a39b43a22726de7c58908e0e033', // EMUR8
-  '359d3f8e355c873b0b5cae1e18eb12e44dcfc2ad212706d93ac314ab', // EMURB
-  '2a8294ad7538b15353b9ffd81e26dafe846ffc3f6b9e331d4c1dc030', // YORO1
-  'b19f2d9498845652ae6eea5da77952b37e2bca9f59b2a98c56694cae', // YORO2
+  // '359d3f8e355c873b0b5cae1e18eb12e44dcfc2ad212706d93ac314ab', // EMURB
+  // '2a8294ad7538b15353b9ffd81e26dafe846ffc3f6b9e331d4c1dc030', // YORO1
+  // 'b19f2d9498845652ae6eea5da77952b37e2bca9f59b2a98c56694cae', // YORO2
 ];
 const BIAS_POOLS_SEARCH_QUERY = BIAS_POOL_IDS.join('|');
 
